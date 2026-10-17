@@ -115,7 +115,9 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
     setPlaying(!playing);
   };
 
-  const showPoster = !st.started || st.loading || (reduced && !playing);
+  // El poster (primer cuadro) solo antes de arrancar o mientras carga un video nuevo
+  // girando. En pausa queda visible el cuadro donde iba el giro (aunque cargue otro).
+  const showPoster = !st.started || (st.loading && playing);
   const videoCls = "absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ease-out";
 
   return (
@@ -184,7 +186,7 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
           onClick={togglePlay}
           className="absolute top-[40%] left-1/2 z-[6] inline-flex min-h-11 -translate-x-1/2 items-center gap-2 bg-ink/80 px-4 font-mono text-xs tracking-widest text-bone uppercase ring-1 ring-bone/30 hover:ring-bone"
         >
-          {playing ? <><IconPause className="size-4" /> Pausar giro</> : <><IconPlay className="size-4" /> Ver girar</>}
+          {playing ? <><IconPause className="size-4" /> Pausar giro</> : <><IconPlay className="size-4" /> {st.started ? "Seguir girando" : "Ver girar"}</>}
         </button>
       )}
 

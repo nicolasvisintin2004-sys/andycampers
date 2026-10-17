@@ -164,20 +164,23 @@ export class VideoSwitcher {
       el.load();
       if (el.readyState < 1 && !(await once(el, "loadedmetadata"))) return false;
       if (el._key !== k) return false;
-      await this.seekToFront(el, 0.05);
+      const corre = this.allowPlay && this.active;
+      // En pausa: mismo cuadro exacto que el visible (sin adelanto) y búsqueda forzada,
+      // así el video nuevo muestra ese cuadro y no queda en negro.
+      await this.seekToFront(el, corre ? 0.05 : 0, !corre);
       if (el._key !== k) return false;
-      if (this.allowPlay && this.active) await el.play().catch(() => {});
+      if (corre) await el.play().catch(() => {});
       return true;
     })();
     return el._prep;
   }
 
   /** Lleva `el` a la misma fracción del giro que el video visible (+ adelanto por la demora del seek). */
-  private async seekToFront(el: HTMLVideoElement, lead: number) {
+  private async seekToFront(el: HTMLVideoElement, lead: number, force = false) {
     if (!el.duration) return;
     const t = (this.frac() * el.duration + lead) % el.duration;
     const drift = Math.abs(el.currentTime - t);
-    if (drift < 1 / 20 || el.duration - drift < 1 / 20) return;
+    if (!force && (drift < 1 / 20 || el.duration - drift < 1 / 20)) return;
     el.currentTime = t;
     await once(el, "seeked", 3000);
   }
@@ -239,7 +242,7 @@ export class VideoSwitcher {
       return;
     }
     // El de atrás venía corriendo en paralelo (hover): solo se corrige si se desfasó.
-    if (primed) await this.seekToFront(back, 0.03);
+    if (primed) await this.seekToFront(back, this.allowPlay && this.active ? 0.03 : 0);
     if (this.allowPlay && this.active && back.paused) await back.play().catch(() => {});
     if (this.allowPlay && this.active) await nextFrame(back);
     if (seq !== this.showSeq) return;
