@@ -1,0 +1,469 @@
+@import "tailwindcss";
+
+/* ───────────────────────── Tokens de marca ─────────────────────────
+   Tomados de la demo anterior (muestreo de los flyers) + el "garage" del selector. */
+@theme {
+  --color-forest: #2e5853;
+  --color-forest-deep: #1d3b37;
+  --color-cream: #f7e4cd;
+  --color-paper: #fbf4ea;
+  --color-sand: #e9d7bd;
+  --color-graphite: #25282c;
+  --color-graphite-2: #2f3338;
+  /* Fondo del selector. Es EL MISMO hex que el fondo de los 16 renders (config/p70.ts). */
+  --color-garage: #1c1f23;
+  --color-ink: #16181b;
+  --color-bone: #ece7df;
+  --color-mist: #a3a9ae;
+  --color-stone: #5b6168;
+  --color-line: #3b4046;
+  /* Naranja P70: acento puntual. -cta para fondos de botón (texto tinta encima pasa AA);
+     -ink para texto sobre fondos claros; -glow para texto chico sobre fondos oscuros. */
+  --color-orange: #e4572e;
+  --color-orange-cta: #ee6a3f;
+  --color-orange-ink: #a8381a;
+  --color-orange-glow: #f07a52;
+  /* Texto chico sobre el verde bosque (pasa AA) */
+  --color-orange-soft: #f7a07f;
+  --color-falta: #e00000;
+  --color-wa: #1f9d55;
+
+  --font-display: var(--font-archivo), "Arial Black", sans-serif;
+  --font-sans: var(--font-inter-tight), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --breakpoint-xs: 26rem;
+}
+
+:root {
+  /* Alto del cartel DEMO (0 cuando site.demo es false) */
+  --demo-h: 0px;
+  --cut: clamp(28px, 5vw, 72px);
+  /* El selector sube el botón de WhatsApp para no tapar su barra fija (mobile). */
+  --wa-offset: 0px;
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+html.is-demo {
+  --demo-h: 28px;
+}
+
+body {
+  padding-top: var(--demo-h);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ───────────────────────── Tipografía ───────────────────────── */
+@utility font-display-x {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ───────────────────────── Recursos gráficos ───────────────────────── */
+
+/* Cortes diagonales como las bandas de los flyers */
+@utility cut-top {
+  clip-path: polygon(0 var(--cut), 100% 0, 100% 100%, 0 100%);
+  margin-top: calc(var(--cut) * -1);
+  padding-top: calc(var(--cut) + 3rem);
+}
+@utility cut-top-rev {
+  clip-path: polygon(0 0, 100% var(--cut), 100% 100%, 0 100%);
+  margin-top: calc(var(--cut) * -1);
+  padding-top: calc(var(--cut) + 3rem);
+}
+@utility clip-tag {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+}
+
+/* Grano de película sutil sobre fotos oscuras */
+@utility grain {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.16;
+    mix-blend-mode: overlay;
+    /* Ruido fractal pre-renderizado a WebP (como SVG con filtro costaba ~100 ms de GPU). */
+    background-image: url("./textures/grain.webp");
+    background-size: 180px 180px;
+  }
+}
+
+/* Mismo grano como capa suelta (no cambia el position del contenedor) */
+.grain-layer {
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+  background-image: url("./textures/grain.webp");
+  background-size: 180px 180px;
+}
+
+/* Retícula de plano técnico */
+@utility blueprint-grid {
+  background-image:
+    linear-gradient(to right, rgb(236 231 223 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(236 231 223 / 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+@utility paper-grid {
+  background-image:
+    linear-gradient(to right, rgb(37 40 44 / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(37 40 44 / 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Foco visible y consistente */
+:focus-visible {
+  outline: 2px solid var(--color-orange-cta);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+/* Encabezados que reciben foco por código (formulario): sin anillo. */
+[tabindex="-1"]:focus-visible {
+  outline: none;
+}
+
+::selection {
+  background: var(--color-orange-cta);
+  color: var(--color-ink);
+}
+
+/* ───────────────────────── Revelado de títulos por línea ───────────────────────── */
+.reveal-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.reveal-line > span {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 0.9s var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+.is-revealed .reveal-line > span {
+  transform: none;
+}
+
+/* Hero: entrada con CSS para no depender de JS ni demorar el LCP */
+@keyframes rise {
+  from {
+    transform: translateY(105%);
+  }
+}
+.hero-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+.hero-line > span {
+  display: block;
+  animation: rise 1s var(--ease-out-expo) both;
+  animation-delay: calc(120ms + var(--i, 0) * 110ms);
+}
+
+/* Solo transform: visible (y medible como LCP) desde el primer frame. */
+@keyframes fade-up {
+  from {
+    transform: translateY(14px);
+  }
+}
+.fade-up {
+  animation: fade-up 0.8s var(--ease-out-expo) both;
+  animation-delay: var(--d, 0ms);
+}
+
+/* Montaje del hero: Ken Burns lento sobre la foto activa */
+@keyframes kenburns {
+  from {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.13) translate3d(var(--kx, -1.5%), var(--ky, -1%), 0);
+  }
+}
+.kenburns {
+  animation: kenburns 9s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+/* Indicador de scroll */
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  60%,
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* ───────────────────────── Selector "Armá tu P70" ───────────────────────── */
+
+/* Nombre del equipamiento: entra letra por letra */
+@keyframes letter-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.5em, 0) skewX(-12deg);
+  }
+}
+.letter-in > span {
+  display: inline-block;
+  white-space: pre;
+  animation: letter-in 0.5s var(--ease-out-expo) both;
+  animation-delay: calc(var(--l, 0) * 28ms);
+}
+
+/* Barrido de escaneo sobre el pedestal al cambiar de opción */
+@keyframes scan-sweep {
+  from {
+    transform: translate3d(-120%, 0, 0);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(120%, 0, 0);
+    opacity: 0;
+  }
+}
+.scan-sweep {
+  animation: scan-sweep 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Pista de primera visita */
+@keyframes hint-nudge {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(10px, 0, 0);
+  }
+}
+.hint-nudge {
+  animation: hint-nudge 1.4s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ───────────── Entradas al hacer scroll (components/ui/Enter.tsx) ─────────────
+   El elemento sale VISIBLE del servidor; solo se oculta al montar si todavía no
+   llegó a la pantalla. La detección es por posición, no por IntersectionObserver. */
+[data-enter="hidden"].enter-fade {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.enter-fade {
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* Foto que entra con una máscara en diagonal (la inclinación de las bandas de los flyers) */
+.enter-diag {
+  clip-path: polygon(0 0, 125% 0, 100% 100%, 0 100%);
+  transition: clip-path 1.1s var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+[data-enter="hidden"].enter-diag {
+  clip-path: polygon(0 0, 0 0, -25% 100%, 0 100%);
+}
+
+/* Raya naranja (la gráfica del P70) que se dibuja de izquierda a derecha */
+.cifra-marca {
+  display: block;
+  width: 44px;
+  height: 7px;
+  background: var(--color-orange);
+  transform: skewX(-24deg);
+  transform-origin: left center;
+  transition: transform 0.8s var(--ease-out-expo);
+  transition-delay: calc(120ms + var(--i, 0) * 60ms);
+}
+[data-enter="hidden"] .cifra-marca {
+  transform: skewX(-24deg) scaleX(0);
+}
+
+/* Movimiento reducido: nada se desplaza; las entradas quedan como fundidos cortos. */
+@media (prefers-reduced-motion: reduce) {
+  *:not([data-enter]):not(.reveal-line > span),
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-enter],
+  .reveal-line > span {
+    transform: none !important;
+    clip-path: none !important;
+    transition: opacity 0.35s ease !important;
+    transition-delay: calc(var(--i, 0) * 50ms) !important;
+  }
+  [data-enter="hidden"] {
+    opacity: 0;
+  }
+  [data-enter="hidden"] .cifra-marca {
+    transform: skewX(-24deg);
+  }
+  .reveal-line > span {
+    opacity: 0;
+  }
+  .is-revealed .reveal-line > span {
+    opacity: 1;
+  }
+  .kenburns {
+    animation: none;
+  }
+}
+
+/* Detalles/acordeón */
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Secciones debajo del pliegue: el navegador no calcula estilo/layout hasta acercarse.
+   No usar en secciones con position: fixed/sticky adentro ni con escenas fijas de GSAP. */
+@utility cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
+/* Ocultar scrollbar en carruseles horizontales */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ───────────────────────── Escenario del selector ─────────────────────────
+   .stage es el área disponible (container de tamaño). .stage-box es el cuadro
+   16:9 del render: su ancho sale del área y el piso del render (--piso, 0.74 del
+   alto) se apoya a --suelo del alto del área. */
+.stage {
+  container-type: size;
+  position: relative;
+  --piso: 0.74;
+  /* mobile: el cuadro se agranda más que la pantalla (los bordes del render están vacíos) */
+  --box-w: min(140vw, 190cqh);
+  --suelo: 63cqh;
+}
+@media (min-width: 1024px) {
+  .stage {
+    --box-w: min(145cqw, 190cqh);
+    --suelo: 78cqh;
+  }
+}
+.stage-box {
+  position: absolute;
+  left: 50%;
+  width: var(--box-w);
+  aspect-ratio: 16 / 9;
+  top: calc(var(--suelo) - var(--piso) * var(--box-w) * 9 / 16);
+  transform: translateX(-50%);
+}
+/* Bordes del video fundidos con el fondo (que es el mismo hex del render) */
+.stage-video {
+  -webkit-mask-image: radial-gradient(ellipse 50% 58% at 50% 50%, #000 72%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 58% at 50% 50%, #000 72%, transparent 100%);
+}
+.stage-light {
+  background:
+    radial-gradient(ellipse 34% 42% at 50% 74%, rgb(236 231 223 / 0.07), transparent 70%),
+    radial-gradient(ellipse 22% 80% at 50% -8%, rgb(255 244 228 / 0.1), transparent 75%);
+}
+/* Cono de luz desde arriba: va ENCIMA del video y suma luz (screen) */
+.garage-cone {
+  background: conic-gradient(from 180deg at 50% -6%, transparent 0deg 162deg, rgb(255 242 225 / 0.07) 172deg 188deg, transparent 198deg 360deg);
+  mix-blend-mode: screen;
+}
+/* Grilla de piso en perspectiva (detrás de todo) */
+.garage-floor {
+  background-image:
+    linear-gradient(to right, rgb(236 231 223 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(236 231 223 / 0.07) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: center top;
+  transform: perspective(520px) rotateX(64deg);
+  transform-origin: 50% 0%;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 60%, transparent);
+}
+
+@keyframes hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* El selector entra sobre el hero con el corte diagonal de los flyers. Solo
+   el borde superior: la altura sigue siendo una pantalla. */
+.garage-cut {
+  --cut-g: clamp(22px, 4vw, 56px);
+  clip-path: polygon(0 var(--cut-g), 100% 0, 100% 100%, 0 100%);
+  margin-top: calc(var(--cut-g) * -1);
+  padding-top: calc(var(--cut-g) * 0.55);
+}

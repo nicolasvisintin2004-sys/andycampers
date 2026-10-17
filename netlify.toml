@@ -1,0 +1,11 @@
+[build]
+  # $URL = dirección real del deploy: de ahí salen las vistas previas de WhatsApp.
+  command = "NEXT_PUBLIC_SITE_URL=$URL npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Las funciones programadas viven en netlify/functions (ver weekly-summary.mts)
+[functions]
+  directory = "netlify/functions"

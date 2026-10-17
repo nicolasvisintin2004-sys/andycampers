@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "p70-dev", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--", "-p", "3100"], "port": 3100 },
+    { "name": "p70-prod", "runtimeExecutable": "npm", "runtimeArgs": ["run", "start", "--", "-p", "3101"], "port": 3101 }
+  ]
+}

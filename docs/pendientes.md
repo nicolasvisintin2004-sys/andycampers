@@ -1,0 +1,51 @@
+# Datos pendientes · landing P70
+
+Generado con `npm run pendientes` el 17/10/2026. Cada ítem aparece en el sitio como un cartel rojo
+("FALTA: …"). Se completa en el archivo indicado reemplazando `falta("…")` por el dato real.
+
+- [ ] **revisión legal de este texto antes de publicar** — `app/privacidad/page.tsx:30`
+- [ ] **clips reales de los reels para el hero (ruta, off-road, nieve, playa, noche con estrellas, cocina)** — `components/hero/Hero.tsx:128`
+- [ ] **clips de los reels para el hero** — `components/hero/Hero.tsx:134`
+- [ ] **los 16 renders 3D del P70 girando (estos videos son DEMO)** — `components/selector/Selector.tsx:244`
+- [ ] **carga útil del P70** — `config/p70.ts:180`
+- [ ] **capacidad de personas** — `config/p70.ts:181`
+- [ ] **medidas exteriores del P70** — `config/p70.ts:203`
+- [ ] **medidas interiores del P70** — `config/p70.ts:204`
+- [ ] **medida de la cama** — `config/p70.ts:205`
+- [ ] **garantía del P70** — `config/p70.ts:211` (+2)
+- [ ] **plazos de fabricación y entrega** — `config/p70.ts:212` (+2)
+- [ ] **forma de pago y seña** — `config/p70.ts:213` (+1)
+- [ ] **nombre del equipamiento 1** — `config/p70.ts:46`
+- [ ] **nombre corto eq. 1** — `config/p70.ts:47`
+- [ ] **descripción de una línea del equipamiento 1** — `config/p70.ts:48`
+- [ ] **qué incluye el equipamiento 1** — `config/p70.ts:49`
+- [ ] **nombre del equipamiento 2** — `config/p70.ts:54`
+- [ ] **nombre corto eq. 2** — `config/p70.ts:55`
+- [ ] **descripción de una línea del equipamiento 2** — `config/p70.ts:56`
+- [ ] **qué incluye el equipamiento 2** — `config/p70.ts:57`
+- [ ] **nombre del equipamiento 3** — `config/p70.ts:62`
+- [ ] **nombre corto eq. 3** — `config/p70.ts:63`
+- [ ] **descripción de una línea del equipamiento 3** — `config/p70.ts:64`
+- [ ] **qué incluye el equipamiento 3** — `config/p70.ts:65`
+- [ ] **nombre del equipamiento 4** — `config/p70.ts:70`
+- [ ] **nombre corto eq. 4** — `config/p70.ts:71`
+- [ ] **descripción de una línea del equipamiento 4** — `config/p70.ts:72`
+- [ ] **qué incluye el equipamiento 4** — `config/p70.ts:73`
+- [ ] **nombre del color 1** — `config/p70.ts:94`
+- [ ] **hex del color 1** — `config/p70.ts:94`
+- [ ] **nombre del color 2** — `config/p70.ts:95`
+- [ ] **hex del color 2** — `config/p70.ts:95`
+- [ ] **nombre del color 3** — `config/p70.ts:96`
+- [ ] **hex del color 3** — `config/p70.ts:96`
+- [ ] **nombre del color 4** — `config/p70.ts:97`
+- [ ] **hex del color 4** — `config/p70.ts:97`
+- [ ] **razón social y CUIT del responsable de los datos** — `config/site.ts:15`
+- [ ] **URL de la página de Facebook** — `config/site.ts:34`
+- [ ] **canal de YouTube (si tiene)** — `config/site.ts:35`
+- [ ] **dirección del taller** — `config/site.ts:38`
+- [ ] **ciudad del taller** — `config/site.ts:39`
+- [ ] **horario de atención y si se puede visitar el taller** — `config/site.ts:40`
+- [ ] **logo en vector (SVG)** — `config/site.ts:42`
+- [ ] **si ofrece financiación y en qué condiciones** — `config/site.ts:47`
+- [ ] **forma de pago, seña y si hay financiación** — `content/faq.ts:34`
+- [ ] **dirección del taller, horario y si se puede visitar** — `content/faq.ts:36`
