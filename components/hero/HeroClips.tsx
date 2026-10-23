@@ -72,10 +72,8 @@ function Visor({ i, onNav, onClose }: { i: number; onNav: (i: number) => void; o
     requestAnimationFrame(() => setOpen(true));
     const prev = document.activeElement as HTMLElement | null;
     ref.current?.focus();
-    window.__lenis?.stop();
     document.documentElement.style.overflow = "hidden";
     return () => {
-      window.__lenis?.start();
       document.documentElement.style.overflow = "";
       prev?.focus?.();
     };

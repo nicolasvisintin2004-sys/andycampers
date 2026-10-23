@@ -109,9 +109,7 @@ function QuoteFormInner() {
     heading.current?.focus({ preventScroll: true });
     const r = top.current?.getBoundingClientRect();
     if (r && (r.top < 0 || r.top > window.innerHeight * 0.5)) {
-      const y = window.scrollY + r.top - 16;
-      if (window.__lenis) window.__lenis.scrollTo(y, { duration: 0.6 });
-      else window.scrollTo({ top: y });
+      window.scrollTo({ top: window.scrollY + r.top - 16 });
     }
   }, [s.step, hydrated]);
 

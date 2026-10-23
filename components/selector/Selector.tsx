@@ -16,21 +16,15 @@ const pad = (n: number) => String(n).padStart(2, "0");
 /** Alto de la barra de contactos fija (--bar-h), para que el scroll no deje nada debajo. */
 const barra = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--bar-h")) || 0;
 
-/** Scroll suave a una sección (debajo de la barra fija); si la página cambió de alto en el camino, corrige al llegar. */
+/**
+ * Lleva a una sección (debajo de la barra fija) con el desplazamiento nativo del
+ * navegador; si la página cambió de alto en el camino, corrige al llegar.
+ */
 export function irA(id: string) {
   const target = document.getElementById(id);
   if (!target) return;
   const offset = -barra();
   const fuera = () => Math.abs(target.getBoundingClientRect().top + offset) > 2;
-  const lenis = window.__lenis;
-  if (lenis) {
-    lenis.scrollTo(target, {
-      offset,
-      duration: 1.3,
-      onComplete: () => fuera() && lenis.scrollTo(target, { offset, duration: 0.35 }),
-    });
-    return;
-  }
   const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
   const go = () => window.scrollTo({ top: window.scrollY + target.getBoundingClientRect().top + offset, behavior: smooth ? "smooth" : "auto" });
   go();
@@ -508,10 +502,8 @@ function Sheet({ eq, onClose, onQuiero, onShare }: { eq: Equipamiento; onClose: 
     ref.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     window.addEventListener("keydown", onKey);
-    window.__lenis?.stop();
     return () => {
       window.removeEventListener("keydown", onKey);
-      window.__lenis?.start();
       prev?.focus?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -67,18 +67,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Lenis */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
 /* ───────────────────────── Tipografía ───────────────────────── */
 @utility font-display-x {
   font-family: var(--font-display);

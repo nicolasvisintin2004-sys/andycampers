@@ -4,7 +4,6 @@ import "./globals.css";
 import { site } from "@/config/site";
 import { ContactBar } from "@/components/layout/ContactBar";
 import { INTRO_SCRIPT, LogoIntro } from "@/components/layout/LogoIntro";
-import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { AttributionCapture } from "@/components/providers/Attribution";
 import { Analytics } from "@/components/providers/Analytics";
 import { JsonLd } from "@/components/ui/JsonLd";
@@ -79,7 +78,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ContactBar />
         {children}
         <LogoIntro />
-        <SmoothScroll />
         <AttributionCapture />
         <Analytics />
         <JsonLd data={[organizationLd(), localBusinessLd()]} />

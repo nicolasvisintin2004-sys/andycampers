@@ -2,7 +2,7 @@
 
 Landing de una sola página para el **P70 Acero 100%**: entrada con el logo grande que se corre a la barra, **barra fija** con el logo, Instagram, Facebook y WhatsApp, hero con la experiencia y 3 videos que se agrandan, **selector tipo videojuego** (3 niveles de equipamiento × 5 colores, el camper girando 360° sobre una base brújula), qué es el P70 (piezas clave + ficha técnica en HTML, en una sola sección), en acción, formulario de cotización con puntaje de leads y footer. Páginas extra: `/gracias` y `/privacidad`.
 
-**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · Framer Motion · Lenis · Zod. La landing es estática (SSG); los Route Handlers son el formulario (`/api/lead`) y el resumen semanal (`/api/cron/weekly-summary`). Deploy en Netlify, videos en un CDN externo.
+**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · Framer Motion · Zod. La landing es estática (SSG); los Route Handlers son el formulario (`/api/lead`) y el resumen semanal (`/api/cron/weekly-summary`). Deploy en Netlify, videos en un CDN externo.
 
 ```bash
 npm install
@@ -242,4 +242,4 @@ scripts/             generate-placeholder-videos, check-videos, pendientes, test
 netlify/functions/   resumen semanal
 ```
 
-Movimiento y accesibilidad: al entrar solo se mueven la entrada del logo y las fotos del hero; los videos (el camper del selector, "En acción" y los 3 del hero) arrancan recién al tocarlos, y no hay animaciones decorativas en loop. Solo se anima `transform` y `opacity`; en mobile baja la intensidad; con `prefers-reduced-motion` todo queda en su estado final (sin entrada del logo, sin parallax, sin smooth scroll). La entrada del logo se ve una vez por carga de la home: el logo grande sale en el HTML y, si el JS no llega, se funde solo a los 2,6 s. El selector y el formulario se usan con teclado (← → equipamiento, ↑ ↓ color; letras A, B, C… eligen opciones del formulario) y lector de pantalla (`radiogroup`). Lenis se desactiva en pantallas táctiles.
+Movimiento y accesibilidad: al entrar solo se mueven la entrada del logo y las fotos del hero; los videos (el camper del selector, "En acción" y los 3 del hero) arrancan recién al tocarlos, y no hay animaciones decorativas en loop. Solo se anima `transform` y `opacity`; en mobile baja la intensidad; con `prefers-reduced-motion` todo queda en su estado final (sin entrada del logo, sin parallax). El scroll es el nativo del navegador (sin scroll suave: en computadoras lentas se sentía pesado). La entrada del logo se ve una vez por carga de la home: el logo grande sale en el HTML y, si el JS no llega, se funde solo a los 2,6 s. El selector y el formulario se usan con teclado (← → equipamiento, ↑ ↓ color; letras A, B, C… eligen opciones del formulario) y lector de pantalla (`radiogroup`).
