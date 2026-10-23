@@ -105,6 +105,12 @@ export const inicial = { eq: 1, color: "c1" } as const;
    desde /public/media (solo para desarrollo y la demo). */
 
 export const videoSelector = {
+  /**
+   * Versión de los videos y posters: va en la URL (?v=…). Subila cada vez que se
+   * reemplazan los archivos con los mismos nombres, si no los navegadores siguen
+   * mostrando los viejos que tienen guardados.
+   */
+  version: 2,
   /** Duración de TODOS los videos, en segundos (deben ser iguales). Más largo = gira más lento. */
   duracion: 14,
   /**
@@ -145,9 +151,9 @@ export type Resolucion = "desktop" | "mobile";
 export const nombreVideo = (eq: number, color: string) => `p70-eq${eq}-${color}`;
 
 export const videoUrl = (eq: number, color: string, res: Resolucion, ext: "mp4" | "webm") =>
-  `${MEDIA_BASE}/p70/${res}/${nombreVideo(eq, color)}.${ext}`;
+  `${MEDIA_BASE}/p70/${res}/${nombreVideo(eq, color)}.${ext}?v=${videoSelector.version}`;
 
-export const posterUrl = (eq: number, color: string) => `${MEDIA_BASE}/p70/posters/${nombreVideo(eq, color)}.jpg`;
+export const posterUrl = (eq: number, color: string) => `${MEDIA_BASE}/p70/posters/${nombreVideo(eq, color)}.jpg?v=${videoSelector.version}`;
 
 /* ───────────────────────── Helpers de texto ───────────────────────── */
 

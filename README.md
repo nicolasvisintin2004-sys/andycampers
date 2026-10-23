@@ -107,6 +107,7 @@ Si el encuadre final no respeta exactamente esas medidas, se ajusta en `config/p
 1. Pisar los archivos con los mismos nombres (si los colores ya tienen nombre, renombrar ids en `config/p70.ts` y archivos a la vez).
 2. `npm run videos:check -- --dir=carpeta/de/los/renders` → tiene que dar "Todo en regla".
 3. Subirlos al CDN (abajo) y poner `videoSelector.sonDemo = false` en `config/p70.ts` (saca el cartel "Videos demo").
+4. Subir `videoSelector.version` en `config/p70.ts` (va en la URL como `?v=`): si no, los navegadores que ya visitaron la página siguen mostrando los videos viejos que tienen guardados.
 
 Los demo se regeneran con `npm run videos:demo` (lee equipamientos, colores, fondo y duración de `config/p70.ts`; necesita Google Chrome instalado). Llevan una etiqueta roja "DEMO · Equipamiento N · Color X" y un camper genérico: no se pueden confundir con el producto.
 
