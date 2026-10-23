@@ -22,6 +22,8 @@ export const clips = {
   medanos: {
     src: "/video/camper-p70-medanos-4x4",
     poster: "/video/camper-p70-medanos-4x4-poster.jpg",
+    /** Miniatura 4:5 (232 px) para los videos del hero. */
+    mini: "/video/camper-p70-medanos-4x4-mini.jpg",
     titulo: "4x4 en los médanos",
     alt: "Camioneta AndyCampers remolcando el P70 por los médanos de arena",
     /** Fecha en que se publicó en este sitio (VideoObject.uploadDate). */
@@ -31,6 +33,7 @@ export const clips = {
   cocinaPlaya: {
     src: "/video/camper-p70-cocina-en-la-playa",
     poster: "/video/camper-p70-cocina-en-la-playa-poster.jpg",
+    mini: "/video/camper-p70-cocina-en-la-playa-mini.jpg",
     titulo: "Cocinar frente al mar",
     alt: "Cocina baulera del P70 abierta en la playa, cocinando a la plancha frente al mar",
     publicado: "2026-10-15",
@@ -39,6 +42,7 @@ export const clips = {
   despertar: {
     src: "/video/camper-p70-despertar",
     poster: "/video/camper-p70-despertar-poster.jpg",
+    mini: "/video/camper-p70-despertar-mini.jpg",
     titulo: "Despertar adentro",
     alt: "Mañana dentro del P70 con vista a la laguna",
     publicado: "2026-10-15",

@@ -31,13 +31,15 @@ export const site = {
   social: {
     instagram: "https://www.instagram.com/andycampers/",
     instagramHandle: "@andycampers",
-    facebook: falta("URL de la página de Facebook") as Maybe<string>,
+    facebook: "https://www.facebook.com/p/Andycampers-100063702243817/" as Maybe<string>,
     youtube: falta("canal de YouTube (si tiene)") as Maybe<string>,
   },
 
-  address: falta("dirección del taller") as Maybe<string>,
-  city: falta("ciudad del taller") as Maybe<string>,
-  openingHours: falta("horario de atención y si se puede visitar el taller") as Maybe<string>,
+  /** La dirección y el horario del taller no se publican: las visitas se coordinan por mensaje. */
+  visitas: {
+    texto: "Se coordinan por mensaje: escribile a Andy y arreglan el día.",
+    mensaje: "Hola Andy, quiero coordinar una visita al taller para ver el P70",
+  },
   /** Ruta del logo en vector dentro de /public, ej. "/logo-andycampers.svg". */
   logoSvg: falta("logo en vector (SVG)") as Maybe<string>,
 

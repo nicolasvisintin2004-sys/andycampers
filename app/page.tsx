@@ -1,17 +1,15 @@
 import { Hero } from "@/components/hero/Hero";
 import { Selector } from "@/components/selector/Selector";
-import { Anatomy } from "@/components/p70/Anatomy";
-import { Ficha } from "@/components/p70/Ficha";
+import { QueEsP70 } from "@/components/p70/QueEsP70";
 import { InAction } from "@/components/accion/InAction";
 import { Cotizar } from "@/components/cotizar/Cotizar";
-import { Faq } from "@/components/faq/Faq";
 import { Footer } from "@/components/layout/Footer";
 import { JsonLd } from "@/components/ui/JsonLd";
-import { faqLd, productLd, videosLd } from "@/lib/jsonld";
+import { productLd, videosLd } from "@/lib/jsonld";
 
 /**
- * Landing del P70: hero (la experiencia) → "Armá tu P70" (selector) → qué es
- * el P70 (anatomía + ficha) → en acción → cotización → preguntas → footer.
+ * Landing del P70: hero (la experiencia y 3 videos) → "Armá tu P70" (selector) →
+ * qué es el P70 (piezas clave + ficha) → en acción → cotización → footer.
  */
 export default function Home() {
   return (
@@ -19,14 +17,12 @@ export default function Home() {
       <main id="contenido">
         <Hero />
         <Selector />
-        <Anatomy />
-        <Ficha />
+        <QueEsP70 />
         <InAction />
         <Cotizar />
-        <Faq />
       </main>
       <Footer />
-      <JsonLd data={[productLd(), faqLd(), ...videosLd()]} />
+      <JsonLd data={[productLd(), ...videosLd()]} />
     </>
   );
 }

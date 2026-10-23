@@ -123,7 +123,7 @@ export class VideoSwitcher {
     return p;
   }
 
-  /** Vecinos: los otros 3 colores del equipamiento actual y los otros 3 equipamientos del color actual. */
+  /** Vecinos: los otros colores del equipamiento actual y los otros equipamientos del color actual. */
   queueNeighbors(eq: number, color: string) {
     if (this.noPreload) return;
     const next: Key[] = [

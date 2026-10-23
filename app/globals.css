@@ -26,7 +26,8 @@
   /* Texto chico sobre el verde bosque (pasa AA) */
   --color-orange-soft: #f7a07f;
   --color-falta: #e00000;
-  --color-wa: #1f9d55;
+  /* Verde WhatsApp con texto blanco encima (5:1, pasa AA) */
+  --color-wa: #15803d;
 
   --font-display: var(--font-archivo), "Arial Black", sans-serif;
   --font-sans: var(--font-inter-tight), system-ui, sans-serif;
@@ -37,12 +38,15 @@
 }
 
 :root {
-  /* Alto del cartel DEMO (0 cuando site.demo es false) */
-  --demo-h: 0px;
+  /* Alto de la barra fija de arriba (logo + Instagram, Facebook y WhatsApp) */
+  --bar-h: 44px;
   --cut: clamp(28px, 5vw, 72px);
-  /* El selector sube el botón de WhatsApp para no tapar su barra fija (mobile). */
-  --wa-offset: 0px;
   color-scheme: light;
+}
+@media (min-width: 1024px) {
+  :root {
+    --bar-h: 52px;
+  }
 }
 
 html {
@@ -50,12 +54,13 @@ html {
   text-rendering: optimizeLegibility;
 }
 
-html.is-demo {
-  --demo-h: 28px;
+/* Los saltos a #armalo, #p70, #cotizar quedan debajo de la barra fija */
+main [id] {
+  scroll-margin-top: var(--bar-h);
 }
 
 body {
-  padding-top: var(--demo-h);
+  padding-top: var(--bar-h);
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
@@ -198,6 +203,43 @@ html.lenis body {
   display: block;
   animation: rise 1s var(--ease-out-expo) both;
   animation-delay: calc(120ms + var(--i, 0) * 110ms);
+}
+
+/* ───────────── Entrada del logo (components/layout/LogoIntro.tsx) ─────────────
+   El script del <head> pone html.con-intro (solo en la home y sin movimiento
+   reducido). El logo grande sale en el HTML; el JS lo lleva achicándose a la
+   barra de arriba. Si el JS no llega, a los 2,6 s se funde solo. */
+.logo-intro {
+  display: none;
+}
+html.con-intro .logo-intro {
+  display: block;
+  animation: intro-fuera 0.4s ease 2.6s both;
+}
+html.con-intro .logo-intro.js {
+  animation: none;
+}
+@keyframes intro-fuera {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+html.con-intro:not(.intro-listo) [data-logo-target] {
+  opacity: 0;
+  animation: intro-dentro 0.3s ease 2.6s both;
+}
+@keyframes intro-dentro {
+  to {
+    opacity: 1;
+  }
+}
+/* El texto del hero entra cuando se corre el telón del logo */
+html.con-intro [data-hero-copy] .hero-line > span {
+  animation-delay: calc(1250ms + var(--i, 0) * 110ms);
+}
+html.con-intro [data-hero-copy] .fade-up {
+  animation-delay: calc(1150ms + var(--d, 0ms));
 }
 
 /* Solo transform: visible (y medible como LCP) desde el primer frame. */
@@ -398,20 +440,22 @@ details > summary::-webkit-details-marker {
 
 /* ───────────────────────── Escenario del selector ─────────────────────────
    .stage es el área disponible (container de tamaño). .stage-box es el cuadro
-   16:9 del render: su ancho sale del área y el piso del render (--piso, 0.74 del
-   alto) se apoya a --suelo del alto del área. */
+   16:9 del render: su ancho sale del área y el piso del render (--piso: contacto
+   de las ruedas, fracción del alto) queda a --suelo, de modo que el borde de
+   abajo de la base (--base más abajo) toque el pie del área. Selector pone
+   --piso y --base desde config/p70.ts. */
 .stage {
   container-type: size;
   position: relative;
-  --piso: 0.74;
+  --piso: 0.66;
+  --base: 0.22;
   /* mobile: el cuadro se agranda más que la pantalla (los bordes del render están vacíos) */
-  --box-w: min(140vw, 190cqh);
-  --suelo: 63cqh;
+  --box-w: min(165cqw, 178cqh);
+  --suelo: calc(97cqh - var(--base) * var(--box-w) * 9 / 16);
 }
 @media (min-width: 1024px) {
   .stage {
-    --box-w: min(145cqw, 190cqh);
-    --suelo: 78cqh;
+    --box-w: min(120cqw, 178cqh);
   }
 }
 .stage-box {

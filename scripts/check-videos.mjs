@@ -1,5 +1,5 @@
 /**
- * Revisa los 16 videos del selector contra las especificaciones de los renders
+ * Revisa los 15 videos del selector contra las especificaciones de los renders
  * (README → "Videos del selector"). Sirve para los demo y, sobre todo, para
  * controlar los renders finales de Andrés antes de subirlos al CDN.
  *
@@ -7,7 +7,7 @@
  *   npm run videos:check -- --dir=entregas/p70 → revisa otra carpeta con la misma estructura
  *
  * Controla: que estén los 5 archivos de cada combinación (desktop mp4/webm,
- * mobile mp4/webm, poster jpg), duración igual en todos (8–12 s), resolución,
+ * mobile mp4/webm, poster jpg), duración igual en todos (8–16 s), resolución,
  * 30 fps, sin audio y menos de 4 MB por archivo.
  */
 import { execFileSync } from "node:child_process";
@@ -64,7 +64,7 @@ for (const eq of eqs)
       if (p.w !== w || p.h !== h) problemas.push(`${res}/${base}.${ext}: ${p.w}×${p.h} (esperado ${w}×${h})`);
       if (Math.round(p.fps) !== 30) problemas.push(`${res}/${base}.${ext}: ${p.fps} fps (esperado 30)`);
       if (p.audio) problemas.push(`${res}/${base}.${ext}: tiene audio (debe ir sin audio)`);
-      if (!(p.dur >= 8 && p.dur <= 12.05)) problemas.push(`${res}/${base}.${ext}: dura ${p.dur.toFixed(2)} s (8 a 12 s)`);
+      if (!(p.dur >= 8 && p.dur <= 16.05)) problemas.push(`${res}/${base}.${ext}: dura ${p.dur.toFixed(2)} s (8 a 16 s)`);
       if (size > MAX) problemas.push(`${res}/${base}.${ext}: ${(size / 1048576).toFixed(1)} MB (máximo 4 MB)`);
     }
     if (!existsSync(join(DIR, "posters", `${base}.jpg`))) problemas.push(`posters/${base}.jpg: no está`);

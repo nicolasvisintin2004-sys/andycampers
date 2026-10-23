@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { site } from "@/config/site";
-import { DemoBanner } from "@/components/layout/DemoBanner";
-import { WhatsAppFloat } from "@/components/layout/WhatsAppFloat";
+import { ContactBar } from "@/components/layout/ContactBar";
+import { INTRO_SCRIPT, LogoIntro } from "@/components/layout/LogoIntro";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { AttributionCapture } from "@/components/providers/Attribution";
 import { Analytics } from "@/components/providers/Analytics";
@@ -70,11 +70,15 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-AR" className={`${archivo.variable} ${interTight.variable} ${jetbrains.variable}${site.demo ? " is-demo" : ""}`}>
+    <html lang="es-AR" className={`${archivo.variable} ${interTight.variable} ${jetbrains.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Decide la entrada del logo antes de pintar (ver LogoIntro) */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_SCRIPT }} />
+      </head>
       <body className="min-h-dvh">
-        <DemoBanner />
+        <ContactBar />
         {children}
-        <WhatsAppFloat />
+        <LogoIntro />
         <SmoothScroll />
         <AttributionCapture />
         <Analytics />

@@ -1,6 +1,5 @@
 import { site } from "@/config/site";
 import { precioDesde, moneda } from "@/config/p70";
-import { faq } from "@/content/faq";
 import { clips } from "@/content/media";
 import { isPending, type Maybe } from "@/lib/pending";
 
@@ -30,11 +29,11 @@ export function organizationLd() {
   };
 }
 
-/** LocalBusiness con lo confirmado: dirección y horario se suman solos al completarlos en config/site.ts. */
+/**
+ * LocalBusiness sin dirección ni horario: no se publican (las visitas al taller
+ * se coordinan por mensaje). Solo país y teléfono.
+ */
 export function localBusinessLd() {
-  const address = ok(site.address);
-  const city = ok(site.city);
-  const hours = ok(site.openingHours);
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -45,13 +44,8 @@ export function localBusinessLd() {
     image: abs(OG_IMAGE),
     priceRange: `Desde ${moneda} ${precioDesde}`,
     parentOrganization: { "@id": abs("/#organization") },
-    address: {
-      "@type": "PostalAddress",
-      addressCountry: "AR",
-      ...(address ? { streetAddress: address } : {}),
-      ...(city ? { addressLocality: city } : {}),
-    },
-    ...(hours ? { openingHours: hours } : {}),
+    address: { "@type": "PostalAddress", addressCountry: "AR" },
+    areaServed: "AR",
   };
 }
 
@@ -83,17 +77,6 @@ export function productLd() {
       url: `${url}#armalo`,
       seller: { "@id": abs("/#organization") },
     },
-  };
-}
-
-/** FAQPage solo con respuestas confirmadas (las pendientes no se publican). */
-export function faqLd() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faq
-      .filter((i) => !isPending(i.a))
-      .map((i) => ({ "@type": "Question", name: i.q, acceptedAnswer: { "@type": "Answer", text: i.a as string } })),
   };
 }
 

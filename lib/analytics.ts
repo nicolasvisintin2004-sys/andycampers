@@ -20,7 +20,10 @@ export type EventName =
   | "start_quote"
   | `quote_step_${number}`
   | "submit_quote"
-  | "click_whatsapp";
+  | "click_whatsapp"
+  | "click_instagram"
+  | "click_facebook"
+  | "open_clip";
 
 export function track(event: EventName, params: Params = {}) {
   if (typeof window === "undefined") return;

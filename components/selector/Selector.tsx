@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { colores, equipamientos, hexColor, nombreColor, nombreEq, precioDesde, videoSelector, type Equipamiento } from "@/config/p70";
+import { colores, equipamientos, hexColor, nombreColor, nombreEq, videoSelector, type Equipamiento } from "@/config/p70";
 import { isPending } from "@/lib/pending";
 import { ciclarColor, ciclarEq, linkCompartir, setSeleccion, useSeleccion } from "@/lib/selection";
 import { track } from "@/lib/analytics";
@@ -13,31 +13,47 @@ import { Stage, type StageHandle } from "./Stage";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-/** Scroll suave a una sección; si la página cambió de alto en el camino, corrige al llegar. */
+/** Alto de la barra de contactos fija (--bar-h), para que el scroll no deje nada debajo. */
+const barra = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--bar-h")) || 0;
+
+/** Scroll suave a una sección (debajo de la barra fija); si la página cambió de alto en el camino, corrige al llegar. */
 export function irA(id: string) {
   const target = document.getElementById(id);
   if (!target) return;
+  const offset = -barra();
+  const fuera = () => Math.abs(target.getBoundingClientRect().top + offset) > 2;
   const lenis = window.__lenis;
   if (lenis) {
     lenis.scrollTo(target, {
+      offset,
       duration: 1.3,
-      onComplete: () => Math.abs(target.getBoundingClientRect().top) > 2 && lenis.scrollTo(target, { duration: 0.35 }),
+      onComplete: () => fuera() && lenis.scrollTo(target, { offset, duration: 0.35 }),
     });
     return;
   }
   const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
-  target.scrollIntoView({ behavior: smooth ? "smooth" : "auto" });
-  if (smooth) setTimeout(() => Math.abs(target.getBoundingClientRect().top) > 2 && target.scrollIntoView(), 1200);
+  const go = () => window.scrollTo({ top: window.scrollY + target.getBoundingClientRect().top + offset, behavior: smooth ? "smooth" : "auto" });
+  go();
+  if (smooth) setTimeout(() => fuera() && go(), 1200);
 }
 
 const usd = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 });
 const HINT_KEY = "p70:pista";
+const NUMEROS = ["", "Un", "Dos", "Tres", "Cuatro", "Cinco", "Seis"];
+const NIVELES = `${NUMEROS[equipamientos.length] ?? equipamientos.length} niveles de equipamiento`;
+
+/** Nombre en la pestaña: el real o, mientras falte, uno neutro. */
+const nombreTab = (e: Equipamiento, corto = false) => {
+  if (corto && !isPending(e.nombreCorto)) return e.nombreCorto;
+  return isPending(e.nombre) ? (corto ? `Equip. ${pad(e.n)}` : nombreEq(e.n)) : e.nombre;
+};
 
 /**
  * "Armá tu P70": pantalla de selección tipo videojuego.
- * Mobile primero (375 px): pestañas arriba, colores en una columna fina a la
- * derecha, el camper al centro, "Qué incluye" en una hoja inferior y el CTA fijo.
- * Desktop: clases arriba, colores grandes a la derecha, panel a la izquierda.
+ * Mobile primero (375 px): pestañas arriba, el precio del nivel, el camper al
+ * centro, los colores en una fila abajo, "Qué incluye" en una hoja inferior y el CTA fijo.
+ * Desktop: niveles arriba, panel a la izquierda (precio arriba, lo que incluye,
+ * CTA abajo) y el camper con la fila de colores debajo.
  */
 export function Selector() {
   const sel = useSeleccion();
@@ -49,9 +65,7 @@ export function Selector() {
   const [barVisible, setBarVisible] = useState(false);
   const [hint, setHint] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const eqIdx = equipamientos.findIndex((e) => e.n === sel.eq);
-  const colorIdx = colores.findIndex((c) => c.id === sel.color);
-  const eq = equipamientos[eqIdx];
+  const eq = equipamientos.find((e) => e.n === sel.eq) ?? equipamientos[0];
 
   useEffect(() => {
     setSoundState(soundEnabled());
@@ -68,10 +82,6 @@ export function Selector() {
     io.observe(el);
     return () => io.disconnect();
   }, []);
-  useEffect(() => {
-    const mobile = matchMedia("(max-width: 1023px)").matches;
-    document.documentElement.style.setProperty("--wa-offset", barVisible && mobile ? "76px" : "0px");
-  }, [barVisible]);
 
   const interacted = useCallback(() => {
     if (!hint) return;
@@ -173,7 +183,7 @@ export function Selector() {
       id="armalo"
       aria-labelledby="armalo-title"
       onKeyDown={onKeyDown}
-      className="garage-cut relative isolate flex h-[100svh] min-h-[640px] flex-col overflow-hidden bg-garage text-bone lg:min-h-[760px]"
+      className="garage-cut relative isolate flex h-[calc(100svh-var(--bar-h))] min-h-[600px] flex-col overflow-hidden bg-garage text-bone lg:min-h-[700px]"
     >
       {/* Ambiente del garage: grilla de piso, viñeta y cono de luz */}
       <div aria-hidden className="pointer-events-none absolute inset-x-[-30%] top-[58%] bottom-[-40%] -z-10 garage-floor" />
@@ -204,50 +214,49 @@ export function Selector() {
         </div>
       </div>
 
-      {/* Equipamientos: pestañas (mobile) / clases (desktop) */}
+      {/* Equipamientos: solo el nombre */}
       <EqTabs active={sel.eq} onPick={(n) => elegir({ eq: n })} onPrime={(n) => prime(n, sel.color)} />
 
-      <div className="relative flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[minmax(300px,340px)_1fr_minmax(150px,180px)] lg:gap-6 lg:px-10 lg:pb-8">
-        {/* Nombre + contador (mobile arriba del camper; desktop en el panel) */}
-        <div className="relative z-10 flex items-end justify-between gap-3 px-4 pt-3 sm:px-6 lg:hidden">
-          <EqName eq={eq} count={`${pad(eqIdx + 1)} / ${pad(equipamientos.length)}`} />
+      <div className="relative flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[minmax(300px,340px)_1fr] lg:gap-8 lg:px-10 lg:pb-6">
+        {/* Niveles + precio (mobile, arriba del camper) */}
+        <div className="relative z-10 flex items-start justify-between gap-3 px-4 pt-3 sm:px-6 lg:hidden">
+          <Precio eq={eq} />
           <ActiveColorName active={sel.color} />
         </div>
 
-        {/* Panel izquierdo (desktop) */}
-        <aside className="relative z-10 hidden flex-col pt-6 lg:flex" aria-label="Detalle del equipamiento">
-          <EqName eq={eq} count={`${pad(eqIdx + 1)} / ${pad(equipamientos.length)}`} large />
+        {/* Panel izquierdo (desktop): niveles y precio arriba, lo que incluye, CTA abajo */}
+        <aside className="relative z-10 hidden min-h-0 flex-col pt-6 lg:flex" aria-label="Detalle del equipamiento">
+          <Precio eq={eq} large />
+          <p key={eq.n} className="fade-up mt-4 text-bone/80">
+            {isPending(eq.descripcion) ? <Missing label={eq.descripcion} /> : eq.descripcion}
+          </p>
           <div className="mt-6 min-h-0 flex-1 overflow-y-auto pr-2">
             <Includes eq={eq} />
           </div>
-          <PriceCtas onQuiero={quieroAsi} onShare={compartir} />
+          <Ctas onQuiero={quieroAsi} onShare={compartir} />
         </aside>
 
-        {/* Escenario */}
-        <div
-          className="stage min-h-0 flex-1 touch-pan-y select-none"
-          onPointerDown={onPointerDown}
-          onPointerUp={onPointerUp}
-          onPointerCancel={() => (swipe.current = null)}
-        >
-          <Stage
-            ref={stage}
-            eq={sel.eq}
-            color={sel.color}
-            scanKey={scanKey}
-            label={`${nombreEq(sel.eq)}, ${nombreColor(sel.color)}`}
-          />
-          <div aria-hidden className="garage-cone pointer-events-none absolute inset-0 z-[6]" />
-          {hint && <Hint className="absolute top-3 left-4 z-[7] flex sm:left-6 lg:hidden" />}
-          {videoSelector.sonDemo && (
-            <div className="absolute bottom-2 left-4 z-[7] max-w-[60%] sm:left-6 lg:left-0">
-              <Missing label="los 16 renders 3D del P70 girando (estos videos son DEMO)" compact short="Videos demo" />
-            </div>
-          )}
-        </div>
+        {/* Escenario + colores debajo */}
+        <div className="flex min-h-0 flex-1 flex-col">
+          <div
+            className="stage min-h-0 flex-1 touch-pan-y select-none"
+            style={{ "--piso": videoSelector.pisoY, "--base": videoSelector.pedestal.frente + 0.04 } as React.CSSProperties}
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+            onPointerCancel={() => (swipe.current = null)}
+          >
+            <Stage ref={stage} eq={sel.eq} color={sel.color} scanKey={scanKey} label={`${nombreEq(sel.eq)}, ${nombreColor(sel.color)}`} />
+            <div aria-hidden className="garage-cone pointer-events-none absolute inset-0 z-[6]" />
+            {hint && <Hint className="absolute top-2 left-4 z-[7] flex sm:left-6 lg:hidden" />}
+            {videoSelector.sonDemo && (
+              <div className="absolute bottom-1 left-4 z-[7] max-w-[46%] sm:left-6 lg:left-0">
+                <Missing label="los 15 renders 3D del P70 girando (estos videos son DEMO)" compact short="Videos demo" />
+              </div>
+            )}
+          </div>
 
-        {/* Colores: columna fina sobre el borde derecho (mobile) / muestras grandes (desktop) */}
-        <ColorRail active={sel.color} onPick={(c) => elegir({ color: c })} onPrime={(c) => prime(sel.eq, c)} />
+          <ColorRow active={sel.color} onPick={(c) => elegir({ color: c })} onPrime={(c) => prime(sel.eq, c)} />
+        </div>
       </div>
 
       {/* Barra fija inferior (mobile) */}
@@ -263,9 +272,13 @@ export function Selector() {
             onClick={() => setSheet(true)}
             tabIndex={barVisible ? 0 : -1}
             aria-haspopup="dialog"
-            className="flex min-h-12 flex-1 flex-col items-start justify-center text-left"
+            className="flex min-h-12 min-w-0 flex-1 flex-col items-start justify-center text-left"
           >
-            <span className="tabular font-mono text-[0.7rem] tracking-[0.12em] text-mist uppercase">Desde USD {usd.format(precioDesde)}</span>
+            {isPending(eq.precio) ? (
+              <Missing label={eq.precio} compact short="precio" />
+            ) : (
+              <span className="tabular max-w-full truncate font-mono text-[0.7rem] tracking-[0.12em] text-mist uppercase">USD {usd.format(eq.precio)}</span>
+            )}
             <span className="flex items-center gap-1 text-sm font-semibold">
               Qué incluye <IconChevron className="size-4 rotate-180" />
             </span>
@@ -284,7 +297,7 @@ export function Selector() {
       {sheet && createPortal(<Sheet eq={eq} onClose={() => setSheet(false)} onQuiero={quieroAsi} onShare={compartir} />, document.body)}
 
       {toast && (
-        <p role="status" className="fixed top-[calc(var(--demo-h)+1rem)] left-1/2 z-[60] max-w-[92vw] -translate-x-1/2 truncate bg-bone px-4 py-3 text-sm font-semibold text-ink shadow-[0_8px_24px_-12px_rgb(0_0_0/0.6)]">
+        <p role="status" className="fixed top-[calc(var(--bar-h)+1rem)] left-1/2 z-[60] max-w-[92vw] -translate-x-1/2 truncate bg-bone px-4 py-3 text-sm font-semibold text-ink shadow-[0_8px_24px_-12px_rgb(0_0_0/0.6)]">
           {toast}
         </p>
       )}
@@ -298,7 +311,13 @@ function EqTabs({ active, onPick, onPrime }: { active: number; onPick: (n: numbe
   const idx = equipamientos.findIndex((e) => e.n === active);
   return (
     <div className="relative z-10 mt-2 px-4 sm:px-6 lg:mt-5 lg:px-10">
-      <div role="radiogroup" aria-label="Equipamiento" data-group="eq" className="relative grid grid-cols-4 border-b border-line">
+      <div
+        role="radiogroup"
+        aria-label="Equipamiento"
+        data-group="eq"
+        className="relative grid border-b border-line"
+        style={{ gridTemplateColumns: `repeat(${equipamientos.length}, minmax(0, 1fr))` }}
+      >
         {equipamientos.map((e) => {
           const on = e.n === active;
           return (
@@ -312,67 +331,46 @@ function EqTabs({ active, onPick, onPrime }: { active: number; onPick: (n: numbe
               onPointerEnter={(ev) => ev.pointerType === "mouse" && onPrime(e.n)}
               onPointerDown={() => onPrime(e.n)}
               onFocus={() => onPrime(e.n)}
-              aria-label={`Equipamiento ${pad(e.n)}${isPending(e.nombre) ? "" : `: ${e.nombre}`}`}
-              className={`group relative flex min-h-14 flex-col items-start gap-1 px-1.5 pt-1 pb-3 text-left transition-colors sm:px-3 lg:min-h-[92px] lg:px-4 lg:pt-3 ${
+              aria-label={nombreTab(e)}
+              className={`group relative flex min-h-14 flex-col items-start justify-center gap-1 px-1.5 pt-1 pb-3 text-left transition-colors sm:px-3 lg:min-h-[76px] lg:px-4 lg:pt-2 ${
                 on ? "text-bone" : "text-mist hover:text-bone"
               }`}
             >
-              <span className={`tabular font-mono text-xs tracking-[0.14em] lg:text-[0.8rem] ${on ? "text-orange-glow" : ""}`}>{pad(e.n)}</span>
-              {/* Nombre corto (mobile) / nombre + descripción (desktop) */}
-              <span className="max-w-full lg:hidden">
-                {isPending(e.nombreCorto) ? <Missing label={e.nombreCorto} compact short="nombre" /> : <span className="text-sm font-semibold">{e.nombreCorto}</span>}
-              </span>
-              <span className="hidden max-w-full lg:block">
-                {isPending(e.nombre) ? (
-                  <span className="font-display-x text-lg uppercase">Equipamiento {pad(e.n)}</span>
-                ) : (
-                  <span className="font-display-x text-lg uppercase">{e.nombre}</span>
-                )}
-              </span>
-              <span className="hidden max-w-full text-[0.82rem] leading-snug text-bone/70 lg:block">
-                {isPending(e.descripcion) ? <Missing label={e.descripcion} compact short="descripción" /> : e.descripcion}
-              </span>
+              <span className="font-display-x max-w-full text-[0.95rem] leading-tight uppercase lg:hidden">{nombreTab(e, true)}</span>
+              <span className="font-display-x hidden max-w-full text-xl uppercase lg:block">{nombreTab(e)}</span>
+              {isPending(e.nombre) && <Missing label={e.nombre} compact short="nombre" />}
             </button>
           );
         })}
         {/* Indicador que se desliza entre opciones */}
         <span
           aria-hidden
-          className="pointer-events-none absolute bottom-[-1px] left-0 h-[3px] w-1/4 bg-orange transition-transform duration-500 ease-[var(--ease-out-expo)]"
-          style={{ transform: `translateX(${idx * 100}%) skewX(-24deg)` }}
+          className="pointer-events-none absolute bottom-[-1px] left-0 h-[3px] bg-orange transition-transform duration-500 ease-[var(--ease-out-expo)]"
+          style={{ width: `${100 / equipamientos.length}%`, transform: `translateX(${idx * 100}%) skewX(-24deg)` }}
         />
       </div>
     </div>
   );
 }
 
-function EqName({ eq, count, large = false }: { eq: Equipamiento; count: string; large?: boolean }) {
-  const name = isPending(eq.nombre) ? `Equipamiento ${pad(eq.n)}` : eq.nombre;
-  let l = 0;
+/** "Tres niveles de equipamiento" y, debajo, el precio del nivel elegido. */
+function Precio({ eq, large = false, titulo = true }: { eq: Equipamiento; large?: boolean; titulo?: boolean }) {
   return (
-    <div>
-      <p className="tabular font-mono text-xs tracking-[0.14em] text-mist">
-        <span className="text-orange-glow">{count.slice(0, 2)}</span>
-        {count.slice(2)}
-      </p>
-      <p key={name} aria-hidden className={`letter-in font-display-x mt-1 uppercase ${large ? "text-[clamp(1.7rem,2.2vw,2.4rem)]" : "text-[clamp(1.35rem,6.4vw,1.75rem)]"}`}>
-        {name.split(" ").map((w, wi) => (
-          <span key={wi} className="inline-block whitespace-nowrap">
-            {[...w].map((ch) => (
-              <span key={l} style={{ "--l": l++ } as React.CSSProperties}>
-                {ch}
-              </span>
-            ))}
-            {wi < name.split(" ").length - 1 && <span style={{ "--l": l++ } as React.CSSProperties}> </span>}
-          </span>
-        ))}
-      </p>
-      {isPending(eq.nombre) && (
-        <div className="mt-2">
-          <Missing label={eq.nombre} compact={!large} short="nombre del equipamiento" />
-        </div>
-      )}
-      {large && <p className="mt-3 text-bone/80">{isPending(eq.descripcion) ? <Missing label={eq.descripcion} /> : eq.descripcion}</p>}
+    <div className="min-w-0">
+      {titulo && <p className={`font-display-x text-bone/90 uppercase ${large ? "text-[clamp(1.35rem,1.7vw,1.7rem)]" : "text-[0.95rem]"}`}>{NIVELES}</p>}
+      <div key={eq.n} className={`fade-up ${!titulo ? "" : large ? "mt-3" : "mt-1.5"}`}>
+        {isPending(eq.precio) ? (
+          large ? (
+            <Missing label={eq.precio} />
+          ) : (
+            <Missing label={eq.precio} compact short="precio" />
+          )
+        ) : (
+          <p className={`font-display-x tabular text-orange-glow uppercase ${large ? "text-[clamp(2.2rem,3vw,3rem)]" : "text-[clamp(1.6rem,7.4vw,2rem)]"}`}>
+            USD {usd.format(eq.precio)}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
@@ -423,45 +421,35 @@ function Stats({ stats }: { stats: NonNullable<Equipamiento["stats"]> }) {
   );
 }
 
-function PriceCtas({ onQuiero, onShare }: { onQuiero: () => void; onShare: () => void }) {
+function Ctas({ onQuiero, onShare }: { onQuiero: () => void; onShare: () => void }) {
   return (
-    <div className="mt-6 border-t border-line pt-5">
-      <p className="tabular font-mono text-[0.72rem] tracking-[0.14em] text-mist uppercase">Precio base</p>
-      <p className="font-display-x mt-1 text-[clamp(1.5rem,1.9vw,1.85rem)] uppercase">
-        Desde <span className="tabular">USD {usd.format(precioDesde)}</span>
-      </p>
-      <div className="mt-5 flex flex-col gap-2">
-        <button
-          type="button"
-          onClick={onQuiero}
-          className="group inline-flex min-h-14 items-center justify-between gap-3 bg-orange-cta px-6 text-lg font-semibold text-ink transition-colors hover:bg-[#f47b52]"
-        >
-          Lo quiero así <IconArrow className="size-5 transition-transform group-hover:translate-x-1" />
-        </button>
-        <button
-          type="button"
-          onClick={onShare}
-          className="inline-flex min-h-12 items-center gap-3 px-1 font-semibold text-bone/85 transition-colors hover:text-bone"
-        >
-          <IconShare className="size-5" /> Compartir mi P70
-        </button>
-      </div>
+    <div className="mt-6 flex flex-col gap-2 border-t border-line pt-5">
+      <button
+        type="button"
+        onClick={onQuiero}
+        className="group inline-flex min-h-14 items-center justify-between gap-3 bg-orange-cta px-6 text-lg font-semibold text-ink transition-colors hover:bg-[#f47b52]"
+      >
+        Lo quiero así <IconArrow className="size-5 transition-transform group-hover:translate-x-1" />
+      </button>
+      <button type="button" onClick={onShare} className="inline-flex min-h-12 items-center gap-3 px-1 font-semibold text-bone/85 transition-colors hover:text-bone">
+        <IconShare className="size-5" /> Compartir mi P70
+      </button>
     </div>
   );
 }
 
 /* ───────────────────────── Colores ───────────────────────── */
 
-function ColorRail({ active, onPick, onPrime }: { active: string; onPick: (id: string) => void; onPrime: (id: string) => void }) {
+/** Fila de colores debajo del camper. */
+function ColorRow({ active, onPick, onPrime }: { active: string; onPick: (id: string) => void; onPrime: (id: string) => void }) {
   return (
-    <div className="pointer-events-none absolute top-[6rem] right-2 z-10 sm:right-4 lg:pointer-events-auto lg:static lg:flex lg:flex-col lg:justify-center">
-      <p className="eyebrow mb-4 hidden text-mist lg:block" id="color-label">
+    <div className="relative z-10 flex items-center justify-center gap-6 px-4 pt-1 pb-[5.5rem] sm:px-6 lg:justify-between lg:px-0 lg:pt-3 lg:pb-0">
+      <p className="eyebrow hidden w-40 text-mist lg:block" id="color-label">
         Color
       </p>
-      <div role="radiogroup" aria-label="Color" data-group="color" className="pointer-events-auto flex flex-col gap-0.5 lg:gap-3">
+      <div role="radiogroup" aria-label="Color" data-group="color" className="flex items-center gap-1.5 sm:gap-3">
         {colores.map((c, i) => {
           const on = c.id === active;
-          const pending = isPending(c.nombre) || isPending(c.hex);
           return (
             <button
               key={c.id}
@@ -474,23 +462,21 @@ function ColorRail({ active, onPick, onPrime }: { active: string; onPick: (id: s
               onPointerDown={() => onPrime(c.id)}
               onFocus={() => onPrime(c.id)}
               aria-label={`Color ${pad(i + 1)}${isPending(c.nombre) ? "" : `: ${c.nombre}`}`}
-              className="group flex min-h-11 items-center justify-end gap-3 lg:justify-start lg:py-1"
+              className="group grid min-h-11 place-items-center"
             >
               <span
-                className={`relative grid size-11 shrink-0 place-items-center rounded-full transition-transform duration-300 ease-[var(--ease-out-expo)] lg:size-14 ${on ? "scale-100" : "scale-[0.82] group-hover:scale-90"}`}
+                className={`relative grid size-12 shrink-0 place-items-center rounded-full transition-transform duration-300 ease-[var(--ease-out-expo)] lg:size-14 ${on ? "scale-100" : "scale-[0.82] group-hover:scale-90"}`}
               >
                 <span aria-hidden className={`absolute inset-0 rounded-full ring-2 transition-colors ${on ? "ring-bone" : "ring-transparent"}`} />
                 <span aria-hidden className="size-[72%] rounded-full shadow-[inset_0_-6px_10px_rgb(0_0_0/0.35),inset_0_3px_6px_rgb(255_255_255/0.25)]" style={{ background: hexColor(c) }} />
                 {on && <span aria-hidden className="absolute -inset-1.5 rounded-full border border-dashed border-orange-glow/70 motion-safe:animate-[spin_9s_linear_infinite]" />}
               </span>
-              <span className="hidden min-w-0 text-left lg:block">
-                <span className="tabular block font-mono text-[0.68rem] tracking-[0.14em] text-mist">{pad(i + 1)}</span>
-                {isPending(c.nombre) ? <span className="block font-semibold">Color {pad(i + 1)}</span> : <span className="block font-semibold">{c.nombre}</span>}
-                {pending && <Missing label={`nombre y hex del color ${i + 1}`} compact short="nombre y hex" className="mt-1" />}
-              </span>
             </button>
           );
         })}
+      </div>
+      <div className="hidden w-40 justify-end lg:flex">
+        <ActiveColorName active={active} />
       </div>
     </div>
   );
@@ -501,12 +487,12 @@ function ActiveColorName({ active }: { active: string }) {
   const c = colores[i];
   const pending = isPending(c.nombre) || isPending(c.hex);
   return (
-    <div className="flex shrink-0 flex-col items-end gap-1 pb-0.5" aria-hidden>
-      <span className="flex items-center gap-1.5 font-mono text-[0.66rem] tracking-[0.14em] text-mist uppercase">
+    <div className="flex shrink-0 flex-col items-end gap-1 pt-0.5" aria-hidden>
+      <span className="flex items-center gap-1.5 font-mono text-[0.66rem] tracking-[0.14em] text-mist uppercase lg:text-[0.72rem]">
         <span className="size-2.5 rounded-full" style={{ background: hexColor(c) }} />
         {isPending(c.nombre) ? `Color ${pad(i + 1)}` : c.nombre}
       </span>
-      {pending && <Missing label={`nombre y hex del color ${i + 1}`} compact short="nombre/hex" />}
+      {pending && <Missing label={`nombre y hex del color ${i + 1}`} compact short="nombre y hex" />}
     </div>
   );
 }
@@ -549,16 +535,22 @@ function Sheet({ eq, onClose, onQuiero, onShare }: { eq: Equipamiento; onClose: 
       >
         <div className="mx-auto mb-3 h-1 w-10 bg-line" aria-hidden />
         <div className="flex items-start justify-between gap-4">
-          <EqName eq={eq} count={`${pad(eq.n)} / ${pad(equipamientos.length)}`} />
+          <div className="min-w-0">
+            <p className="font-display-x text-[1.5rem] uppercase">{nombreTab(eq)}</p>
+            {isPending(eq.nombre) && <Missing label={eq.nombre} compact short="nombre del equipamiento" className="mt-2" />}
+          </div>
           <button type="button" onClick={close} aria-label="Cerrar" className="-mt-1 -mr-2 grid size-11 shrink-0 place-items-center text-mist hover:text-bone">
             <IconClose className="size-5" />
           </button>
         </div>
-        <p className="mt-2 text-bone/80">{isPending(eq.descripcion) ? <Missing label={eq.descripcion} /> : eq.descripcion}</p>
+        <div className="mt-4">
+          <Precio eq={eq} large titulo={false} />
+        </div>
+        <p className="mt-3 text-bone/80">{isPending(eq.descripcion) ? <Missing label={eq.descripcion} /> : eq.descripcion}</p>
         <div className="mt-5">
           <Includes eq={eq} />
         </div>
-        <PriceCtas onQuiero={onQuiero} onShare={onShare} />
+        <Ctas onQuiero={onQuiero} onShare={onShare} />
       </div>
     </div>
   );
@@ -575,4 +567,3 @@ function Hint({ className = "" }: { className?: string }) {
     </p>
   );
 }
-

@@ -1,8 +1,8 @@
 # AndyCampers · Landing P70 ("Armá tu P70")
 
-Landing de una sola página para el **P70 Acero 100%**: hero con la experiencia, **selector tipo videojuego** (4 equipamientos × 4 colores, el camper girando 360° sobre un pedestal), qué es el P70 (anatomía + ficha técnica en HTML), en acción, formulario de cotización con puntaje de leads, preguntas frecuentes y footer. Páginas extra: `/gracias` y `/privacidad`.
+Landing de una sola página para el **P70 Acero 100%**: entrada con el logo grande que se corre a la barra, **barra fija** con el logo, Instagram, Facebook y WhatsApp, hero con la experiencia y 3 videos que se agrandan, **selector tipo videojuego** (3 niveles de equipamiento × 5 colores, el camper girando 360° sobre una base brújula), qué es el P70 (piezas clave + ficha técnica en HTML, en una sola sección), en acción, formulario de cotización con puntaje de leads y footer. Páginas extra: `/gracias` y `/privacidad`.
 
-**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · GSAP + ScrollTrigger · Framer Motion · Lenis · Zod. La landing es estática (SSG); los Route Handlers son el formulario (`/api/lead`) y el resumen semanal (`/api/cron/weekly-summary`). Deploy en Netlify, videos en un CDN externo.
+**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · Framer Motion · Lenis · Zod. La landing es estática (SSG); los Route Handlers son el formulario (`/api/lead`) y el resumen semanal (`/api/cron/weekly-summary`). Deploy en Netlify, videos en un CDN externo.
 
 ```bash
 npm install
@@ -12,10 +12,10 @@ npm run dev                   # http://localhost:3000
 
 | Comando | Qué hace |
 |---|---|
-| `npm run dev` / `build` / `start` | Desarrollo, build de producción (corre antes el chequeo de pendientes) y servidor |
+| `npm run dev` / `build` / `start` | Desarrollo, build de producción (corre antes el chequeo de pendientes) y servidor. `dev` usa la carpeta `.next-dev` y `build`/`start` usan `.next`, así pueden correr a la vez sin pisarse |
 | `npm run pendientes` | Lista todos los carteles rojos con archivo y línea y escribe `docs/pendientes.md` para mandarle a Andrés |
-| `npm run videos:demo` | Genera los 16 videos DEMO del selector (Three.js + Chrome + ffmpeg-static) |
-| `npm run videos:check` | Controla los 16 videos contra las especificaciones de los renders |
+| `npm run videos:demo` | Genera los 15 videos DEMO del selector (Three.js + Chrome + ffmpeg-static) |
+| `npm run videos:check` | Controla los 15 videos contra las especificaciones de los renders |
 | `npm run test:leads` | Manda un lead de cada categoría (y casos de error) al formulario |
 | `npm run typecheck` | TypeScript sin emitir |
 
@@ -25,22 +25,21 @@ npm run dev                   # http://localhost:3000
 
 Nada se inventa. Todo dato que Andrés no confirmó aparece en el sitio como un **cartel rojo** (`⚠ FALTA: …`, fondo `#E00000`, borde punteado). Se carga como `falta("…")` y se completa reemplazando esa llamada por el dato real. Está todo centralizado en:
 
-- **`config/p70.ts`**: los 4 equipamientos (nombre, nombre corto, descripción, qué incluye, stats), los 4 colores (nombre y hex), medidas, carga útil, personas, garantía, plazos, forma de pago.
-- **`config/site.ts`**: dirección y horario del taller, Facebook, YouTube, logo SVG, razón social, financiación.
-- **`content/faq.ts`**: respuestas de compra y entrega.
+- **`config/p70.ts`**: los 3 equipamientos (nombre, nombre corto, precio, descripción, qué incluye, stats), los 5 colores (nombre y hex), medidas, carga útil, personas, garantía, plazos, forma de pago.
+- **`config/site.ts`**: YouTube, logo SVG, razón social, financiación. La dirección y el horario del taller **no se publican**: las visitas se coordinan por mensaje (`site.visitas`, que usa el footer).
 
 `npm run pendientes` arma la lista completa en `docs/pendientes.md`. Además faltan, fuera del código:
-- Los **16 renders** del P70 girando (hoy se ven los DEMO, ver §2).
+- Los **15 renders** del P70 girando (hoy se ven los DEMO, ver §3).
 - **Clips** para el hero (ruta, off-road, nieve, playa, noche con estrellas, cocina) y para "En acción" (nieve, frenar en curva, estacionando, protecciones).
 - Si Andrés quiere usar las barras de **stats**, sus valores por equipamiento.
 - Si ofrece **financiación** (cambia el puntaje, ver §4).
 - **Credenciales**: Google service account + ID de planilla, Resend, WhatsApp Cloud API, Turnstile, GA4, Meta Pixel y CDN de videos.
 
-**Modo demo.** Mientras `NEXT_PUBLIC_DEMO` no sea `false`, arriba se ve el cartel rojo "DEMO" y el sitio pide a Google que no lo indexe. Con `NEXT_PUBLIC_DEMO=false`, si queda algún dato pendiente **el build falla** y dice cuáles.
+**Modo demo.** Mientras `NEXT_PUBLIC_DEMO` no sea `false`, el sitio pide a Google que no lo indexe (la barra de arriba ya no dice "DEMO": muestra los contactos). Con `NEXT_PUBLIC_DEMO=false`, si queda algún dato pendiente **el build falla** y dice cuáles.
 
 ---
 
-## 2. Los 4 equipamientos y los 4 colores
+## 2. Los 3 equipamientos y los 5 colores
 
 Todo en `config/p70.ts`:
 
@@ -48,8 +47,9 @@ Todo en `config/p70.ts`:
 export const equipamientos: Equipamiento[] = [
   {
     n: 1,                                   // va en el nombre del video: p70-eq1-…
-    nombre: "Esencial",                     // ← reemplaza falta("nombre del equipamiento 1")
+    nombre: "Esencial",                     // ← reemplaza falta("nombre del equipamiento 1"); es lo único que dice la pestaña
     nombreCorto: "Esencial",                // pestañas en mobile (8–10 caracteres)
+    precio: 18900,                          // USD, se ve arriba del panel debajo de "Tres niveles de equipamiento"
     descripcion: "Lo justo para salir este fin de semana",
     incluye: ["Toldo 270°", "Panel solar 150 W", "…"],
     stats: { autonomia: 40, confort: 55, offroad: 70 },   // o null para no mostrar barras
@@ -64,29 +64,30 @@ export const colores: ColorP70[] = [
 ```
 
 - **`id` del color**: minúsculas, sin espacios ni tildes. Es lo que va en el link compartido (`?eq=2&color=verde`) y en el nombre de los videos. Si cambiás los ids, renombrá los videos igual.
-- **Stats**: se muestran solo si los 4 equipamientos tienen valores (0–100). Con `stats: null` no aparecen.
-- **Precio**: `precioDesde` (único precio que se muestra, "Desde USD 16.500").
+- **Stats**: se muestran solo si los 3 equipamientos tienen valores (0–100). Con `stats: null` no aparecen.
+- **Precio**: cada equipamiento tiene el suyo (`precio`, el precio real, sin "desde"). `precioDesde` ("Desde USD 16.500") queda para el hero y los buscadores.
 - **Combinación inicial** del selector: `inicial`.
 
 ---
 
-## 3. Videos del selector (los 16 renders)
+## 3. Videos del selector (los 15 renders)
 
 ### Cómo funciona
 Cada combinación tiene su video del camper girando 360° en loop. Al cambiar de opción, la web carga el nuevo en un segundo `<video>` oculto, lo lleva **a la misma fracción del giro** que el actual, espera el `seeked` y hace un fundido de 300 ms: el camper cambia de piel sin saltar de ángulo. Precarga en tiempo ocioso los "vecinos" (los otros colores del equipamiento actual y los otros equipamientos del color actual) y, con el mouse encima de una opción (o el dedo apoyado), esa misma. Con ahorro de datos o conexión lenta usa la versión mobile y no precarga. Con `prefers-reduced-motion` muestra el poster quieto y un botón de play.
 
-Medido en esta máquina con los 16 demo: el ángulo se mantiene dentro de ±1 cuadro en los 15 cambios y el fundido arranca a los 20–40 ms con la opción precargada por hover, y a los 55–90 ms sin hover.
+Medido en esta máquina con los demo: el ángulo se mantiene dentro de ±1 cuadro en cada cambio y el fundido arranca a los 20–40 ms con la opción precargada por hover, y a los 55–90 ms sin hover.
 
 ### Especificaciones para Andrés (renders finales)
 
 | | |
 |---|---|
-| Cantidad | **16 videos**, uno por combinación (4 equipamientos × 4 colores) |
-| Movimiento | **Un giro completo de 360°**, velocidad constante, **loop perfecto** (el último cuadro empalma con el primero: el cuadro siguiente al último sería el primero) |
-| Duración | **La misma en los 16**, entre 8 y 12 s (los demo duran 10 s) |
-| Cámara | **Misma cámara, encuadre, lente, iluminación y ángulo inicial** en los 16. Cámara fija, apenas elevada (unos 9°), el camper centrado |
-| Encuadre | El contacto de las ruedas con el piso a la altura del **74 % del cuadro** (desde arriba). El camper, con lanza incluida y en su posición más ancha, ocupa como máximo el **62 % del ancho**. El 15 % superior queda libre |
-| Fondo | **Liso, del color `#1C1F23`** (el grafito del sitio), sin degradés ni viñeta. Puede tener sombra de contacto. Con o sin piso: si trae piso o plataforma propia, poner `renderIncludesFloor: true` en `config/p70.ts` y la web oculta su pedestal |
+| Cantidad | **15 videos**, uno por combinación (3 equipamientos × 5 colores) |
+| Movimiento | **Un giro completo de 360°**, velocidad constante y tranquila, **loop perfecto** (el último cuadro empalma con el primero: el cuadro siguiente al último sería el primero) |
+| Duración | **La misma en los 15**, entre 8 y 16 s (los demo duran 14 s: cuanto más largo, más lento gira) |
+| Cámara | **Misma cámara, encuadre, lente, iluminación y ángulo inicial** en los 15. Cámara fija, un poco desde arriba (unos 16°) para que se vea el techo, el camper centrado |
+| Base | El camper gira sobre una **base redonda tipo brújula, fija**, con **N, S, E y O** (en los demo: N hacia la cámara, E a la izquierda, O a la derecha, y una flecha naranja debajo de la lanza que marca el rumbo). Con base propia en el render va `renderIncludesFloor: true` en `config/p70.ts`; `brujula.rumboInicial` y `sentido` hacen que la lectura "Rumbo" de la web coincida |
+| Encuadre | El contacto de las ruedas con el piso a la altura del **66 % del cuadro** (desde arriba). La base ocupa como máximo el **57 % del ancho** y su borde de abajo queda por encima del 88 % del alto. El 15 % superior queda libre |
+| Fondo | **Liso, del color `#1C1F23`** (el grafito del sitio), sin degradés ni viñeta. Puede tener sombra de contacto |
 | Exportación | **MP4 H.264** y **WebM VP9**, **30 fps**, **sin audio**. Desktop **1920×1080**; mobile **1280×720** (mismo encuadre). **Menos de 4 MB** cada archivo. Keyframe cada 15 cuadros si se puede (ayuda a sincronizar) |
 | Poster | Un **JPG 1280×720** por combinación: el primer cuadro |
 | Nombres | `p70-eq{número}-{color}.mp4` / `.webm` / `.jpg`. Ej.: `p70-eq1-verde.mp4`, `p70-eq3-gris.webm` (colores de ejemplo: usar los `id` de `config/p70.ts`) |
@@ -100,7 +101,7 @@ p70/
   posters/  p70-eq1-c1.jpg  …                    (1280×720)
 ```
 
-Si el encuadre final no respeta exactamente el 74 % / 62 %, se ajusta en `config/p70.ts → videoSelector.pisoY` y `pedestal` para que el pedestal de la web coincida con el piso del render.
+Si el encuadre final no respeta exactamente esas medidas, se ajusta en `config/p70.ts → videoSelector.pisoY` (contacto con el piso) y `pedestal.frente` (cuánto baja la base por delante): con eso la web acomoda el camper para que la base entre entera en el escenario. Si los renders vinieran **sin** base, `renderIncludesFloor: false` dibuja el pedestal de la web encima (`components/selector/Pedestal.tsx`).
 
 ### Reemplazar los demo por los reales
 1. Pisar los archivos con los mismos nombres (si los colores ya tienen nombre, renombrar ids en `config/p70.ts` y archivos a la vez).
@@ -202,15 +203,15 @@ curl -H "Authorization: Bearer $CRON_SECRET" https://andycampers.com.ar/api/cron
 ```
 
 ### Analítica (GA4 + Meta Pixel)
-`NEXT_PUBLIC_GA4_ID` y `NEXT_PUBLIC_META_PIXEL_ID`. Se cargan después del load (no compiten con el LCP). Eventos, sin datos personales: `select_equipment`, `select_color`, `share_config`, `click_quiero_asi`, `start_quote`, `quote_step_n`, `submit_quote` (con categoría; en el Pixel va como `Lead`) y `click_whatsapp`.
+`NEXT_PUBLIC_GA4_ID` y `NEXT_PUBLIC_META_PIXEL_ID`. Se cargan después del load (no compiten con el LCP). Eventos, sin datos personales: `select_equipment`, `select_color`, `share_config`, `click_quiero_asi`, `start_quote`, `quote_step_n`, `submit_quote` (con categoría; en el Pixel va como `Lead`), `click_whatsapp`, `click_instagram`, `click_facebook` (barra de arriba) y `open_clip` (videos del hero).
 
 ---
 
 ## 6. SEO
 
 - Una sola URL fuerte (`/`) con title, description, canonical, Open Graph (`public/og/camper-p70-og.jpg`), `sitemap.xml` y `robots.txt`.
-- JSON-LD: `Organization`, `LocalBusiness` (dirección y horario se suman solos al completarlos), `Product` P70 con `Offer` de USD 16.500 como precio base, `FAQPage` (solo respuestas confirmadas) y `VideoObject` de los clips reales de "En acción" (no de los videos demo).
-- Ficha técnica, equipamiento y preguntas en HTML, nunca dentro de imágenes.
+- JSON-LD: `Organization`, `LocalBusiness` (sin dirección ni horario, a propósito), `Product` P70 con `Offer` de USD 16.500 como precio base y `VideoObject` de los clips reales de "En acción" (no de los videos demo).
+- Ficha técnica y equipamiento en HTML, nunca dentro de imágenes.
 - Después de publicar: validar `/` en la [Prueba de resultados enriquecidos](https://search.google.com/test/rich-results) y subir el sitemap a Search Console.
 
 ---
@@ -229,14 +230,15 @@ curl -H "Authorization: Bearer $CRON_SECRET" https://andycampers.com.ar/api/cron
 
 ```
 app/                 page.tsx (la landing), gracias/, privacidad/, api/lead, api/cron/weekly-summary
-components/          hero/, selector/ (Selector, Stage, Pedestal), p70/ (anatomía, ficha),
-                     accion/, cotizar/ (puente, formulario, gracias), faq/, layout/, ui/, providers/
+components/          hero/ (montaje, 3 videos con visor), selector/ (Selector, Stage, Pedestal),
+                     p70/ (QueEsP70: piezas clave + ficha), accion/, cotizar/ (puente, formulario, gracias),
+                     layout/ (ContactBar: barra fija con contactos, LogoIntro: entrada del logo, Footer), ui/, providers/
 config/              p70.ts (producto), site.ts (negocio), lead-scoring.ts, quote-questions.ts
-content/             media.ts (fotos y clips reales), faq.ts, media/ (fotos optimizadas)
+content/             media.ts (fotos y clips reales), media/ (fotos optimizadas)
 lib/                 video-switcher.ts (motor A/B), selection.ts, jsonld, analytics, scoring, server/
-public/media/p70/    los 16 videos DEMO + posters (en producción, en el CDN)
+public/media/p70/    los 15 videos DEMO + posters (en producción, en el CDN)
 scripts/             generate-placeholder-videos, check-videos, pendientes, test-leads
 netlify/functions/   resumen semanal
 ```
 
-Movimiento y accesibilidad: solo se anima `transform` y `opacity`; en mobile baja la intensidad; con `prefers-reduced-motion` todo queda en su estado final (sin parallax, sin escena fija, sin smooth scroll, video quieto con botón de play). El selector y el formulario se usan con teclado (← → equipamiento, ↑ ↓ color; letras A, B, C… eligen opciones del formulario) y lector de pantalla (`radiogroup`). Lenis se desactiva en pantallas táctiles.
+Movimiento y accesibilidad: solo se anima `transform` y `opacity`; en mobile baja la intensidad; con `prefers-reduced-motion` todo queda en su estado final (sin entrada del logo, sin parallax, sin smooth scroll, video quieto con botón de play). La entrada del logo se ve una vez por carga de la home: el logo grande sale en el HTML y, si el JS no llega, se funde solo a los 2,6 s. El selector y el formulario se usan con teclado (← → equipamiento, ↑ ↓ color; letras A, B, C… eligen opciones del formulario) y lector de pantalla (`radiogroup`). Lenis se desactiva en pantallas táctiles.

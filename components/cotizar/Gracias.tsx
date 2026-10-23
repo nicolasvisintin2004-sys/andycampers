@@ -56,7 +56,7 @@ export function Gracias() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => track("click_whatsapp", { ubicacion: "gracias", categoria: d?.categoria })}
-                className="inline-flex min-h-14 items-center gap-3 bg-wa px-6 text-lg font-semibold text-white hover:bg-[#188a49]"
+                className="inline-flex min-h-14 items-center gap-3 bg-wa px-6 text-lg font-semibold text-white hover:bg-[#116b33]"
               >
                 <IconWhatsApp className="size-6" /> Escribirle a Andy ahora
               </a>

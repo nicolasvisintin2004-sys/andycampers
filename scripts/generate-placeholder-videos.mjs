@@ -1,21 +1,23 @@
 /**
- * Genera los 16 videos DEMO del selector "Armá tu P70" (4 equipamientos × 4 colores).
+ * Genera los 15 videos DEMO del selector "Armá tu P70" (3 equipamientos × 5 colores).
  *
  * Una escena simple de Three.js (un camper low-poly genérico: caja con ruedas)
- * gira 360° sobre el fondo liso del sitio, pintada con el color de cada
- * combinación y con una ETIQUETA ROJA "DEMO · Equipamiento N · Color X".
+ * gira 360° sobre una base brújula (N, S, E, O) fija, sobre el fondo liso del
+ * sitio, pintada con el color de cada combinación y con una ETIQUETA ROJA
+ * "DEMO · Equipamiento N · Color X". Una flecha naranja en la base marca hacia
+ * dónde apunta la lanza.
  * Se renderiza cuadro por cuadro en Chrome (playwright-core) y se codifica con
  * ffmpeg-static, sin depender de un ffmpeg instalado.
  *
  * Cumplen las mismas reglas que los renders finales (ver README):
- *   - 10 s, 30 fps, un giro completo, loop perfecto (el cuadro 300 sería el 0)
- *   - misma cámara, encuadre, luz y ángulo inicial en los 16
+ *   - 14 s (videoSelector.duracion), 30 fps, un giro completo, loop perfecto
+ *   - misma cámara (un poco desde arriba: se ve el techo), encuadre, luz y ángulo inicial en los 15
  *   - MP4 H.264 + WebM VP9, sin audio · desktop 1920×1080 y mobile 1280×720
  *   - poster .jpg (primer cuadro)
  *   - nombres p70-eq{n}-{color}.mp4 en public/media/p70/{desktop,mobile,posters}
  *
  * Uso:
- *   npm run videos:demo                 → los 16
+ *   npm run videos:demo                 → los 15
  *   npm run videos:demo -- --only=eq2-c3 → una sola combinación
  *   npm run videos:demo -- --frames=60   → prueba rápida (no hace loop de 10 s)
  *
@@ -43,7 +45,7 @@ const colores = [...bloque("colores").matchAll(/\{\s*id:\s*"([^"]+)",\s*nombre:\
 const fondo = cfg.match(/fondo:\s*"(#[0-9a-fA-F]{6})"/)[1];
 const duracion = Number(cfg.match(/duracion:\s*(\d+)/)[1]);
 const pisoY = Number(cfg.match(/pisoY:\s*([\d.]+)/)[1]);
-if (eqs.length !== 4 || colores.length !== 4) throw new Error(`Esperaba 4 equipamientos y 4 colores en config/p70.ts (encontré ${eqs.length} y ${colores.length})`);
+if (!eqs.length || !colores.length) throw new Error(`No encontré equipamientos o colores en config/p70.ts (${eqs.length} y ${colores.length})`);
 
 const FPS = 30;
 const FRAMES = Number(args.frames ?? duracion * FPS);
@@ -58,7 +60,8 @@ for (const d of ["desktop", "mobile", "posters"]) mkdirSync(join(OUT, d), { recu
 
 /* ───────────────────────── Escena (corre dentro de Chrome) ───────────────────────── */
 const PAGE = /* html */ `<!doctype html><html><head><meta charset="utf-8">
-<style>html,body{margin:0;background:${fondo}}canvas{display:block}</style>
+<style>html,body{margin:0;background:${fondo}}canvas{display:block}
+@font-face{font-family:Archivo;src:url(/archivo.woff2) format("woff2");font-weight:900;font-style:italic}</style>
 <script type="importmap">{"imports":{"three":"/three/three.module.js"}}</script></head><body>
 <script type="module">
 import * as THREE from "three";
@@ -81,9 +84,47 @@ Object.assign(key.shadow.camera,{left:-4,right:4,top:4,bottom:-4,near:1,far:20})
 const rim=new THREE.DirectionalLight(0xcfd8ff,1.4);rim.position.set(-6,4,-7);scene.add(rim);
 const fill=new THREE.DirectionalLight(0xffeedd,1.1);fill.position.set(2,3,10);scene.add(fill);
 
-/* Piso invisible que solo recibe la sombra */
+/* Piso invisible que solo recibe la sombra (de la base) */
+const BASE_H=0.16;
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.ShadowMaterial({opacity:0.55}));
-floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);
+floor.rotation.x=-Math.PI/2;floor.position.y=-BASE_H;floor.receiveShadow=true;scene.add(floor);
+
+/* ── Base brújula (fija): el camper gira encima ──
+   N hacia la cámara (al fondo quedaría siempre tapada por el camper), así E queda
+   a la izquierda y O a la derecha, como en una rosa de los vientos vista de arriba.
+   Las letras van estiradas a lo alto (como las pintadas en la calle) para que se
+   lean con la cámara baja. */
+const R=2.45;
+await document.fonts.load("italic 900 100px Archivo");
+const TX=2048,C=TX/2,tc=document.createElement("canvas");tc.width=tc.height=TX;const t2=tc.getContext("2d");
+const arc=(r,a0=0,a1=Math.PI*2,ccw=false)=>t2.arc(C,C,r*C,a0,a1,ccw);
+let gr=t2.createRadialGradient(C,C,0,C,C,C);gr.addColorStop(0,"#30353b");gr.addColorStop(1,"#23272c");
+t2.fillStyle=gr;t2.beginPath();arc(1);t2.fill();
+// Anillo exterior con marcas cada 5°, 15° y 45° (0° = N, abajo en la textura)
+t2.fillStyle="#17191d";t2.beginPath();arc(1);arc(0.9,0,Math.PI*2,true);t2.fill();
+const pos=(deg,r)=>{const a=deg*Math.PI/180;return[C-Math.sin(a)*r*C,C+Math.cos(a)*r*C];};
+for(let d=0;d<360;d+=5){const len=d%45===0?0.075:d%15===0?0.05:0.028;const[x1,y1]=pos(d,0.985),[x2,y2]=pos(d,0.985-len);
+  t2.strokeStyle=d===0?"#f07a52":"rgba(236,231,223,"+(d%45===0?0.85:d%15===0?0.6:0.38)+")";t2.lineWidth=d%45===0?9:d%15===0?6:4;
+  t2.beginPath();t2.moveTo(x1,y1);t2.lineTo(x2,y2);t2.stroke();}
+const ring=(r,c,w)=>{t2.strokeStyle=c;t2.lineWidth=w;t2.beginPath();arc(r);t2.stroke();};
+ring(0.9,"rgba(236,231,223,.45)",5);ring(0.62,"rgba(236,231,223,.18)",4);ring(0.3,"rgba(236,231,223,.14)",3);
+// Rosa de los vientos (8 puntas, dos tonos), casi toda debajo del camper
+const punta=(deg,largo,ancho,c1,c2)=>{const[tx,ty]=pos(deg,largo),[lx,ly]=pos(deg-90,ancho),[rx,ry]=pos(deg+90,ancho);
+  t2.fillStyle=c1;t2.beginPath();t2.moveTo(C,C);t2.lineTo(tx,ty);t2.lineTo(lx,ly);t2.closePath();t2.fill();
+  t2.fillStyle=c2;t2.beginPath();t2.moveTo(C,C);t2.lineTo(tx,ty);t2.lineTo(rx,ry);t2.closePath();t2.fill();};
+for(const d of [45,135,225,315])punta(d,0.42,0.09,"#4a5058","#363b42");
+for(const d of [90,180,270])punta(d,0.62,0.12,"#d9d3ca","#8f949a");
+punta(0,0.62,0.12,"#f07a52","#b4492a");
+// Letras: N naranja, el resto hueso; las intermedias más chicas
+const letra=(txt,deg,r,px,c)=>{const[x,y]=pos(deg,r);t2.save();t2.translate(x,y);t2.scale(1,1.9);t2.fillStyle=c;
+  t2.font="italic 900 "+px+"px Archivo";t2.textAlign="center";t2.textBaseline="middle";t2.fillText(txt,0,0);t2.restore();};
+letra("N",0,0.77,150,"#f07a52");letra("S",180,0.77,150,"#ece7df");letra("E",90,0.77,150,"#ece7df");letra("O",270,0.77,150,"#ece7df");
+for(const[l,d]of[["NE",45],["SE",135],["SO",225],["NO",315]])letra(l,d,0.8,70,"rgba(236,231,223,.7)");
+const tex=new THREE.CanvasTexture(tc);tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=16;
+const plinto=new THREE.Mesh(new THREE.CylinderGeometry(R,R+0.04,BASE_H,160),new THREE.MeshStandardMaterial({color:0x2a2e33,roughness:0.5,metalness:0.55}));
+plinto.position.y=-BASE_H/2-0.002;plinto.receiveShadow=true;plinto.castShadow=true;scene.add(plinto);
+const disco=new THREE.Mesh(new THREE.CircleGeometry(R,160),new THREE.MeshStandardMaterial({map:tex,roughness:0.78,metalness:0.08}));
+disco.rotation.x=-Math.PI/2;disco.receiveShadow=true;scene.add(disco);
 
 /* ── Camper low-poly genérico ── */
 const camper=new THREE.Group();scene.add(camper);
@@ -132,9 +173,14 @@ for(const x of [-0.95,0.05,1.05])for(const z of [0.6,-0.6])add(new THREE.BoxGeom
 // El conjunto (caja + lanza) gira alrededor de su centro: el radio queda mínimo
 const CENTRO_X=-0.7;camper.children.forEach((m)=>m.position.x-=CENTRO_X);
 
-/* ── Cámara: elevación baja, el contacto con el piso en PISO_Y del cuadro ── */
+// Aguja: flecha naranja sobre la base, debajo de la lanza (gira con el camper)
+const flecha=new THREE.Shape();flecha.moveTo(-0.3,0);flecha.lineTo(0.08,0.17);flecha.lineTo(0,0);flecha.lineTo(0.08,-0.17);flecha.closePath();
+const aguja=new THREE.Mesh(new THREE.ShapeGeometry(flecha),new THREE.MeshBasicMaterial({color:0xf07a52}));
+aguja.rotation.x=-Math.PI/2;aguja.position.set(-R*0.8,0.006,0);camper.add(aguja);
+
+/* ── Cámara: un poco desde arriba (se ve el techo), el contacto con el piso en PISO_Y del cuadro ── */
 const cam=new THREE.PerspectiveCamera(24,W/H,0.5,60);
-const ELEV=THREE.MathUtils.degToRad(9),DIST=10.6;
+const ELEV=THREE.MathUtils.degToRad(16),DIST=11.4;
 cam.position.set(0,Math.sin(ELEV)*DIST,Math.cos(ELEV)*DIST);
 let ty=0.9;
 for(let i=0;i<40;i++){cam.lookAt(0,ty,0);cam.updateMatrixWorld();const y=(1-new THREE.Vector3(0,0,0).project(cam).y)/2;ty+=(PISO_Y-y)*3;}
@@ -142,12 +188,13 @@ cam.lookAt(0,ty,0);cam.updateMatrixWorld();
 
 /* Geometría del pedestal de la web (fracciones del cuadro) para config/p70.ts */
 const proj=(x,z)=>{const v=new THREE.Vector3(x,0,z).project(cam);return{x:(v.x+1)/2,y:(1-v.y)/2};};
-const R=2.45;
 window.__pedestal={radio:R,cx:proj(0,0).x,cy:proj(0,0).y,rx:proj(R,0).x-proj(0,0).x,frente:proj(0,R).y-proj(0,0).y,fondo:proj(0,0).y-proj(0,-R).y};
 
 /* ── Composición final con la etiqueta DEMO (canvas 2D) ── */
 const out=document.createElement("canvas");out.width=W;out.height=H;const ctx=out.getContext("2d");
 const ANG0=THREE.MathUtils.degToRad(-38);
+// Rumbo de la lanza en el cuadro 0 (0 = N hacia la cámara, 90 = E a la izquierda): baja al girar
+window.__rumbo=((90-THREE.MathUtils.radToDeg(ANG0))%360+360)%360;
 
 window.renderFrame=(i,frames,colorHex,label)=>{
   body.color.set(colorHex);
@@ -181,12 +228,14 @@ await page.route("http://render.local/**", (route) => {
   const path = new URL(route.request().url()).pathname;
   if (path === "/") return route.fulfill({ contentType: "text/html", body: PAGE });
   if (path.startsWith("/three/")) return route.fulfill({ contentType: "text/javascript", body: readFileSync(join(threeDir, path.slice(7))) });
+  if (path === "/archivo.woff2") return route.fulfill({ contentType: "font/woff2", body: readFileSync(join(ROOT, "app", "fonts", "archivo-expanded-black-italic.woff2")) });
   return route.fulfill({ status: 404 });
 });
 await page.goto("http://render.local/");
 await page.waitForFunction(() => window.__ready === true, null, { timeout: 30_000 });
 const ped = await page.evaluate(() => window.__pedestal);
 console.log(`Pedestal (para el selector): centro ${ped.cx.toFixed(3)}, ${ped.cy.toFixed(3)} · rx ${ped.rx.toFixed(3)} · frente ${ped.frente.toFixed(3)} · fondo ${ped.fondo.toFixed(3)}`);
+console.log(`Brújula: rumbo inicial de la lanza ${Math.round(await page.evaluate(() => window.__rumbo))}° (baja al girar)`);
 console.log(`${combos.length} combinaciones · ${FRAMES} cuadros c/u · fondo ${fondo}\n`);
 
 /* ───────────────────────── ffmpeg ───────────────────────── */

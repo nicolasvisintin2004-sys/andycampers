@@ -41,7 +41,7 @@ export default function PrivacidadPage() {
                 ) : (
                   ` (${site.legalName})`
                 )}
-                , con domicilio en {isPending(site.address) ? <Missing label={site.address} /> : site.address}. Podés escribirnos al WhatsApp{" "}
+                . Podés escribirnos al WhatsApp{" "}
                 {site.whatsapp.display}.
               </p>
             </section>

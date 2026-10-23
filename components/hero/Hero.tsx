@@ -2,10 +2,10 @@ import { media } from "@/content/media";
 import { site } from "@/config/site";
 import { precioDesde } from "@/config/p70";
 import { Missing } from "@/components/ui/Missing";
-import { Wordmark } from "@/components/ui/Wordmark";
-import { IconArrowDown, IconInstagram } from "@/components/ui/Icons";
+import { IconArrowDown } from "@/components/ui/Icons";
 import { HeroMontage, type Slide } from "./HeroMontage";
 import { HeroScrollFx } from "./HeroScrollFx";
+import { HeroClips } from "./HeroClips";
 
 /**
  * Hero "vender la experiencia".
@@ -62,7 +62,9 @@ const usd = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 });
 
 export function Hero() {
   return (
-    <section aria-labelledby="hero-title" className="relative h-[100svh] min-h-[620px] overflow-hidden bg-ink text-bone">
+    // Ocupa la pantalla entera, por debajo de la barra fija: así la foto de mobile (que
+    // llega después del load) es "de fondo" para Chrome y el LCP sigue siendo el texto.
+    <section aria-labelledby="hero-title" className="relative -mt-[var(--bar-h)] h-[100svh] min-h-[620px] overflow-hidden bg-ink pt-[var(--bar-h)] text-bone">
       {/* Montaje: a sangre en mobile, panel diagonal en desktop */}
       <div data-hero-media className="absolute inset-0 md:left-[40%] md:[clip-path:polygon(16%_0,100%_0,100%_100%,0_100%)]">
         <HeroMontage slides={slides} />
@@ -75,20 +77,7 @@ export function Hero() {
       {/* Desktop: retícula de plano detrás del texto */}
       <div aria-hidden className="blueprint-grid absolute inset-y-0 left-0 hidden w-[46%] [mask-image:linear-gradient(to_right,#000_60%,transparent)] md:block" />
 
-      {/* Barra superior */}
-      <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-4 pt-4 sm:px-6 lg:px-10 lg:pt-6">
-        <Wordmark className="text-[1.05rem] lg:text-[1.2rem]" />
-        <a
-          href={site.social.instagram}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex min-h-11 items-center gap-2 font-mono text-xs tracking-[0.16em] text-bone/85 hover:text-orange-glow"
-        >
-          <IconInstagram className="size-4" /> {site.social.instagramHandle}
-        </a>
-      </div>
-
-      <div data-hero-copy className="relative z-10 flex h-full flex-col justify-end px-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] sm:px-6 md:w-[46%] md:justify-center md:pr-6 md:pb-16 lg:px-10 xl:pl-16">
+      <div data-hero-copy className="relative z-10 flex h-full flex-col justify-end px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:px-6 md:w-[46%] md:justify-center md:pr-6 md:pb-10 lg:px-10 xl:pl-16">
         <p className="eyebrow fade-up mb-5 text-bone/85" style={{ "--d": "40ms" } as React.CSSProperties}>
           P70 · Acero 100% · Hecho en Argentina
         </p>
@@ -124,25 +113,15 @@ export function Hero() {
           <p className="tabular font-mono text-xs tracking-[0.14em] text-bone/70 uppercase">Desde USD {usd.format(precioDesde)}</p>
         </div>
 
-        <div className="mt-6 hidden max-w-sm md:block">
-          <Missing label="clips reales de los reels para el hero (ruta, off-road, nieve, playa, noche con estrellas, cocina)" />
-        </div>
+        <HeroClips />
       </div>
 
-      {/* Mobile: el cartel del dato faltante arriba, fuera del texto */}
-      <div className="absolute top-[7.25rem] right-4 z-10 md:hidden">
-        <Missing label="clips de los reels para el hero" compact short="clips del hero" />
+      {/* El cartel del dato faltante, arriba a la derecha (fuera del texto) */}
+      <div className="absolute top-[calc(var(--bar-h)+3.5rem)] right-4 z-10 sm:right-6 md:top-[calc(var(--bar-h)+1.25rem)] lg:right-10">
+        <Missing label="clips reales de los reels para el fondo del hero (ruta, off-road, nieve, playa, noche con estrellas, cocina)" compact short="clips del hero" />
       </div>
 
       <HeroScrollFx />
-
-      {/* Indicador de scroll */}
-      <a href="#armalo" aria-label="Bajar al selector" className="absolute bottom-8 left-10 z-10 hidden flex-col items-center gap-2 text-bone/60 hover:text-bone md:flex xl:left-16">
-        <span className="eyebrow text-[0.62rem]">Scroll</span>
-        <span className="relative h-10 w-px overflow-hidden bg-bone/20">
-          <span className="absolute inset-0 bg-bone motion-safe:animate-[scroll-cue_1.8s_cubic-bezier(.6,0,.2,1)_infinite]" />
-        </span>
-      </a>
     </section>
   );
 }

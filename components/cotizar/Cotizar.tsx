@@ -49,7 +49,7 @@ export function Cotizar() {
           <div className="mt-8 bg-garage text-bone">
             <div className="relative aspect-video overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={posterUrl(sel.eq, sel.color)} alt="" loading="lazy" decoding="async" className="h-full w-full origin-[50%_66%] scale-[1.55] object-cover" />
+              <img src={posterUrl(sel.eq, sel.color)} alt="" loading="lazy" decoding="async" className="h-full w-full origin-[50%_62%] scale-[1.4] object-cover" />
               <span className="eyebrow absolute top-3 left-3 bg-ink/70 px-2 py-1 text-[0.62rem] text-bone/85">Tu configuración</span>
             </div>
             <dl className="grid grid-cols-2 divide-x divide-line border-t border-line">

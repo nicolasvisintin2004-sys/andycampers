@@ -10,7 +10,7 @@ export function Footer() {
   const link = "inline-flex min-h-11 items-center gap-2 hover:text-orange-glow";
   return (
     <footer className="cut-top-rev cv-auto relative bg-ink text-bone">
-      <div className="mx-auto max-w-[1440px] px-4 pb-28 sm:px-6 lg:px-10 lg:pb-12">
+      <div className="mx-auto max-w-[1440px] px-4 pb-10 sm:px-6 lg:px-10 lg:pb-12">
         <div className="grid gap-12 border-b border-line pb-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <Wordmark className="text-2xl" />
@@ -49,14 +49,16 @@ export function Footer() {
             </ul>
           </div>
 
-          <div className="space-y-3">
-            <p className="eyebrow mb-4 text-mist">Taller</p>
-            {isPending(site.address) ? <Missing label={site.address} block /> : <p>{site.address}</p>}
-            {isPending(site.openingHours) ? <Missing label={site.openingHours} block /> : <p>{site.openingHours}</p>}
+          <div>
+            <p className="eyebrow mb-4 text-mist">Visitas al taller</p>
+            <p className="max-w-xs text-bone/85">{site.visitas.texto}</p>
+            <a href={waLink(site.visitas.mensaje)} target="_blank" rel="noopener noreferrer" className={`${link} mt-2 font-semibold`}>
+              <IconWhatsApp className="size-5" /> Coordinar una visita
+            </a>
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 pt-8 text-sm text-mist sm:flex-row sm:items-center sm:justify-between sm:pr-20">
+        <div className="flex flex-col gap-2 pt-8 text-sm text-mist sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {site.name}. Precio en USD de referencia, sujeto a confirmación.
           </p>

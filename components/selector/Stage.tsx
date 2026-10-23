@@ -7,6 +7,14 @@ import { useSettled, whenSettled } from "@/lib/settled";
 import { Pedestal, pedestalTransform } from "./Pedestal";
 import { IconPause, IconPlay } from "@/components/ui/Icons";
 
+const PUNTOS = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"];
+/** Hacia dónde apunta la lanza, según la base brújula de los renders: "128° SE". */
+const rumbo = (t: number) => {
+  const { rumboInicial, sentido } = videoSelector.brujula;
+  const g = (((rumboInicial + sentido * t * 360) % 360) + 360) % 360;
+  return `${String(Math.round(g) % 360).padStart(3, "0")}° ${PUNTOS[Math.round(g / 45) % 8]}`;
+};
+
 export interface StageHandle {
   /** Hover / foco / dedo apoyado sobre una opción. */
   prime: (eq: number, color: string) => void;
@@ -93,14 +101,16 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
     s.queueNeighbors(eq, color);
   }, [eq, color, booted]);
 
-  // El pedestal y la lectura de grados giran con el video (sin re-render de React).
+  // El pedestal y la lectura de rumbo giran con el video (sin re-render de React).
   useEffect(() => {
     if (reduced && !playing) return;
     let raf = 0;
+    let last = "";
     const loop = () => {
       const t = sw.current?.angle() ?? 0;
       ring.current?.setAttribute("transform", pedestalTransform(t));
-      if (rot.current) rot.current.textContent = String(Math.round(t * 360) % 360).padStart(3, "0");
+      const txt = rumbo(t);
+      if (rot.current && txt !== last) rot.current.textContent = last = txt;
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
@@ -121,6 +131,7 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
   const videoCls = "absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ease-out";
 
   return (
+    <>
     <div ref={wrap} className="stage-box" data-loading={st.loading || undefined}>
       {/* Cono de luz cenital y pileta de luz en el piso (detrás del video, se ven en los bordes) */}
       <div aria-hidden className="stage-light absolute inset-0" />
@@ -163,15 +174,10 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
 
       {/* Barrido de escaneo al cambiar de opción */}
       {scanKey > 0 && (
-        <div key={scanKey} aria-hidden className="pointer-events-none absolute inset-x-0 top-[52%] bottom-[6%] z-[5] overflow-hidden">
+        <div key={scanKey} aria-hidden className="pointer-events-none absolute inset-x-[18%] top-[22%] bottom-[14%] z-[5] overflow-hidden">
           <div className="scan-sweep absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,transparent_0%,transparent_44%,rgb(240_122_82/0.0)_46%,rgb(240_122_82/0.55)_49.6%,rgb(255_255_255/0.9)_50%,rgb(240_122_82/0.35)_50.6%,transparent_56%)] mix-blend-screen" />
         </div>
       )}
-
-      {/* Lectura de rotación (HUD) */}
-      <p aria-hidden className="pointer-events-none absolute bottom-[3%] left-1/2 z-[5] -translate-x-1/2 font-mono text-[0.62rem] tracking-[0.2em] text-bone/45 uppercase sm:text-[0.68rem]">
-        Rot <span ref={rot} className="tabular text-bone/80">000</span>° · Vista 360
-      </p>
 
       {st.loading && (
         <span role="status" className="absolute top-1/2 left-1/2 z-[6] flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 bg-ink/70 px-3 py-1.5 font-mono text-[0.68rem] tracking-widest text-bone uppercase">
@@ -194,5 +200,11 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
         {label}
       </span>
     </div>
+
+    {/* Rumbo de la brújula (HUD), en el borde del escenario */}
+    <p aria-hidden className="pointer-events-none absolute right-4 bottom-1 z-[7] font-mono text-[0.62rem] tracking-[0.2em] text-bone/45 uppercase sm:right-6 sm:text-[0.68rem] lg:right-0">
+      Rumbo <span ref={rot} className="tabular text-bone/80">{rumbo(0)}</span>
+    </p>
+    </>
   );
 });

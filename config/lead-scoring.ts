@@ -15,7 +15,7 @@ export const leadScoring = {
   /** Puntos de "Necesitaría financiación" cuando FINANCING_OFFERED = true. */
   financiacionSiSeOfrece: 20,
   plazo: { proximamente: 20, "3a6": 15, este_anio: 8, anio_que_viene: 4, sin_fecha: 0 },
-  equipamiento: { eq4: 5, eq3: 4, eq2: 3, eq1: 2, asesoramiento: 2 },
+  equipamiento: { eq3: 5, eq2: 3, eq1: 2, asesoramiento: 2 },
   /** Marca, modelo y año del vehículo completos. */
   vehiculoCompleto: 5,
 } as const;
