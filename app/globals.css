@@ -266,27 +266,6 @@ html.con-intro [data-hero-copy] .fade-up {
   animation: kenburns 9s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 
-/* Indicador de scroll */
-@keyframes scroll-cue {
-  0% {
-    transform: translateY(-100%);
-  }
-  60%,
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-@keyframes pulse-ring {
-  0% {
-    transform: scale(0.6);
-    opacity: 0.9;
-  }
-  100% {
-    transform: scale(2.2);
-    opacity: 0;
-  }
-}
 
 /* ───────────────────────── Selector "Armá tu P70" ───────────────────────── */
 
@@ -320,20 +299,6 @@ html.con-intro [data-hero-copy] .fade-up {
 }
 .scan-sweep {
   animation: scan-sweep 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-/* Pista de primera visita */
-@keyframes hint-nudge {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(10px, 0, 0);
-  }
-}
-.hint-nudge {
-  animation: hint-nudge 1.4s ease-in-out infinite;
 }
 
 @keyframes spin {

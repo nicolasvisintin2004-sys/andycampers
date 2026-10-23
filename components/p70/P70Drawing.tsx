@@ -259,7 +259,7 @@ export function P70Drawing({
                 style={{ transition: "stroke-dashoffset .8s cubic-bezier(.16,1,.3,1)" }}
               />
               {on && (
-                <circle cx={h.x} cy={h.y} r="10" fill="none" stroke={accent} strokeWidth="2" style={{ transformOrigin: `${h.x}px ${h.y}px`, animation: "pulse-ring 1.6s ease-out infinite" }} />
+                <circle cx={h.x} cy={h.y} r="14" fill="none" stroke={accent} strokeWidth="2" strokeOpacity="0.55" />
               )}
               <circle cx={h.x} cy={h.y} r="7" fill={on ? accent : "#25282c"} stroke={on ? "#fff" : p.line} strokeWidth="2" />
               <text

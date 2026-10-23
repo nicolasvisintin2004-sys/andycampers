@@ -123,9 +123,12 @@ export class VideoSwitcher {
     return p;
   }
 
-  /** Vecinos: los otros colores del equipamiento actual y los otros equipamientos del color actual. */
+  /**
+   * Vecinos: los otros colores del equipamiento actual y los otros equipamientos del color actual.
+   * Solo mientras gira: antes de tocar "Ver girar" no se baja ningún video de más.
+   */
   queueNeighbors(eq: number, color: string) {
-    if (this.noPreload) return;
+    if (this.noPreload || !this.allowPlay) return;
     const next: Key[] = [
       ...colores.filter((c) => c.id !== color).map((c) => key(eq, c.id)),
       ...equipamientos.filter((e) => e.n !== eq).map((e) => key(e.n, color)),
@@ -193,12 +196,24 @@ export class VideoSwitcher {
     void this.prepare(this.vids[1 - this.front], k);
   }
 
-  /** Primera combinación: va directo al video de adelante (streaming, sin esperar la precarga). */
+  /** Pone una combinación en el video de adelante (streaming, sin esperar la precarga). */
+  private cargarFrente(k: Key) {
+    const el = this.vids[this.front];
+    el._key = k;
+    el._prep = Promise.resolve(true);
+    el.src = this.ready.get(k) ?? this.url(k);
+    el.load();
+    if (this.allowPlay && this.active) el.play().catch(() => {});
+  }
+
+  /**
+   * Primera combinación. Mientras no se toque "Ver girar" (allowPlay) el video
+   * no recibe la URL: no se pide ni un byte; se ve el poster.
+   */
   init(eq: number, color: string) {
     const k = key(eq, color);
     this.current = k;
-    const el = this.vids[this.front];
-    el.addEventListener(
+    this.vids[this.front].addEventListener(
       "playing",
       () => {
         this.started = true;
@@ -206,11 +221,7 @@ export class VideoSwitcher {
       },
       { once: true },
     );
-    el._key = k;
-    el._prep = Promise.resolve(true);
-    el.src = this.url(k);
-    el.load();
-    if (this.allowPlay && this.active) el.play().catch(() => {});
+    if (this.allowPlay) this.cargarFrente(k);
   }
 
   async show(eq: number, color: string, t0 = performance.now()) {
@@ -218,18 +229,16 @@ export class VideoSwitcher {
     if (k === this.current) return;
     this.current = k;
     const seq = ++this.showSeq;
-    this.showing = true;
-    this.preload(k);
     clearTimeout(this.loadingTimer);
 
-    // Antes de arrancar (o sin reproducción automática): solo se cambia la fuente.
+    // Antes del primer giro el poster muestra la combinación; el video se carga recién con "Ver girar".
     if (!this.started) {
-      const el = this.vids[this.front];
-      el._key = undefined;
-      await this.prepare(el, k);
-      this.showing = false;
+      if (this.allowPlay) this.cargarFrente(k);
       return;
     }
+
+    this.showing = true;
+    this.preload(k);
 
     const back = this.vids[1 - this.front];
     const primed = back._key === k;
@@ -270,10 +279,16 @@ export class VideoSwitcher {
     if (!on) this.vids.forEach((v) => v.pause());
   }
 
-  /** Movimiento reducido: el usuario tocó play. */
+  /** La persona tocó "Ver girar" / "Girar": arranca y recién ahí precarga los vecinos. */
   play() {
     this.allowPlay = true;
-    this.vids[this.front].play().catch(() => {});
+    const f = this.vids[this.front];
+    if (this.current && f._key !== this.current) this.cargarFrente(this.current);
+    else f.play().catch(() => {});
+    if (this.current) {
+      const { eq, color } = parse(this.current);
+      this.queueNeighbors(eq, color);
+    }
   }
   pause() {
     this.allowPlay = false;

@@ -41,10 +41,11 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
   const sw = useRef<VideoSwitcher | null>(null);
   const clickAt = useRef(0);
   const [st, setSt] = useState<SwitcherState>({ front: 0, loading: false, started: false });
-  const [reduced, setReduced] = useState(false);
-  const [playing, setPlaying] = useState(true);
+  // El camper gira recién cuando la persona toca "Ver girar" (nada se mueve ni se baja solo).
+  const [playing, setPlaying] = useState(false);
   const [booted, setBooted] = useState(false);
   const shown = useRef({ eq, color });
+  const pedido = useRef(false);
   const settled = useSettled();
 
   useImperativeHandle(ref, () => ({
@@ -54,17 +55,15 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
   }));
 
   // Arranque: recién cuando la sección está cerca y la página ya se asentó (no compite con el LCP).
+  // Solo prepara el video: no lo reproduce ni precarga otros hasta que se toque "Ver girar".
   useEffect(() => {
     const el = wrap.current;
     if (!el || !a.current || !b.current) return;
-    const red = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setReduced(red);
-    setPlaying(!red);
     const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
     const slow = Boolean(conn?.saveData || /(^|-)2g|3g/.test(conn?.effectiveType ?? ""));
     const res = matchMedia("(min-width: 1024px)").matches && !slow ? "desktop" : "mobile";
     const ext = a.current.canPlayType('video/mp4; codecs="avc1.640028"') ? "mp4" : "webm";
-    const s = new VideoSwitcher(a.current, b.current, res, ext, { allowPlay: !red, noPreload: slow }, setSt);
+    const s = new VideoSwitcher(a.current, b.current, res, ext, { allowPlay: false, noPreload: slow }, setSt);
     sw.current = s;
 
     let started = false;
@@ -77,7 +76,8 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
             s.init(shown.current.eq, shown.current.color);
             s.setActive(true);
             setBooted(true);
-            s.queueNeighbors(shown.current.eq, shown.current.color);
+            // Tocaron "Ver girar" antes de que el motor estuviera listo.
+            if (pedido.current) s.play();
           });
         }
       },
@@ -103,7 +103,7 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
 
   // El pedestal y la lectura de rumbo giran con el video (sin re-render de React).
   useEffect(() => {
-    if (reduced && !playing) return;
+    if (!playing) return;
     let raf = 0;
     let last = "";
     const loop = () => {
@@ -115,19 +115,23 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [reduced, playing]);
+  }, [playing]);
 
   const togglePlay = () => {
     const s = sw.current;
-    if (!s) return;
-    if (playing) s.pause();
-    else s.play();
+    pedido.current = !playing;
+    if (s && booted) {
+      if (playing) s.pause();
+      else s.play();
+    }
     setPlaying(!playing);
   };
 
   // El poster (primer cuadro) solo antes de arrancar o mientras carga un video nuevo
   // girando. En pausa queda visible el cuadro donde iba el giro (aunque cargue otro).
   const showPoster = !st.started || (st.loading && playing);
+  // Ya se tocó "Ver girar" pero el video todavía no arrancó.
+  const arrancando = playing && !st.started;
   const videoCls = "absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ease-out";
 
   return (
@@ -152,7 +156,7 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
           loop
           playsInline
           autoPlay={false}
-          preload="none"
+          preload="metadata"
           aria-hidden
           tabIndex={-1}
           className={`${videoCls} ${st.front === 0 ? "z-[2] opacity-100" : "z-[1] opacity-0"}`}
@@ -163,7 +167,7 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
           loop
           playsInline
           autoPlay={false}
-          preload="none"
+          preload="metadata"
           aria-hidden
           tabIndex={-1}
           className={`${videoCls} ${st.front === 1 ? "z-[2] opacity-100" : "z-[1] opacity-0"}`}
@@ -186,13 +190,23 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
         </span>
       )}
 
-      {reduced && (
+      {/* Antes del primer giro: botón grande sobre el camper */}
+      {!st.started && (
         <button
           type="button"
           onClick={togglePlay}
-          className="absolute top-[40%] left-1/2 z-[6] inline-flex min-h-11 -translate-x-1/2 items-center gap-2 bg-ink/80 px-4 font-mono text-xs tracking-widest text-bone uppercase ring-1 ring-bone/30 hover:ring-bone"
+          onPointerDown={(e) => e.stopPropagation()}
+          disabled={arrancando}
+          className="group absolute top-[44%] left-1/2 z-[6] inline-flex min-h-12 -translate-x-1/2 -translate-y-1/2 items-center gap-3 rounded-full bg-ink/80 py-1.5 pr-5 pl-1.5 font-mono text-xs font-semibold tracking-widest text-bone uppercase ring-1 ring-bone/35 transition-colors hover:bg-ink hover:ring-orange-glow"
         >
-          {playing ? <><IconPause className="size-4" /> Pausar giro</> : <><IconPlay className="size-4" /> {st.started ? "Seguir girando" : "Ver girar"}</>}
+          <span className="grid size-9 place-items-center rounded-full bg-orange-cta text-ink">
+            {arrancando ? (
+              <span aria-hidden className="size-4 animate-[spin_0.8s_linear_infinite] rounded-full border-2 border-ink/30 border-t-ink" />
+            ) : (
+              <IconPlay className="ml-0.5 size-4" />
+            )}
+          </span>
+          {arrancando ? "Cargando" : "Ver girar 360°"}
         </button>
       )}
 
@@ -200,6 +214,18 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
         {label}
       </span>
     </div>
+
+    {/* Ya arrancó: pausar / seguir girando, chico en la esquina */}
+    {st.started && (
+      <button
+        type="button"
+        onClick={togglePlay}
+        onPointerDown={(e) => e.stopPropagation()}
+        className="absolute top-1 right-4 z-[7] inline-flex min-h-11 items-center gap-2 px-2 font-mono text-[0.68rem] tracking-widest text-bone/80 uppercase transition-colors hover:text-bone sm:right-6 lg:right-0"
+      >
+        {playing ? <><IconPause className="size-4" /> Pausar</> : <><IconPlay className="size-4" /> Girar</>}
+      </button>
+    )}
 
     {/* Rumbo de la brújula (HUD), en el borde del escenario */}
     <p aria-hidden className="pointer-events-none absolute right-4 bottom-1 z-[7] font-mono text-[0.62rem] tracking-[0.2em] text-bone/45 uppercase sm:right-6 sm:text-[0.68rem] lg:right-0">

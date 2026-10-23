@@ -469,7 +469,7 @@ function ColorRow({ active, onPick, onPrime }: { active: string; onPick: (id: st
               >
                 <span aria-hidden className={`absolute inset-0 rounded-full ring-2 transition-colors ${on ? "ring-bone" : "ring-transparent"}`} />
                 <span aria-hidden className="size-[72%] rounded-full shadow-[inset_0_-6px_10px_rgb(0_0_0/0.35),inset_0_3px_6px_rgb(255_255_255/0.25)]" style={{ background: hexColor(c) }} />
-                {on && <span aria-hidden className="absolute -inset-1.5 rounded-full border border-dashed border-orange-glow/70 motion-safe:animate-[spin_9s_linear_infinite]" />}
+                {on && <span aria-hidden className="absolute -inset-1.5 rounded-full border border-dashed border-orange-glow/70" />}
               </span>
             </button>
           );
@@ -561,7 +561,7 @@ function Sheet({ eq, onClose, onQuiero, onShare }: { eq: Equipamiento; onClose: 
 function Hint({ className = "" }: { className?: string }) {
   return (
     <p aria-hidden className={`fade-up pointer-events-none min-w-0 items-center gap-2 bg-bone px-2.5 py-1.5 font-mono text-[0.66rem] font-semibold tracking-[0.1em] whitespace-nowrap text-ink uppercase sm:text-[0.68rem] ${className}`}>
-      <span className="hint-nudge inline-block">⟷</span>
+      <span className="inline-block">⟷</span>
       <span className="lg:hidden">Tocá o deslizá para cambiar</span>
       <span className="hidden lg:inline">Elegí equipamiento y color · ← → ↑ ↓</span>
     </p>

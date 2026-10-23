@@ -7,8 +7,8 @@ import { Enter } from "@/components/ui/Enter";
 import { RevealTitle } from "@/components/ui/Reveal";
 
 /**
- * "En acción": clips cortos reales. Se reproducen sin sonido al entrar en
- * pantalla y se pausan al salir (LazyVideo). Los destacados de Instagram que
+ * "En acción": clips cortos reales. Se reproducen al tocarlos (sin sonido) y se
+ * pausan al salir de la pantalla (LazyVideo). Los destacados de Instagram que
  * todavía no tenemos como archivo van como espacio con cartel rojo.
  */
 type Item = { clip: ClipKey } | { falta: string; titulo: string };

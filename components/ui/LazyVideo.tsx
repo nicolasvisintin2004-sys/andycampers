@@ -1,102 +1,95 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { IconPause, IconPlay } from "@/components/ui/Icons";
 
 /**
- * Video corto sin sonido: carga recién cerca de la pantalla, se reproduce
- * al entrar y se pausa al salir. Con reduced-motion muestra el poster y los
- * controles nativos: no arranca solo, pero se puede reproducir a mano.
+ * Video corto sin sonido que se reproduce AL TOCARLO (nada arranca solo).
+ * Hasta entonces se ve el poster (que se pide recién cerca de la pantalla) con
+ * un botón de play; el video se baja recién con el primer toque. Tocar de nuevo
+ * lo pausa, y se pausa solo si sale de la pantalla.
  */
 export function LazyVideo({
   src,
   poster,
   label,
   className = "",
-  eager = false,
-  overlay = false,
 }: {
   /** Ruta sin extensión: se sirven .webm y .mp4. */
   src: string;
   poster: string;
   label: string;
   className?: string;
-  /** Cargar apenas termina la carga de la página (hero). */
-  eager?: boolean;
-  /**
-   * Va encima de una imagen que ya hace de poster (hero): no pide el poster
-   * de nuevo y aparece recién cuando el video arranca.
-   */
-  overlay?: boolean;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
-  const [load, setLoad] = useState(false);
+  const [near, setNear] = useState(false);
+  const [on, setOn] = useState(false);
   const [playing, setPlaying] = useState(false);
-  const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setReduced(true);
-      if (overlay) return; // el hero ya muestra su imagen fija
-      const near = new IntersectionObserver(([e]) => e.isIntersecting && setLoad(true), { rootMargin: "300px" });
-      near.observe(v);
-      return () => near.disconnect();
-    }
-
-    if (eager) {
-      // Solo si está visible (el hero tiene una versión mobile y otra desktop).
-      const start = () => v.getClientRects().length > 0 && setLoad(true);
-      if (document.readyState === "complete") setTimeout(start, 300);
-      else window.addEventListener("load", () => setTimeout(start, 300), { once: true });
-    }
-
-    const near = new IntersectionObserver(([e]) => e.isIntersecting && setLoad(true), { rootMargin: "300px" });
-    const vis = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) v.play().catch(() => {});
-        else v.pause();
-      },
-      { threshold: 0.25 },
-    );
-    near.observe(v);
-    vis.observe(v);
+    const cerca = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: "300px" });
+    const fuera = new IntersectionObserver(([e]) => !e.isIntersecting && v.pause(), { threshold: 0 });
+    cerca.observe(v);
+    fuera.observe(v);
     return () => {
-      near.disconnect();
-      vis.disconnect();
+      cerca.disconnect();
+      fuera.disconnect();
     };
-  }, [eager, overlay]);
+  }, []);
 
+  // Primer toque: recién ahí se ponen las fuentes y arranca.
   useEffect(() => {
-    if (load && !reduced) ref.current?.load();
-  }, [load, reduced]);
+    const v = ref.current;
+    if (!on || !v) return;
+    v.load();
+    v.play().catch(() => {});
+  }, [on]);
+
+  const toggle = () => {
+    const v = ref.current;
+    if (!v) return;
+    if (!on) return setOn(true);
+    if (v.paused) v.play().catch(() => {});
+    else v.pause();
+  };
 
   return (
-    <video
-      ref={ref}
-      className={`${className} transition-opacity duration-700 ${overlay && !playing ? "opacity-0" : "opacity-100"}`}
-      // El poster se pide recién cerca de la pantalla (los de abajo no compiten con el LCP).
-      poster={overlay ? undefined : eager || load ? poster : undefined}
-      muted
-      loop
-      playsInline
-      controls={reduced && !overlay}
-      preload="none"
-      aria-label={label}
-      onPlaying={() => setPlaying(true)}
-      onCanPlay={(e) => {
-        if (reduced) return;
-        const r = e.currentTarget.getBoundingClientRect();
-        if (r.top < window.innerHeight && r.bottom > 0) e.currentTarget.play().catch(() => {});
-      }}
-    >
-      {load && (
-        <>
-          <source src={`${src}.webm`} type="video/webm" />
-          <source src={`${src}.mp4`} type="video/mp4" />
-        </>
-      )}
-    </video>
+    <div className="relative h-full w-full">
+      <video
+        ref={ref}
+        className={className}
+        poster={near ? poster : undefined}
+        muted
+        loop
+        playsInline
+        preload="none"
+        aria-label={label}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+      >
+        {on && (
+          <>
+            <source src={`${src}.webm`} type="video/webm" />
+            <source src={`${src}.mp4`} type="video/mp4" />
+          </>
+        )}
+      </video>
+      <button
+        type="button"
+        onClick={toggle}
+        aria-label={`${playing ? "Pausar" : "Reproducir"} video: ${label}`}
+        className="group absolute inset-0 grid place-items-center"
+      >
+        <span
+          className={`grid size-14 place-items-center rounded-full bg-ink/60 text-bone ring-1 ring-bone/50 transition-[opacity,background-color,color] duration-200 group-hover:bg-orange-cta group-hover:text-ink ${
+            playing ? "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100" : "opacity-100"
+          }`}
+        >
+          {playing ? <IconPause className="size-5" /> : <IconPlay className="ml-0.5 size-5" />}
+        </span>
+      </button>
+    </div>
   );
 }
