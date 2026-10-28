@@ -9,6 +9,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "pendientes": "node scripts/pendientes.mjs",
+    "descargas": "node scripts/descargas.mjs",
     "videos:demo": "node scripts/generate-placeholder-videos.mjs",
     "videos:check": "node scripts/check-videos.mjs",
     "test:leads": "node scripts/test-leads.mjs"

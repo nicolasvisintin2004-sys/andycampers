@@ -43,32 +43,33 @@ export interface Equipamiento {
   stats: Stats | null;
 }
 
+/** Nombres provisorios que pidió Andrés (audio del 27/10): "después voy a ver qué le pongo, ponelo así ahora". */
 export const equipamientos: Equipamiento[] = [
   {
     n: 1,
-    nombre: falta("nombre del equipamiento 1"),
-    nombreCorto: falta("nombre corto eq. 1"),
-    precio: falta("precio del equipamiento 1"),
-    descripcion: falta("descripción de una línea del equipamiento 1"),
-    incluye: falta("qué incluye el equipamiento 1"),
+    nombre: "Santa Fe",
+    nombreCorto: "Santa Fe",
+    precio: falta("precio del nivel Santa Fe"),
+    descripcion: falta("descripción de una línea del nivel Santa Fe"),
+    incluye: falta("qué incluye el nivel Santa Fe"),
     stats: null,
   },
   {
     n: 2,
-    nombre: falta("nombre del equipamiento 2"),
-    nombreCorto: falta("nombre corto eq. 2"),
-    precio: falta("precio del equipamiento 2"),
-    descripcion: falta("descripción de una línea del equipamiento 2"),
-    incluye: falta("qué incluye el equipamiento 2"),
+    nombre: "Patagonia",
+    nombreCorto: "Patagonia",
+    precio: falta("precio del nivel Patagonia"),
+    descripcion: falta("descripción de una línea del nivel Patagonia"),
+    incluye: falta("qué incluye el nivel Patagonia"),
     stats: null,
   },
   {
     n: 3,
-    nombre: falta("nombre del equipamiento 3"),
-    nombreCorto: falta("nombre corto eq. 3"),
-    precio: falta("precio del equipamiento 3"),
-    descripcion: falta("descripción de una línea del equipamiento 3"),
-    incluye: falta("qué incluye el equipamiento 3"),
+    nombre: "Sapukái",
+    nombreCorto: "Sapukái",
+    precio: falta("precio del nivel Sapukái"),
+    descripcion: falta("descripción de una línea del nivel Sapukái"),
+    incluye: falta("qué incluye el nivel Sapukái"),
     stats: null,
   },
 ];
@@ -96,8 +97,8 @@ export const colores: ColorP70[] = [
   { id: "c5", nombre: falta("nombre del color 5"), hex: falta("hex del color 5"), hexDemo: "#3f6e8c" },
 ];
 
-/** Combinación con la que arranca el selector (sin link compartido). */
-export const inicial = { eq: 1, color: "c1" } as const;
+/** Combinación con la que arranca el selector (sin link compartido). Arranca en verde, el color de la marca. */
+export const inicial = { eq: 1, color: "c2" } as const;
 
 /* ───────────────────────── Videos del selector (15) ─────────────────────────
    Un video por combinación: p70-eq{n}-{color}.mp4 y .webm, más el poster .jpg.
@@ -110,14 +111,15 @@ export const videoSelector = {
    * reemplazan los archivos con los mismos nombres, si no los navegadores siguen
    * mostrando los viejos que tienen guardados.
    */
-  version: 2,
+  version: 3,
   /** Duración de TODOS los videos, en segundos (deben ser iguales). Más largo = gira más lento. */
   duracion: 14,
   /**
-   * Fondo liso de los renders: TIENE que ser este hex para que el video se
-   * funda con la pantalla. Es el mismo que --color-garage en globals.css.
+   * Fondo liso de los renders (un estudio claro, como los renders de los flyers):
+   * TIENE que ser este hex para que el video se funda con la pantalla. Es el
+   * mismo que --color-estudio en globals.css.
    */
-  fondo: "#1c1f23",
+  fondo: "#ebe8e3",
   /**
    * Los renders traen su propia base (la brújula): la web no dibuja el pedestal.
    * Con `false` la web dibuja el suyo encima del video (components/selector/Pedestal).
@@ -131,12 +133,6 @@ export const videoSelector = {
    * frente y fondo: cuánto baja y sube la elipse del piso / alto del cuadro.
    */
   pedestal: { rx: 0.285, frente: 0.177, fondo: 0.116 },
-  /**
-   * Base brújula de los renders: hacia dónde apunta la lanza del camper en el
-   * primer cuadro (grados, 0 = N, 90 = E) y si el rumbo baja (-1) o sube (1) al girar.
-   * Lo imprime scripts/generate-placeholder-videos; con los renders finales se mide a ojo.
-   */
-  brujula: { rumboInicial: 128, sentido: -1 },
   /**
    * `true` mientras se usen los videos generados por scripts/generate-placeholder-videos.
    * Muestra el cartel rojo de "videos demo" en el selector.
@@ -172,6 +168,21 @@ export const nombreColor = (id: string) => {
 export const hexColor = (c: ColorP70) => (isPending(c.hex) ? c.hexDemo : c.hex);
 
 export const getEq = (n: unknown) => equipamientos.find((e) => e.n === Number(n));
+
+/** "Sapukái" → "sapukai": nombre de archivo del catálogo descargable de cada nivel. */
+export const slugEq = (n: number) =>
+  nombreEq(n)
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+/** Archivos que genera scripts/descargas.mjs en /public/descargas. */
+export const descargas = {
+  preguntas: "/descargas/andycampers-p70-preguntas-frecuentes.pdf",
+  catalogo: (n: number) => `/descargas/andycampers-p70-${slugEq(n)}.jpg`,
+};
 export const getColor = (id: unknown) => colores.find((c) => c.id === id);
 
 /* ───────────────────────── Ficha técnica (versión Acero) ───────────────────────── */

@@ -9,31 +9,35 @@ import { Analytics } from "@/components/providers/Analytics";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { DESCRIPCION, OG_IMAGE, localBusinessLd, organizationLd } from "@/lib/jsonld";
 
-// Display: Archivo extendida (wdth 125), Black, itálica — instancia estática de Google
-// Fonts (OFL), subset latin: 15 KB. El wordmark provisorio también la usa, así la
-// recta (archivo-expanded-black.woff2) no se descarga; queda en app/fonts por si vuelve.
+// Las tipografías de los flyers, todas de Google Fonts (OFL), subset latin, servidas desde el sitio.
+// Logo y "P70": Archivo extendida, Black, itálica (15 KB).
 const archivo = localFont({
   src: [{ path: "./fonts/archivo-expanded-black-italic.woff2", weight: "900", style: "italic" }],
   variable: "--font-archivo",
   display: "swap",
   fallback: ["Arial Black", "sans-serif"],
 });
-// Texto: Inter Tight (grotesca técnica). Datos: JetBrains Mono (tabular).
-const interTight = localFont({
-  src: "./fonts/inter-tight-latin.woff2",
-  weight: "400 700",
-  style: "normal",
-  variable: "--font-inter-tight",
-  display: "swap",
-});
-// La mono es para datos chicos: sin preload para no competir con el LCP.
-const jetbrains = localFont({
-  src: "./fonts/jetbrains-mono-latin.woff2",
-  weight: "400 600",
-  style: "normal",
-  variable: "--font-jetbrains",
+// Texto: Barlow. Sin preload: el primer pantallazo es la Archivo (logo y título) y la
+// condensada; así no suma bytes antes del LCP (el swap no mueve nada visible).
+const barlow = localFont({
+  src: [
+    { path: "./fonts/barlow-400-latin.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/barlow-600-latin.woff2", weight: "600", style: "normal" },
+  ],
+  variable: "--font-barlow",
   display: "swap",
   preload: false,
+});
+// Títulos, tablas, botones y datos: Barlow Semi Condensed (sin preload: no compite con el LCP).
+const barlowSc = localFont({
+  src: [
+    { path: "./fonts/barlow-semi-condensed-300-latin.woff2", weight: "300", style: "normal" },
+    { path: "./fonts/barlow-semi-condensed-600-latin.woff2", weight: "600", style: "normal" },
+  ],
+  variable: "--font-barlow-sc",
+  display: "swap",
+  preload: false,
+  fallback: ["Arial Narrow", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -69,7 +73,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-AR" className={`${archivo.variable} ${interTight.variable} ${jetbrains.variable}`} suppressHydrationWarning>
+    <html lang="es-AR" className={`${archivo.variable} ${barlow.variable} ${barlowSc.variable}`} suppressHydrationWarning>
       <head>
         {/* Decide la entrada del logo antes de pintar (ver LogoIntro) */}
         <script dangerouslySetInnerHTML={{ __html: INTRO_SCRIPT }} />

@@ -4,7 +4,6 @@ import { LazyVideo } from "@/components/ui/LazyVideo";
 import { Missing } from "@/components/ui/Missing";
 import { IconInstagram } from "@/components/ui/Icons";
 import { Enter } from "@/components/ui/Enter";
-import { RevealTitle } from "@/components/ui/Reveal";
 
 /**
  * "En acción": clips cortos reales. Se reproducen al tocarlos (sin sonido) y se
@@ -26,22 +25,20 @@ const items: Item[] = [
 
 export function InAction() {
   return (
-    <section aria-labelledby="accion-title" className="cut-top cv-auto relative bg-forest-deep pb-20 text-bone lg:pb-28">
+    <section aria-labelledby="accion-title" className="zona-oscura cut-top cv-auto relative overflow-hidden bg-forest-deep pb-20 text-bone lg:pb-28">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="eyebrow text-orange-soft">En acción</p>
-            <RevealTitle
-              id="accion-title"
-              className="font-display-x mt-4 text-[clamp(2.2rem,8vw,4.6rem)] uppercase"
-              lines={["Probado donde", "se complica."]}
-            />
+            <h2 id="accion-title" className="slab font-display-x text-[clamp(1.9rem,6.4vw,3.2rem)] uppercase [--slab-bg:var(--color-durazno)] [--slab-fg:var(--color-forest-deep)]">
+              En acción
+            </h2>
+            <p className="titulo-cond mt-4 text-[clamp(1.6rem,4.4vw,2.4rem)] text-durazno">Probado donde se complica.</p>
           </div>
           <a
             href={site.social.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-12 items-center gap-3 font-semibold text-bone hover:text-orange-glow"
+            className="inline-flex min-h-12 items-center gap-3 font-semibold text-bone hover:text-menta"
           >
             <IconInstagram className="size-6" /> Más en {site.social.instagramHandle}
           </a>
@@ -61,10 +58,7 @@ export function InAction() {
                   </div>
                 )}
               </div>
-              <figcaption className="mt-3 flex items-baseline justify-between gap-3">
-                <span className="font-semibold">{"clip" in it ? clips[it.clip].titulo : it.titulo}</span>
-                <span className="tabular font-mono text-xs text-bone/60">{String(i + 1).padStart(2, "0")}</span>
-              </figcaption>
+              <figcaption className="mt-3 font-cond text-[1.05rem] font-semibold uppercase">{"clip" in it ? clips[it.clip].titulo : it.titulo}</figcaption>
             </figure>
           </Enter>
         ))}

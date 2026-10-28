@@ -29,7 +29,7 @@ export function Missing({
         role="note"
         data-falta={text}
         title={`Falta: ${text}`}
-        className={`inline-flex max-w-full items-center gap-1 border border-dashed border-white/80 bg-falta px-1.5 py-px font-mono text-[0.62rem] leading-tight font-semibold text-white uppercase ${className}`}
+        className={`inline-flex max-w-full items-center gap-1 border border-dashed border-white/80 bg-falta px-1.5 py-px font-cond text-[0.72rem] leading-tight font-semibold text-white uppercase ${className}`}
       >
         <span aria-hidden>⚠</span>
         <span className="truncate">
@@ -43,7 +43,7 @@ export function Missing({
     <Tag
       role="note"
       data-falta={text}
-      className={`${block ? "flex" : "inline-flex"} items-start gap-2 border-2 border-dashed border-white/80 bg-falta px-3 py-2 font-mono text-[0.8rem] leading-snug font-semibold text-white outline-2 outline-falta ${className}`}
+      className={`${block ? "flex" : "inline-flex"} items-start gap-2 border-2 border-dashed border-white/80 bg-falta px-3 py-2 font-cond text-[0.9rem] leading-snug font-semibold text-white outline-2 outline-falta ${className}`}
     >
       <span aria-hidden>⚠</span>
       <span>FALTA: {text}</span>
@@ -51,9 +51,10 @@ export function Missing({
   );
 }
 
-/** Muestra un valor confirmado o, si está pendiente, el cartel rojo. */
-export function V({ v, block }: { v: Maybe<string>; block?: boolean }) {
-  return isPending(v) ? <Missing label={v} block={block} /> : <>{v}</>;
+/** Muestra un valor confirmado o, si está pendiente, el cartel rojo (chico con `compact`). */
+export function V({ v, block, compact }: { v: Maybe<string>; block?: boolean; compact?: boolean }) {
+  if (!isPending(v)) return <>{v}</>;
+  return compact ? <Missing label={v} compact short={v.falta} /> : <Missing label={v} block={block} />;
 }
 
 /** Bloque de media faltante con la proporción del espacio que ocupará. */

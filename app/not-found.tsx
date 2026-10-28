@@ -1,14 +1,12 @@
 import Link from "next/link";
-import { Wordmark } from "@/components/ui/Wordmark";
 
 export default function NotFound() {
   return (
-    <main id="contenido" className="grid min-h-[100svh] place-items-center bg-garage px-4 text-bone">
+    <main id="contenido" className="zona-oscura grid min-h-[calc(100svh-var(--bar-h))] place-items-center bg-forest px-4 text-white">
       <div className="text-center">
-        <Wordmark />
-        <p className="eyebrow mt-10 text-orange-glow">Error 404</p>
-        <h1 className="font-display-x mt-3 text-[clamp(2.6rem,10vw,5rem)] uppercase">Te saliste del mapa.</h1>
-        <Link href="/" className="mt-8 inline-flex min-h-14 items-center bg-orange-cta px-7 text-lg font-semibold text-ink hover:bg-[#f47b52]">
+        <h1 className="font-display-x text-[clamp(2.6rem,10vw,5rem)] uppercase">Te saliste del mapa.</h1>
+        <p className="titulo-cond mt-4 text-[1.6rem] text-durazno">(esta página no existe)</p>
+        <Link href="/" className="mt-8 inline-flex min-h-14 items-center bg-durazno px-7 text-lg font-semibold text-forest-deep hover:bg-white">
           Volver al P70
         </Link>
       </div>

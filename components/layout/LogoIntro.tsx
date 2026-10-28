@@ -11,7 +11,7 @@ let jugado = false;
 export const INTRO_SCRIPT = `try{if(location.pathname==="/"&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("con-intro")}catch(e){}`;
 
 /**
- * Entrada del logo: aparece grande en el centro sobre un telón y, al correrse
+ * Entrada del logo: aparece grande en el centro sobre un telón verde (el de los flyers) y, al correrse
  * el telón, viaja achicándose hasta su lugar en la barra fija de arriba.
  * Sin JS se funde solo (CSS en globals.css → "Entrada del logo").
  */
@@ -53,9 +53,9 @@ export function LogoIntro() {
   if (pathname !== "/" || fin) return null;
   return (
     <div ref={ref} aria-hidden className="logo-intro pointer-events-none fixed inset-0 z-[90]">
-      <div data-telon className="absolute inset-0 bg-ink" />
+      <div data-telon className="absolute inset-0 bg-forest" />
       <div className="absolute inset-0 grid place-items-center px-4">
-        <span data-mark className="block origin-top-left leading-none text-bone">
+        <span data-mark className="block origin-top-left leading-none text-white">
           <Wordmark className="block text-[clamp(1.9rem,8.4vw,7.4rem)]" />
         </span>
       </div>

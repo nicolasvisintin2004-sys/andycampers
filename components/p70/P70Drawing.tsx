@@ -104,7 +104,9 @@ const palettes: Record<DrawingTone, { body: string; line: string; detail: string
 
 export function P70Drawing({
   tone = "blueprint",
-  accent = "#e4572e",
+  // Durazno de los flyers: la gráfica del P70 y la pieza activa se leen sobre el bloque verde.
+  accent = "#fbe3c7",
+  accentInk = "#1f3f3b",
   active,
   showHotspots = false,
   showDims = true,
@@ -115,6 +117,8 @@ export function P70Drawing({
 }: {
   tone?: DrawingTone;
   accent?: string;
+  /** Texto sobre el color de acento (el "P70" de la franja). */
+  accentInk?: string;
   active?: string | null;
   showHotspots?: boolean;
   showDims?: boolean;
@@ -193,7 +197,7 @@ export function P70Drawing({
       {/* Gráficas de color */}
       <path d="M346 378 L430 336 L560 336 L560 352 L438 352 L366 388 Z" fill={accent} />
       <path d="M604 304 L716 304 L704 326 L604 326 Z" fill={accent} />
-      <text x="618" y="321" fill="#fff" fontFamily="var(--font-archivo), sans-serif" fontStyle="italic" fontWeight="900" fontSize="17">
+      <text x="618" y="321" fill={accentInk} fontFamily="var(--font-archivo), sans-serif" fontStyle="italic" fontWeight="900" fontSize="17">
         P70
       </text>
       <path d="M902 372 L986 336 L986 352 L914 384 Z" fill={accent} />
@@ -261,7 +265,7 @@ export function P70Drawing({
               {on && (
                 <circle cx={h.x} cy={h.y} r="14" fill="none" stroke={accent} strokeWidth="2" strokeOpacity="0.55" />
               )}
-              <circle cx={h.x} cy={h.y} r="7" fill={on ? accent : "#25282c"} stroke={on ? "#fff" : p.line} strokeWidth="2" />
+              <circle cx={h.x} cy={h.y} r="7" fill={on ? accent : "#1f3f3b"} stroke={on ? "#fff" : p.line} strokeWidth="2" />
               <text
                 x={ex + (right ? 74 : -74)}
                 y={ey + 5}

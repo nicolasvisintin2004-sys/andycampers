@@ -23,7 +23,8 @@ export type EventName =
   | "click_whatsapp"
   | "click_instagram"
   | "click_facebook"
-  | "open_clip";
+  | "open_clip"
+  | "download";
 
 export function track(event: EventName, params: Params = {}) {
   if (typeof window === "undefined") return;

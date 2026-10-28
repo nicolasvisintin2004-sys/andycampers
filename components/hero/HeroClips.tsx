@@ -17,12 +17,14 @@ export function HeroClips() {
 
   return (
     <div className="fade-up mt-7 md:mt-9" style={{ "--d": "720ms" } as React.CSSProperties}>
-      <p className="eyebrow text-[0.66rem] text-bone/70">Mirá el P70 en acción</p>
-      <ul className="mt-3 flex gap-2.5 sm:gap-3">
+      <p className="font-cond text-[1rem] text-white/80">Mirá el P70 en acción</p>
+      {/* Fotos en paralelogramo, como la tira de fotos de los flyers de opcionales */}
+      <ul className="mt-2.5 flex">
+
         {ELEGIDOS.map((k, i) => {
           const c = clips[k];
           return (
-            <li key={k}>
+            <li key={k} className={i > 0 ? "-ml-2.5" : ""}>
               <button
                 type="button"
                 onClick={() => {
@@ -31,7 +33,7 @@ export function HeroClips() {
                 }}
                 aria-label={`Ver video: ${c.titulo}`}
                 aria-haspopup="dialog"
-                className="group relative block aspect-[4/5] w-[clamp(76px,22vw,96px)] overflow-hidden bg-graphite ring-1 ring-bone/25 transition-[box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:ring-orange-glow md:w-[clamp(84px,7vw,116px)]"
+                className="group relative block aspect-[4/5] w-[clamp(84px,25vw,108px)] overflow-hidden bg-graphite [clip-path:polygon(14%_0,100%_0,86%_100%,0_100%)] md:w-[clamp(96px,8vw,128px)]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -43,11 +45,11 @@ export function HeroClips() {
                   decoding="async"
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <span aria-hidden className="absolute inset-0 bg-[linear-gradient(to_top,rgb(22_24_27/0.75),transparent_55%)]" />
-                <span aria-hidden className="absolute top-1/2 left-1/2 grid size-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-ink/60 text-bone ring-1 ring-bone/50 transition-colors group-hover:bg-orange-cta group-hover:text-ink">
+                <span aria-hidden className="absolute inset-0 bg-[linear-gradient(to_top,rgb(31_63_59/0.85),transparent_58%)]" />
+                <span aria-hidden className="absolute top-[42%] left-1/2 grid size-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-forest transition-colors group-hover:bg-durazno">
                   <IconPlay className="ml-0.5 size-4" />
                 </span>
-                <span aria-hidden className="absolute inset-x-1.5 bottom-1.5 line-clamp-2 text-left text-[0.68rem] leading-tight font-semibold text-bone">
+                <span aria-hidden className="absolute right-[18%] bottom-1.5 left-2 line-clamp-2 text-left font-cond text-[0.78rem] leading-tight font-semibold text-white">
                   {c.titulo}
                 </span>
               </button>
@@ -103,7 +105,7 @@ function Visor({ i, onNav, onClose }: { i: number; onNav: (i: number) => void; o
       aria-modal="true"
       aria-label={c.titulo}
       tabIndex={-1}
-      className={`fixed inset-0 z-[80] flex flex-col items-center justify-center gap-4 bg-ink/92 p-4 outline-none transition-opacity duration-200 ${open ? "opacity-100" : "opacity-0"}`}
+      className={`zona-oscura fixed inset-0 z-[80] flex flex-col items-center justify-center gap-4 bg-ink/92 p-4 outline-none transition-opacity duration-200 ${open ? "opacity-100" : "opacity-0"}`}
       onClick={(e) => e.target === e.currentTarget && cerrar()}
     >
       <button type="button" onClick={cerrar} aria-label="Cerrar video" className="absolute top-3 right-3 grid size-12 place-items-center text-bone/80 hover:text-bone">
@@ -139,7 +141,7 @@ function Visor({ i, onNav, onClose }: { i: number; onNav: (i: number) => void; o
         </button>
         <p className="text-center">
           <span className="block font-semibold">{c.titulo}</span>
-          <span className="tabular font-mono text-xs text-bone/60">
+          <span className="tabular font-cond text-sm text-bone/60">
             {String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
           </span>
         </p>

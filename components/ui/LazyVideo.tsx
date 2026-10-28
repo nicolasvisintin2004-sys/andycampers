@@ -83,7 +83,7 @@ export function LazyVideo({
         className="group absolute inset-0 grid place-items-center"
       >
         <span
-          className={`grid size-14 place-items-center rounded-full bg-ink/60 text-bone ring-1 ring-bone/50 transition-[opacity,background-color,color] duration-200 group-hover:bg-orange-cta group-hover:text-ink ${
+          className={`grid size-14 place-items-center rounded-full bg-white/90 text-forest transition-[opacity,background-color,color] duration-200 group-hover:bg-durazno group-hover:text-forest-deep ${
             playing ? "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100" : "opacity-100"
           }`}
         >

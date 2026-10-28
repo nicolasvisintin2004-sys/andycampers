@@ -4,6 +4,8 @@ Landing de una sola página para el **P70 Acero 100%**: entrada con el logo gran
 
 **Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · Framer Motion · Zod. La landing es estática (SSG); los Route Handlers son el formulario (`/api/lead`) y el resumen semanal (`/api/cron/weekly-summary`). Deploy en Netlify, videos en un CDN externo.
 
+**Diseño (sale de los flyers de Andrés):** verde bosque `#2E5853` para bloques y botones, durazno `#FBE3C7` de fondo, oliva y la barra grafito `#2F3337` del pie. **Nada naranja en la interfaz** (Andrés trabaja con verde; el naranja queda solo en el producto). Tipografías: Barlow (texto), Barlow Semi Condensed (títulos, tablas, botones) y Archivo extendida itálica (logo y "P70"). Recursos: el bloque verde con el borde en diagonal para los títulos (`slab` en `globals.css`), el subtítulo liviano entre paréntesis, la tabla con filas alternadas de los opcionales, la flecha ↘ en las descargas y el selector en un estudio claro como los renders. Pocas palabras: si algo necesita un cartel para entenderse, está mal resuelto.
+
 ```bash
 npm install
 cp .env.example .env.local   # todo es opcional en desarrollo
@@ -14,6 +16,7 @@ npm run dev                   # http://localhost:3000
 |---|---|
 | `npm run dev` / `build` / `start` | Desarrollo, build de producción (corre antes el chequeo de pendientes) y servidor. `dev` usa la carpeta `.next-dev` y `build`/`start` usan `.next`, así pueden correr a la vez sin pisarse |
 | `npm run pendientes` | Lista todos los carteles rojos con archivo y línea y escribe `docs/pendientes.md` para mandarle a Andrés |
+| `npm run descargas` | Con el sitio corriendo (`BASE_URL=http://localhost:3101`), genera en `public/descargas` el PDF de preguntas frecuentes y el catálogo (una imagen 1080×1920 por nivel). Volver a correrlo cuando cambien niveles, precios o preguntas, y reiniciar `npm run start` para que los sirva |
 | `npm run videos:demo` | Genera los 15 videos DEMO del selector (Three.js + Chrome + ffmpeg-static) |
 | `npm run videos:check` | Controla los 15 videos contra las especificaciones de los renders |
 | `npm run test:leads` | Manda un lead de cada categoría (y casos de error) al formulario |
@@ -85,9 +88,9 @@ Medido en esta máquina con los demo: el ángulo se mantiene dentro de ±1 cuadr
 | Movimiento | **Un giro completo de 360°**, velocidad constante y tranquila, **loop perfecto** (el último cuadro empalma con el primero: el cuadro siguiente al último sería el primero) |
 | Duración | **La misma en los 15**, entre 8 y 16 s (los demo duran 14 s: cuanto más largo, más lento gira) |
 | Cámara | **Misma cámara, encuadre, lente, iluminación y ángulo inicial** en los 15. Cámara fija, un poco desde arriba (unos 16°) para que se vea el techo, el camper centrado |
-| Base | El camper gira sobre una **base redonda tipo brújula, fija**, con **N, S, E y O** (en los demo: N hacia la cámara, E a la izquierda, O a la derecha, y una flecha naranja debajo de la lanza que marca el rumbo). Con base propia en el render va `renderIncludesFloor: true` en `config/p70.ts`; `brujula.rumboInicial` y `sentido` hacen que la lectura "Rumbo" de la web coincida |
+| Base | El camper gira sobre una **base redonda tipo brújula, fija**, clara, con **N, S, E y O en gris suave** (pedido de Andrés; en los demo: N hacia la cámara, E a la izquierda, O a la derecha, y una flecha verde debajo de la lanza). Con base propia en el render va `renderIncludesFloor: true` en `config/p70.ts` |
 | Encuadre | El contacto de las ruedas con el piso a la altura del **66 % del cuadro** (desde arriba). La base ocupa como máximo el **57 % del ancho** y su borde de abajo queda por encima del 88 % del alto. El 15 % superior queda libre |
-| Fondo | **Liso, del color `#1C1F23`** (el grafito del sitio), sin degradés ni viñeta. Puede tener sombra de contacto |
+| Fondo | **Liso, claro, del color `#EBE8E3`** (el "estudio" del sitio, como los renders de los flyers), sin degradés ni viñeta. Puede tener sombra de contacto |
 | Exportación | **MP4 H.264** y **WebM VP9**, **30 fps**, **sin audio**. Desktop **1920×1080**; mobile **1280×720** (mismo encuadre). **Menos de 4 MB** cada archivo. Keyframe cada 15 cuadros si se puede (ayuda a sincronizar) |
 | Poster | Un **JPG 1280×720** por combinación: el primer cuadro |
 | Nombres | `p70-eq{número}-{color}.mp4` / `.webm` / `.jpg`. Ej.: `p70-eq1-verde.mp4`, `p70-eq3-gris.webm` (colores de ejemplo: usar los `id` de `config/p70.ts`) |
@@ -106,7 +109,7 @@ Si el encuadre final no respeta exactamente esas medidas, se ajusta en `config/p
 ### Reemplazar los demo por los reales
 1. Pisar los archivos con los mismos nombres (si los colores ya tienen nombre, renombrar ids en `config/p70.ts` y archivos a la vez).
 2. `npm run videos:check -- --dir=carpeta/de/los/renders` → tiene que dar "Todo en regla".
-3. Subirlos al CDN (abajo) y poner `videoSelector.sonDemo = false` en `config/p70.ts` (saca el cartel "Videos demo").
+3. Subirlos al CDN (abajo) y poner `videoSelector.sonDemo = false` en `config/p70.ts`. Los demo llevan su propia etiqueta roja "DEMO" dentro del video.
 4. Subir `videoSelector.version` en `config/p70.ts` (va en la URL como `?v=`): si no, los navegadores que ya visitaron la página siguen mostrando los videos viejos que tienen guardados.
 
 Los demo se regeneran con `npm run videos:demo` (lee equipamientos, colores, fondo y duración de `config/p70.ts`; necesita Google Chrome instalado). Llevan una etiqueta roja "DEMO · Equipamiento N · Color X" y un camper genérico: no se pueden confundir con el producto.
@@ -233,7 +236,7 @@ curl -H "Authorization: Bearer $CRON_SECRET" https://andycampers.com.ar/api/cron
 app/                 page.tsx (la landing), gracias/, privacidad/, api/lead, api/cron/weekly-summary
 components/          hero/ (montaje, 3 videos con visor), selector/ (Selector, Stage, Pedestal),
                      p70/ (QueEsP70: piezas clave + ficha), accion/, cotizar/ (puente, formulario, gracias),
-                     layout/ (ContactBar: barra fija con contactos, LogoIntro: entrada del logo, Footer), ui/, providers/
+                     layout/ (ContactBar: barra fija con contactos, LogoIntro: entrada del logo, Footer, Descargas), descargas/ (piezas de los flyers), ui/, providers/
 config/              p70.ts (producto), site.ts (negocio), lead-scoring.ts, quote-questions.ts
 content/             media.ts (fotos y clips reales), media/ (fotos optimizadas)
 lib/                 video-switcher.ts (motor A/B), selection.ts, jsonld, analytics, scoring, server/

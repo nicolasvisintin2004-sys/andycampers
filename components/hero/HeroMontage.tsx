@@ -92,9 +92,8 @@ export function HeroMontage({ slides }: { slides: Slide[] }) {
 
       {/* HUD del montaje: rótulo + progreso */}
       <div className="absolute top-[calc(var(--bar-h)+0.75rem)] right-4 z-10 flex flex-col items-end gap-1 sm:right-6 md:top-auto md:right-10 md:bottom-[4.5rem]">
-        <p className="eyebrow text-bone/85" aria-live="off">
-          <span className="tabular text-orange-glow">{String(i + 1).padStart(2, "0")}</span>
-          <span className="text-bone/50"> / {String(slides.length).padStart(2, "0")}</span> · {s.rotulo}
+        <p className="font-cond text-[0.95rem] font-semibold text-white [text-shadow:0_1px_8px_rgb(0_0_0/0.45)]" aria-live="off">
+          {s.rotulo}
         </p>
         <div className="flex items-center gap-1.5">
           {slides.map((sl, k) => (

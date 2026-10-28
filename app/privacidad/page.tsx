@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Missing } from "@/components/ui/Missing";
-import { Wordmark } from "@/components/ui/Wordmark";
 import { Footer } from "@/components/layout/Footer";
 import { site } from "@/config/site";
 import { isPending } from "@/lib/pending";
@@ -16,17 +14,15 @@ export default function PrivacidadPage() {
   return (
     <>
       <main id="contenido">
-        <section className="bg-graphite px-4 pt-6 pb-14 text-bone sm:px-6 lg:px-10">
+        <section className="overflow-hidden bg-durazno px-4 pt-12 pb-12 sm:px-6 lg:px-10 lg:pt-16">
           <div className="mx-auto max-w-[1440px]">
-            <Link href="/" className="inline-flex min-h-11 items-center">
-              <Wordmark />
-            </Link>
-            <h1 className="font-display-x mt-12 text-[clamp(2.6rem,10.5vw,6rem)] uppercase">Privacidad.</h1>
+            <h1 className="slab font-display-x text-[clamp(2.4rem,9vw,4.6rem)] uppercase">Privacidad</h1>
+            <p className="titulo-cond mt-4 text-[1.5rem] text-forest">(cómo usamos los datos que dejás en el sitio)</p>
           </div>
         </section>
 
-        <article className="bg-paper px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
-          <div className="mx-auto max-w-3xl space-y-10 text-lg leading-relaxed text-ink/85 [&_h2]:font-display-x [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:text-ink [&_h2]:uppercase">
+        <article className="bg-paper px-4 py-14 sm:px-6 lg:px-10 lg:py-20">
+          <div className="mx-auto max-w-3xl space-y-10 text-lg leading-relaxed text-ink/85 [&_h2]:titulo-cond [&_h2]:mb-3 [&_h2]:text-[2rem] [&_h2]:text-forest [&_h2]:uppercase">
             <Missing label="revisión legal de este texto antes de publicar" block />
 
             <section>

@@ -228,10 +228,10 @@ function QuoteFormInner() {
         </button>
         <div className="flex h-2 flex-1 gap-1" role="progressbar" aria-label="Progreso del formulario" aria-valuemin={1} aria-valuemax={TOTAL} aria-valuenow={s.step + 1}>
           {Array.from({ length: TOTAL }, (_, i) => (
-            <span key={i} className={`h-full flex-1 -skew-x-[24deg] transition-colors duration-300 ${i < s.step ? "bg-orange-cta" : i === s.step ? "bg-ink/45" : "bg-ink/12"}`} />
+            <span key={i} className={`h-full flex-1 -skew-x-[24deg] transition-colors duration-300 ${i < s.step ? "bg-forest" : i === s.step ? "bg-ink/45" : "bg-ink/12"}`} />
           ))}
         </div>
-        <span className="tabular font-mono text-xs text-stone">
+        <span className="tabular font-cond text-sm text-stone">
           {pad(s.step + 1)}/{pad(TOTAL)}
         </span>
       </div>
@@ -268,7 +268,7 @@ function QuoteFormInner() {
                         whileTap={{ scale: 0.98 }}
                         onClick={() => elegir(pregunta.id, o.id)}
                         className={`group flex min-h-16 w-full items-center gap-4 border-2 px-4 py-3.5 text-left text-[1.05rem] font-medium transition-[border-color,background-color,color,transform] duration-200 sm:px-5 sm:text-lg ${
-                          on ? "border-ink bg-ink text-bone" : "border-ink/15 bg-white/70 hover:-translate-y-0.5 hover:border-ink/60"
+                          on ? "border-forest bg-forest text-white" : "border-ink/15 bg-white/70 hover:-translate-y-0.5 hover:border-forest/60"
                         }`}
                       >
                         <Tecla on={on} letra={String.fromCharCode(65 + i)} />
@@ -316,7 +316,7 @@ function QuoteFormInner() {
                     completar(s.step);
                     go(s.step + 1);
                   }}
-                  className="mt-6 inline-flex min-h-14 items-center gap-3 bg-ink px-6 text-lg font-semibold text-bone"
+                  className="mt-6 inline-flex min-h-14 items-center gap-3 bg-forest px-6 text-lg font-semibold text-white transition-colors hover:bg-forest-deep"
                 >
                   {s.respuestas.comentario ? "Siguiente" : "Omitir"} <IconArrow className="size-5" />
                 </button>
@@ -430,7 +430,7 @@ function QuoteFormInner() {
                 <button
                   type="submit"
                   disabled={enviando}
-                  className="mt-8 inline-flex min-h-14 w-full items-center justify-center gap-3 bg-orange-cta px-6 text-lg font-semibold text-ink transition-colors hover:bg-[#f47b52] disabled:opacity-60 sm:w-auto"
+                  className="mt-8 inline-flex min-h-14 w-full items-center justify-center gap-3 bg-forest px-6 text-lg font-semibold text-white transition-colors hover:bg-forest-deep disabled:opacity-60 sm:w-auto"
                 >
                   {enviando ? "Enviando…" : "Enviar y pedir cotización"} <IconArrow className="size-5" />
                 </button>
@@ -455,8 +455,8 @@ function Tecla({ on, letra }: { on: boolean; letra: string }) {
   return (
     <span
       aria-hidden
-      className={`grid size-8 shrink-0 place-items-center border-2 font-mono text-xs font-semibold transition-colors ${
-        on ? "border-orange-cta bg-orange-cta text-ink shadow-[0_3px_0_0_var(--color-orange-ink)]" : "border-ink/30 text-ink shadow-[0_3px_0_0_rgb(22_24_27/0.22)] group-hover:border-ink/60"
+      className={`grid size-8 shrink-0 place-items-center border-2 font-cond text-sm font-semibold transition-colors ${
+        on ? "border-white bg-white text-forest shadow-[0_3px_0_0_var(--color-forest-deep)]" : "border-ink/30 text-ink shadow-[0_3px_0_0_rgb(22_24_27/0.22)] group-hover:border-ink/60"
       }`}
     >
       {on ? <IconCheck className="size-4" /> : letra}
@@ -490,7 +490,7 @@ function Niveles({
 }) {
   return (
     <div>
-      <p className="eyebrow text-orange-ink">Elegí tu dificultad</p>
+      <p className="font-cond text-[1.05rem] font-semibold text-forest uppercase">Elegí tu dificultad</p>
       <div className="mt-2">
         <Titulo heading={heading} id={`q-${p.id}`}>
           {p.titulo}
@@ -509,7 +509,7 @@ function Niveles({
               whileTap={{ scale: 0.98 }}
               onClick={() => onPick(o.id)}
               className={`group relative flex items-center gap-4 border-2 p-4 text-left transition-[border-color,background-color,color,transform] duration-200 sm:flex-col sm:items-start sm:gap-3 lg:min-h-[248px] lg:p-5 ${
-                on ? "border-ink bg-ink text-bone" : "border-ink/15 bg-white/70 hover:-translate-y-1 hover:border-ink/60"
+                on ? "border-forest bg-forest text-white" : "border-ink/15 bg-white/70 hover:-translate-y-1 hover:border-forest/60"
               }`}
             >
               <svg
@@ -520,12 +520,12 @@ function Niveles({
                 strokeLinejoin="round"
                 strokeLinecap="round"
                 aria-hidden
-                className={`size-10 shrink-0 lg:size-12 ${on ? "text-orange-glow" : "text-ink/70"}`}
+                className={`size-10 shrink-0 lg:size-12 ${on ? "text-durazno" : "text-forest"}`}
               >
                 {iconosNivel[i]}
               </svg>
               <span className="min-w-0 flex-1">
-                <span className={`block font-mono text-[0.7rem] font-semibold tracking-[0.16em] uppercase ${on ? "text-orange-glow" : "text-orange-ink"}`}>
+                <span className={`block font-cond text-[0.95rem] font-semibold uppercase ${on ? "text-durazno" : "text-forest"}`}>
                   {o.label}
                 </span>
                 <span className="mt-1 block text-[1.02rem] leading-snug font-medium lg:text-[1.08rem]">{o.detalle}</span>
@@ -534,7 +534,7 @@ function Niveles({
                   {[0, 1, 2, 3].map((k) => (
                     <span
                       key={k}
-                      className={`h-1.5 flex-1 -skew-x-[24deg] transition-colors duration-300 ${k <= i ? (on ? "bg-orange-cta" : "bg-ink/55 group-hover:bg-ink") : on ? "bg-bone/15" : "bg-ink/10"}`}
+                      className={`h-1.5 flex-1 -skew-x-[24deg] transition-colors duration-300 ${k <= i ? (on ? "bg-durazno" : "bg-forest/70 group-hover:bg-forest") : on ? "bg-bone/15" : "bg-ink/10"}`}
                       style={{ transitionDelay: `${k * 50}ms` }}
                     />
                   ))}
@@ -585,7 +585,7 @@ function Vehiculo({
               aria-checked={on}
               whileTap={{ scale: 0.97 }}
               onClick={() => onChange({ tipo: t.id })}
-              className={`min-h-16 border-2 px-2 text-[1.02rem] font-semibold transition-colors sm:text-lg ${on ? "border-ink bg-ink text-bone" : "border-ink/15 bg-white/70 hover:border-ink/60"}`}
+              className={`min-h-16 border-2 px-2 text-[1.02rem] font-semibold transition-colors sm:text-lg ${on ? "border-forest bg-forest text-white" : "border-ink/15 bg-white/70 hover:border-ink/60"}`}
             >
               {t.label}
             </m.button>
@@ -620,7 +620,7 @@ function Vehiculo({
         type="button"
         disabled={!value.tipo}
         onClick={onNext}
-        className="mt-7 inline-flex min-h-14 items-center gap-3 bg-ink px-6 text-lg font-semibold text-bone disabled:opacity-40"
+        className="mt-7 inline-flex min-h-14 items-center gap-3 bg-forest px-6 text-lg font-semibold text-white transition-colors hover:bg-forest-deep disabled:opacity-40"
       >
         Siguiente <IconArrow className="size-5" />
       </button>

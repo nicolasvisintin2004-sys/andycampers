@@ -20,10 +20,10 @@ export function ContactBar() {
   const pathname = usePathname();
   const sel = useSeleccion();
   const text = pathname.startsWith("/gracias") ? mensajeGracias(sel) : mensajeWhatsApp(sel);
-  const link = "inline-flex min-h-11 min-w-11 items-center justify-center gap-2 px-2 text-sm font-semibold text-bone/85 transition-colors hover:text-orange-glow sm:px-3";
+  const link = "inline-flex min-h-11 min-w-11 items-center justify-center gap-2 px-2 text-sm font-semibold text-white/85 transition-colors hover:text-menta sm:px-3";
 
   return (
-    <header className="fixed inset-x-0 top-0 z-[55] h-[var(--bar-h)] border-b border-line bg-ink text-bone">
+    <header data-barra className="zona-oscura fixed inset-x-0 top-0 z-[55] h-[var(--bar-h)] bg-grafito text-white">
       <div className="flex h-full items-center justify-between gap-3 px-4 sm:px-6 lg:px-10">
         <Link href="/" aria-label={`${site.name}, inicio`} className="inline-flex min-h-11 items-center" data-logo-target>
           <Wordmark className="text-[1.02rem] lg:text-[1.2rem]" />
@@ -39,7 +39,7 @@ export function ContactBar() {
             className={link}
           >
             <IconInstagram className="size-5" />
-            <span className="hidden font-mono text-xs tracking-[0.12em] sm:inline">{site.social.instagramHandle}</span>
+            <span className="hidden font-cond text-[0.95rem] font-semibold sm:inline">{site.social.instagramHandle}</span>
           </a>
           {!isPending(site.social.facebook) && (
             <a
@@ -51,7 +51,7 @@ export function ContactBar() {
               className={link}
             >
               <IconFacebook className="size-5" />
-              <span className="hidden font-mono text-xs tracking-[0.12em] sm:inline">Facebook</span>
+              <span className="hidden font-cond text-[0.95rem] font-semibold sm:inline">Facebook</span>
             </a>
           )}
           <a

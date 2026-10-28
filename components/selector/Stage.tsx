@@ -7,14 +7,6 @@ import { useSettled, whenSettled } from "@/lib/settled";
 import { Pedestal, pedestalTransform } from "./Pedestal";
 import { IconPause, IconPlay } from "@/components/ui/Icons";
 
-const PUNTOS = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"];
-/** Hacia dónde apunta la lanza, según la base brújula de los renders: "128° SE". */
-const rumbo = (t: number) => {
-  const { rumboInicial, sentido } = videoSelector.brujula;
-  const g = (((rumboInicial + sentido * t * 360) % 360) + 360) % 360;
-  return `${String(Math.round(g) % 360).padStart(3, "0")}° ${PUNTOS[Math.round(g / 45) % 8]}`;
-};
-
 export interface StageHandle {
   /** Hover / foco / dedo apoyado sobre una opción. */
   prime: (eq: number, color: string) => void;
@@ -25,7 +17,7 @@ export interface StageHandle {
 
 /**
  * Escenario del selector: los dos videos (A/B), el poster mientras carga,
- * el pedestal, el cono de luz y el barrido de escaneo.
+ * el pedestal (si los renders no traen base) y el barrido al cambiar de opción.
  * El cuadro es 16:9 y sus medidas salen de las variables CSS del contenedor
  * (ver .stage-box en Selector), así el pedestal coincide con el piso del render.
  */
@@ -37,7 +29,6 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
   const a = useRef<HTMLVideoElement>(null);
   const b = useRef<HTMLVideoElement>(null);
   const ring = useRef<SVGGElement>(null);
-  const rot = useRef<HTMLSpanElement>(null);
   const sw = useRef<VideoSwitcher | null>(null);
   const clickAt = useRef(0);
   const [st, setSt] = useState<SwitcherState>({ front: 0, loading: false, started: false });
@@ -103,14 +94,10 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
 
   // El pedestal y la lectura de rumbo giran con el video (sin re-render de React).
   useEffect(() => {
-    if (!playing) return;
+    if (!playing || videoSelector.renderIncludesFloor) return;
     let raf = 0;
-    let last = "";
     const loop = () => {
-      const t = sw.current?.angle() ?? 0;
-      ring.current?.setAttribute("transform", pedestalTransform(t));
-      const txt = rumbo(t);
-      if (rot.current && txt !== last) rot.current.textContent = last = txt;
+      ring.current?.setAttribute("transform", pedestalTransform(sw.current?.angle() ?? 0));
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
@@ -137,9 +124,6 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
   return (
     <>
     <div ref={wrap} className="stage-box" data-loading={st.loading || undefined}>
-      {/* Cono de luz cenital y pileta de luz en el piso (detrás del video, se ven en los bordes) */}
-      <div aria-hidden className="stage-light absolute inset-0" />
-
       <div className="stage-video absolute inset-0">
         {/* Poster: antes de arrancar, mientras carga un video nuevo, o con movimiento reducido */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -179,13 +163,13 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
       {/* Barrido de escaneo al cambiar de opción */}
       {scanKey > 0 && (
         <div key={scanKey} aria-hidden className="pointer-events-none absolute inset-x-[18%] top-[22%] bottom-[14%] z-[5] overflow-hidden">
-          <div className="scan-sweep absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,transparent_0%,transparent_44%,rgb(240_122_82/0.0)_46%,rgb(240_122_82/0.55)_49.6%,rgb(255_255_255/0.9)_50%,rgb(240_122_82/0.35)_50.6%,transparent_56%)] mix-blend-screen" />
+          <div className="scan-sweep absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,transparent_0%,transparent_45%,rgb(46_88_83/0.18)_48.5%,rgb(46_88_83/0.5)_50%,rgb(46_88_83/0.18)_51.5%,transparent_55%)]" />
         </div>
       )}
 
       {st.loading && (
-        <span role="status" className="absolute top-1/2 left-1/2 z-[6] flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 bg-ink/70 px-3 py-1.5 font-mono text-[0.68rem] tracking-widest text-bone uppercase">
-          <span aria-hidden className="size-3 animate-[spin_0.8s_linear_infinite] rounded-full border-2 border-bone/30 border-t-orange-glow" />
+        <span role="status" className="absolute top-1/2 left-1/2 z-[6] flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 bg-white/90 px-3 py-1.5 font-cond text-sm font-semibold text-ink uppercase shadow-sm">
+          <span aria-hidden className="size-3 animate-[spin_0.8s_linear_infinite] rounded-full border-2 border-ink/15 border-t-forest" />
           Cargando
         </span>
       )}
@@ -197,11 +181,11 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
           onClick={togglePlay}
           onPointerDown={(e) => e.stopPropagation()}
           disabled={arrancando}
-          className="group absolute top-[44%] left-1/2 z-[6] inline-flex min-h-12 -translate-x-1/2 -translate-y-1/2 items-center gap-3 rounded-full bg-ink/80 py-1.5 pr-5 pl-1.5 font-mono text-xs font-semibold tracking-widest text-bone uppercase ring-1 ring-bone/35 transition-colors hover:bg-ink hover:ring-orange-glow"
+          className="group absolute top-[44%] left-1/2 z-[6] inline-flex min-h-12 -translate-x-1/2 -translate-y-1/2 items-center gap-3 rounded-full bg-forest py-1.5 pr-5 pl-1.5 font-cond text-[1.02rem] font-semibold tracking-[0.03em] text-white uppercase shadow-[0_10px_24px_-12px_rgb(31_63_59/0.9)] transition-colors hover:bg-forest-deep"
         >
-          <span className="grid size-9 place-items-center rounded-full bg-orange-cta text-ink">
+          <span className="grid size-9 place-items-center rounded-full bg-white text-forest">
             {arrancando ? (
-              <span aria-hidden className="size-4 animate-[spin_0.8s_linear_infinite] rounded-full border-2 border-ink/30 border-t-ink" />
+              <span aria-hidden className="size-4 animate-[spin_0.8s_linear_infinite] rounded-full border-2 border-forest/25 border-t-forest" />
             ) : (
               <IconPlay className="ml-0.5 size-4" />
             )}
@@ -221,16 +205,11 @@ export const Stage = forwardRef<StageHandle, { eq: number; color: string; scanKe
         type="button"
         onClick={togglePlay}
         onPointerDown={(e) => e.stopPropagation()}
-        className="absolute top-1 right-4 z-[7] inline-flex min-h-11 items-center gap-2 px-2 font-mono text-[0.68rem] tracking-widest text-bone/80 uppercase transition-colors hover:text-bone sm:right-6 lg:right-0"
+        className="absolute top-1 right-4 z-[7] inline-flex min-h-11 items-center gap-2 px-2 font-cond text-[0.95rem] font-semibold text-ink/70 uppercase transition-colors hover:text-ink sm:right-6 lg:right-0"
       >
         {playing ? <><IconPause className="size-4" /> Pausar</> : <><IconPlay className="size-4" /> Girar</>}
       </button>
     )}
-
-    {/* Rumbo de la brújula (HUD), en el borde del escenario */}
-    <p aria-hidden className="pointer-events-none absolute right-4 bottom-1 z-[7] font-mono text-[0.62rem] tracking-[0.2em] text-bone/45 uppercase sm:right-6 sm:text-[0.68rem] lg:right-0">
-      Rumbo <span ref={rot} className="tabular text-bone/80">{rumbo(0)}</span>
-    </p>
     </>
   );
 });

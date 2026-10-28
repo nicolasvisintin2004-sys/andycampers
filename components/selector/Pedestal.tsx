@@ -115,7 +115,7 @@ export const Pedestal = forwardRef<SVGGElement, { className?: string }>(function
         <g ref={ref} transform={pedestalTransform(0)}>
           <path d={DISCO_MENORES} stroke="#ece7df" strokeOpacity="0.3" strokeWidth="1" vectorEffect="non-scaling-stroke" />
           <path d={DISCO_MAYORES} stroke="#ece7df" strokeOpacity="0.55" strokeWidth="1.4" vectorEffect="non-scaling-stroke" />
-          <path d="M0 0.86 L0 0.985" stroke="#f07a52" strokeWidth="3" vectorEffect="non-scaling-stroke" />
+          <path d="M0 0.86 L0 0.985" stroke="#2e5853" strokeWidth="3" vectorEffect="non-scaling-stroke" />
         </g>
       </g>
     </svg>
