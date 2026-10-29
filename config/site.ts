@@ -50,7 +50,7 @@ export const site = {
     garantia: falta("garantía del P70") as Maybe<string>,
   },
 
-  credito: { texto: "Diseño y desarrollo: Visintin Studio", url: null as string | null },
+  credito: { texto: "Diseño y desarrollo: Visintin Studio", url: "https://visintinstudio.com.ar" as string | null },
 } as const;
 
 export const waLink = (text?: string, number: string = site.whatsapp.number) =>
