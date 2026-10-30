@@ -45,7 +45,15 @@
   /* Alto de la barra fija de arriba (logo + Instagram, Facebook y WhatsApp) */
   --bar-h: 44px;
   --cut: clamp(28px, 5vw, 72px);
-  color-scheme: light;
+  /* "only": que el modo oscuro forzado del celular (Samsung Internet, Chrome) no invierta los colores */
+  color-scheme: only light;
+}
+/* Samsung Internet no fuerza su modo oscuro si la hoja tiene una regla para el modo
+   oscuro: esta repite los mismos colores claros, así la página se ve siempre igual. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: only light;
+  }
 }
 @media (min-width: 1024px) {
   :root {
