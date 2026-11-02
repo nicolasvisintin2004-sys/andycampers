@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { equipamientoDeSerie, equipamientos, inicial, nombreEq, posterUrl, slugEq } from "@/config/p70";
+import { agregables, descuentoOpcionales, equipamientoDeSerie, equipamientos, incluidos, inicial, nombreEq, posterUrl, slugEq } from "@/config/p70";
 import { site } from "@/config/site";
 import { isPending } from "@/lib/pending";
 import { Missing } from "@/components/ui/Missing";
@@ -60,15 +60,11 @@ export default async function CatalogoNivel({ params }: { params: Promise<{ nive
 
       <div className="px-8 pt-5">
         <p className="font-cond text-[1.2rem] font-semibold text-forest uppercase">Incluye</p>
-        {isPending(e.incluye) ? (
-          <Missing label={e.incluye} className="mt-1" />
-        ) : (
-          <ul className="mt-1 space-y-1 text-[1rem] leading-snug font-semibold">
-            {e.incluye.map((it) => (
-              <li key={it}>{it}</li>
-            ))}
-          </ul>
-        )}
+        <ul className="mt-1 grid grid-cols-2 gap-x-4 gap-y-1 text-[0.86rem] leading-snug font-semibold">
+          {incluidos(e.n).map((o) => (
+            <li key={o.nombre}>{o.nombre}</li>
+          ))}
+        </ul>
       </div>
 
       <div className="px-8 pt-5">
@@ -82,6 +78,21 @@ export default async function CatalogoNivel({ params }: { params: Promise<{ nive
           ))}
         </ul>
       </div>
+
+      {agregables(e.n).length > 0 && (
+        <div className="pt-5">
+          <p className="px-8 font-cond text-[1.2rem] font-semibold text-forest uppercase">Se puede agregar</p>
+          <ul className="mt-1.5">
+            {agregables(e.n).map((o, i) => (
+              <li key={o.nombre} className={`flex items-baseline justify-between gap-4 px-8 py-1 text-[0.88rem] font-semibold ${i % 2 ? "bg-[#d9d9d9]" : "bg-white"}`}>
+                <span>{o.nombre}</span>
+                <span className="tabular shrink-0 font-cond text-forest">U$D {usd.format(o.precio)}.-</span>
+              </li>
+            ))}
+          </ul>
+          <p className="px-8 pt-2 font-cond text-[1rem] font-semibold text-forest">↘ {descuentoOpcionales}</p>
+        </div>
+      )}
 
       <p className="mt-auto flex items-center gap-2.5 px-8 pt-6 pb-5 font-cond text-[1.15rem] font-semibold text-forest uppercase">
         <span aria-hidden className="text-[1.5rem] leading-none">↘</span> Pedí tu cotización en {site.dominio}

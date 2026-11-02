@@ -1,6 +1,7 @@
 import { Hero } from "@/components/hero/Hero";
 import { Selector } from "@/components/selector/Selector";
 import { QueEsP70 } from "@/components/p70/QueEsP70";
+import { Galeria } from "@/components/galeria/Galeria";
 import { InAction } from "@/components/accion/InAction";
 import { Cotizar } from "@/components/cotizar/Cotizar";
 import { Footer } from "@/components/layout/Footer";
@@ -18,6 +19,7 @@ export default function Home() {
         <Hero />
         <Selector />
         <QueEsP70 />
+        <Galeria />
         <InAction />
         <Cotizar />
       </main>

@@ -34,8 +34,6 @@ export interface Equipamiento {
   precio: Maybe<number>;
   /** Una línea debajo del precio. */
   descripcion: Maybe<string>;
-  /** Qué incluye este equipamiento (lista). */
-  incluye: Maybe<string[]>;
   /**
    * Barras de "stats" tipo juego. `null` = no se muestran (así quedan hasta que
    * Andrés defina los valores de los 3 equipamientos).
@@ -43,36 +41,94 @@ export interface Equipamiento {
   stats: Stats | null;
 }
 
-/** Nombres provisorios que pidió Andrés (audio del 27/10): "después voy a ver qué le pongo, ponelo así ahora". */
+/** Los 3 niveles, de más base a más completo. Qué trae cada uno sale de `opcionales`. */
 export const equipamientos: Equipamiento[] = [
   {
     n: 1,
-    nombre: "Santa Fe",
-    nombreCorto: "Santa Fe",
-    precio: falta("precio del nivel Santa Fe"),
-    descripcion: falta("descripción de una línea del nivel Santa Fe"),
-    incluye: falta("qué incluye el nivel Santa Fe"),
+    nombre: "Rumbo",
+    nombreCorto: "Rumbo",
+    precio: falta("precio del nivel Rumbo"),
+    descripcion: falta("descripción de una línea del nivel Rumbo"),
     stats: null,
   },
   {
     n: 2,
-    nombre: "Patagonia",
-    nombreCorto: "Patagonia",
-    precio: falta("precio del nivel Patagonia"),
-    descripcion: falta("descripción de una línea del nivel Patagonia"),
-    incluye: falta("qué incluye el nivel Patagonia"),
+    nombre: "Terra",
+    nombreCorto: "Terra",
+    precio: falta("precio del nivel Terra"),
+    descripcion: falta("descripción de una línea del nivel Terra"),
     stats: null,
   },
   {
     n: 3,
-    nombre: "Sapukái",
-    nombreCorto: "Sapukái",
-    precio: falta("precio del nivel Sapukái"),
-    descripcion: falta("descripción de una línea del nivel Sapukái"),
-    incluye: falta("qué incluye el nivel Sapukái"),
+    nombre: "Cima",
+    nombreCorto: "Cima",
+    precio: falta("precio del nivel Cima"),
+    descripcion: falta("descripción de una línea del nivel Cima"),
     stats: null,
   },
 ];
+
+/* ───────────────────────── Opcionales (flyers marcados por Andrés) ───────────────────────── */
+
+export interface Opcional {
+  nombre: string;
+  detalle?: string;
+  /** Precio en USD si no viene con el nivel elegido. */
+  precio: number;
+  /** Desde qué nivel viene incluido. En los niveles anteriores es un opcional con precio. */
+  desde: 1 | 2 | 3;
+}
+
+/**
+ * Los flyers de Rumbo y Terra tienen tachado lo que ese nivel NO trae (audio de
+ * Andrés del 30/10) y Cima trae todo. Los textos con `desde: 3` están tapados
+ * por la marca en los dos flyers: se confirman con el flyer limpio.
+ */
+export const opcionales: Opcional[] = [
+  { nombre: "Aireador de techo eléctrico", detalle: "Extractor ventilador, muy recomendable. No es aire acondicionado pero es suficiente.", precio: 440, desde: 1 },
+  { nombre: "Batería 1536 W", detalle: "Con picos de 1800 W", precio: 1960, desde: 1 },
+  { nombre: "Panel solar 150 W y conexiones", detalle: "Recupera la batería en 2 horas del uso nocturno", precio: 620, desde: 1 },
+  { nombre: "Bacha en mesada", detalle: "Tanque de 100 litros, bomba de agua automática y entrada. Conexiones y chapones protectores.", precio: 730, desde: 1 },
+  { nombre: "Extensión de mesada", detalle: "Adaptador para usar el portón del espacio técnico como ampliación de la mesada de cocina", precio: 83, desde: 1 },
+  { nombre: "Puerta segunda completa", precio: 1120, desde: 1 },
+  { nombre: "Toberas para el guardado del calzado", precio: 540, desde: 1 },
+  { nombre: "Enganche multidireccional extremo", detalle: "Mayor seguridad", precio: 660, desde: 1 },
+  { nombre: "Chapón cubre chasis", precio: 235, desde: 1 },
+  { nombre: "Ganchos de desatasco", detalle: "x2 unidades", precio: 55, desde: 1 },
+  { nombre: "Trabas para puertas contra el viento", detalle: "x2 unidades", precio: 64, desde: 1 },
+  { nombre: "Luz LED en espacio técnico de herramientas", precio: 44, desde: 1 },
+  { nombre: "Tercera luz de stop", precio: 82, desde: 1 },
+
+  { nombre: "Heladera Dometic a medida", precio: 1560, desde: 2 },
+  { nombre: "Rack porta heladera con desplazamientos", precio: 280, desde: 2 },
+  { nombre: "Baulera frontal de guardado", precio: 720, desde: 2 },
+  { nombre: "Porta equipajes", detalle: "Preparado para sujetar toldo y baño o poner bicicletas", precio: 520, desde: 2 },
+  { nombre: "Rueda de auxilio, cubierta y llanta", precio: 760, desde: 2 },
+  { nombre: "Cubiertas más grandes", detalle: "De 740 a 810 mm de diámetro", precio: 460, desde: 2 },
+  { nombre: "Embellecedor para llantas", detalle: "x2 unidades", precio: 95, desde: 2 },
+  { nombre: "Pie rebatible", detalle: "x2 unidades", precio: 180, desde: 2 },
+
+  { nombre: "Toldo 270 grados", precio: 680, desde: 3 },
+  { nombre: "Luces LED en toldo", precio: 440, desde: 3 },
+  { nombre: "Cerramiento lateral 270 grados", precio: 880, desde: 3 },
+  { nombre: "Baño plegable", detalle: "Te podés dar una ducha y también ponerle el inodoro químico adentro", precio: 480, desde: 3 },
+  { nombre: "Duchador baulera con calefón de agua caliente", detalle: "Con porta garrafa", precio: 840, desde: 3 },
+  { nombre: "Cocina baulera completa", detalle: "Con porta garrafa", precio: 720, desde: 3 },
+  { nombre: "Techo panorámico con apertura y luz", detalle: "Le da amplitud, para ver las estrellas de noche", precio: 820, desde: 3 },
+  { nombre: "Freno de mano mecánico", precio: 1140, desde: 3 },
+  { nombre: "Pava eléctrica", precio: 120, desde: 3 },
+  { nombre: "Funda para el camper", precio: 420, desde: 3 },
+];
+
+/** Todo lo que trae el nivel. */
+export const incluidos = (n: number) => opcionales.filter((o) => o.desde <= n);
+/** Lo que este nivel suma al anterior. */
+export const nuevosEn = (n: number) => opcionales.filter((o) => o.desde === n);
+/** Lo que se le puede agregar al nivel, con su precio. */
+export const agregables = (n: number) => opcionales.filter((o) => o.desde > n);
+/** Texto del flyer de opcionales. */
+export const descuentoOpcionales = "Eligiendo todos los equipamientos 8% de descuento";
 
 /* ───────────────────────── Colores (5) ───────────────────────── */
 
@@ -111,7 +167,7 @@ export const videoSelector = {
    * reemplazan los archivos con los mismos nombres, si no los navegadores siguen
    * mostrando los viejos que tienen guardados.
    */
-  version: 3,
+  version: 4,
   /** Duración de TODOS los videos, en segundos (deben ser iguales). Más largo = gira más lento. */
   duracion: 14,
   /**
@@ -169,7 +225,7 @@ export const hexColor = (c: ColorP70) => (isPending(c.hex) ? c.hexDemo : c.hex);
 
 export const getEq = (n: unknown) => equipamientos.find((e) => e.n === Number(n));
 
-/** "Sapukái" → "sapukai": nombre de archivo del catálogo descargable de cada nivel. */
+/** "Rumbo" → "rumbo": nombre de archivo del catálogo descargable de cada nivel. */
 export const slugEq = (n: number) =>
   nombreEq(n)
     .normalize("NFD")

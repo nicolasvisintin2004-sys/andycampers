@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { colores, equipamientos, hexColor, nombreColor, nombreEq, videoSelector, type Equipamiento } from "@/config/p70";
+import { agregables, colores, descuentoOpcionales, equipamientos, hexColor, nombreColor, nombreEq, nuevosEn, videoSelector, type Equipamiento } from "@/config/p70";
 import { isPending } from "@/lib/pending";
 import { ciclarColor, ciclarEq, linkCompartir, setSeleccion, useSeleccion } from "@/lib/selection";
 import { track } from "@/lib/analytics";
@@ -157,7 +157,7 @@ export function Selector() {
       id="armalo"
       aria-labelledby="armalo-title"
       onKeyDown={onKeyDown}
-      className="garage-cut relative isolate flex h-[calc(100svh-var(--bar-h))] min-h-[620px] flex-col overflow-hidden bg-estudio text-ink lg:min-h-[700px]"
+      className="relative isolate flex h-[calc(100svh-var(--bar-h))] min-h-[620px] flex-col overflow-hidden bg-estudio text-ink lg:min-h-[700px]"
     >
       {/* Piso del estudio: grilla en perspectiva, como el de los renders de los flyers */}
       <div aria-hidden className="pointer-events-none absolute inset-x-[-30%] top-[54%] bottom-[-40%] -z-10 garage-floor" />
@@ -317,19 +317,36 @@ function Detalle({ eq }: { eq: Equipamiento }) {
 }
 
 function Incluye({ eq, className = "" }: { eq: Equipamiento; className?: string }) {
+  const anterior = equipamientos.find((e) => e.n === eq.n - 1);
+  const extras = agregables(eq.n);
   return (
     <div className={className}>
-      <p className="font-cond text-[1.15rem] font-semibold text-forest uppercase">Incluye</p>
-      {isPending(eq.incluye) ? (
-        <Missing label={eq.incluye} compact short="qué incluye" className="mt-1.5" />
+      <p className="font-cond text-[1.15rem] font-semibold text-forest uppercase">{anterior ? `Todo lo de ${nombre(anterior)}, más` : "Incluye"}</p>
+      <ul className="mt-1.5 space-y-1.5">
+        {nuevosEn(eq.n).map((o) => (
+          <li key={o.nombre} className="text-[0.98rem] leading-snug">
+            {o.nombre}
+            {o.detalle && <span className="block text-[0.86rem] text-stone">{o.detalle}</span>}
+          </li>
+        ))}
+      </ul>
+      {extras.length > 0 ? (
+        <details className="mt-5 border-t border-ink/15 pt-3">
+          <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-3 font-cond text-[1.15rem] font-semibold text-forest uppercase">
+            Se puede agregar ({extras.length}) <IconChevron className="size-4 -rotate-90" />
+          </summary>
+          <ul className="mt-1">
+            {extras.map((o) => (
+              <li key={o.nombre} className="flex items-baseline justify-between gap-3 py-1 text-[0.95rem] leading-snug">
+                <span>{o.nombre}</span>
+                <span className="tabular shrink-0 font-cond font-semibold text-forest">{precioFlyer(o.precio)}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 font-cond text-[1rem] font-semibold text-forest">↘ {descuentoOpcionales}</p>
+        </details>
       ) : (
-        <ul className="mt-1.5 space-y-1.5">
-          {eq.incluye.map((it) => (
-            <li key={it} className="text-[0.98rem] leading-snug">
-              {it}
-            </li>
-          ))}
-        </ul>
+        <p className="mt-4 font-cond text-[1.05rem] font-semibold text-forest">Trae todos los opcionales.</p>
       )}
       {eq.stats && equipamientos.every((e) => e.stats) && <Stats stats={eq.stats} />}
     </div>
@@ -380,11 +397,12 @@ function Ctas({ onQuiero, onShare }: { onQuiero: () => void; onShare: () => void
 
 function Colores({ active, onPick, onPrime }: { active: string; onPick: (id: string) => void; onPrime: (id: string) => void }) {
   return (
-    <div className="relative z-10 flex items-center justify-center gap-3 px-4 pt-3 pb-[5.75rem] sm:gap-5 sm:px-6 lg:pt-4 lg:pb-0">
-      <span className="pestana hidden font-cond text-[0.95rem] font-semibold uppercase sm:inline-block" id="color-label">
+    // Tres columnas: las muestras quedan centradas justo debajo de los niveles, tenga lo que tenga a los costados.
+    <div className="relative z-10 grid grid-cols-[1fr_auto_1fr] items-center gap-x-3 px-4 pt-3 pb-[5.75rem] sm:gap-x-5 sm:px-6 lg:pt-4 lg:pb-0">
+      <span className="pestana hidden justify-self-end font-cond text-[0.95rem] font-semibold uppercase sm:inline-block" id="color-label">
         Elegí tu color
       </span>
-      <div role="radiogroup" aria-labelledby="color-label" data-group="color" className="flex items-center gap-1 sm:gap-2">
+      <div role="radiogroup" aria-labelledby="color-label" data-group="color" className="col-start-2 flex items-center gap-1 sm:gap-2">
         {colores.map((c, i) => {
           const on = c.id === active;
           return (
@@ -410,7 +428,11 @@ function Colores({ active, onPick, onPrime }: { active: string; onPick: (id: str
           );
         })}
       </div>
-      {coloresPendientes && <Missing label="nombre y código de los 5 colores" compact short="nombres" />}
+      {coloresPendientes && (
+        <div className="col-span-3 mt-1 justify-self-center sm:col-span-1 sm:col-start-3 sm:mt-0 sm:justify-self-start">
+          <Missing label="nombre y código de los 5 colores" compact short="nombres" />
+        </div>
+      )}
     </div>
   );
 }

@@ -238,7 +238,7 @@ components/          hero/ (montaje, 3 videos con visor), selector/ (Selector, S
                      p70/ (QueEsP70: piezas clave + ficha), accion/, cotizar/ (puente, formulario, gracias),
                      layout/ (ContactBar: barra fija con contactos, LogoIntro: entrada del logo, Footer, Descargas), descargas/ (piezas de los flyers), ui/, providers/
 config/              p70.ts (producto), site.ts (negocio), lead-scoring.ts, quote-questions.ts
-content/             media.ts (fotos y clips reales), media/ (fotos optimizadas)
+content/             media.ts (fotos y videos reales de Andrés), media/ (fotos)
 lib/                 video-switcher.ts (motor A/B), selection.ts, jsonld, analytics, scoring, server/
 public/media/p70/    los 15 videos DEMO + posters (en producción, en el CDN)
 scripts/             generate-placeholder-videos, check-videos, pendientes, test-leads

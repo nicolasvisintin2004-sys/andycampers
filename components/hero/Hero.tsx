@@ -1,6 +1,5 @@
-import { media } from "@/content/media";
+import { fotos, media } from "@/content/media";
 import { precioDesde } from "@/config/p70";
-import { Missing } from "@/components/ui/Missing";
 import { IconArrowDown } from "@/components/ui/Icons";
 import { HeroMontage, type Slide } from "./HeroMontage";
 import { HeroScrollFx } from "./HeroScrollFx";
@@ -8,7 +7,7 @@ import { HeroClips } from "./HeroClips";
 
 /**
  * Hero "vender la experiencia".
- * Mobile: montaje a sangre (100svh) con el texto abajo.
+ * Mobile: montaje arriba (el camper queda libre, las fotos son verticales) y el texto abajo.
  * Desktop: el texto sobre grafito a la izquierda y el montaje en un panel con
  * corte diagonal a la derecha (las fotos son de 1440 px: a pantalla completa en
  * un monitor grande se verían blandas).
@@ -17,10 +16,10 @@ import { HeroClips } from "./HeroClips";
 const slides: Slide[] = [
   {
     tipo: "foto",
-    img: media.ruta,
-    alt: "P70 enganchado a la camioneta en la banquina de una ruta al atardecer",
-    rotulo: "Ruta al atardecer",
-    pos: { m: "56% 60%", d: "60% 62%" },
+    img: fotos.playa.img,
+    alt: fotos.playa.alt,
+    rotulo: "Frente al mar",
+    pos: { m: "42% 72%", d: "50% 68%" },
     kb: { x: "-1.5%", y: "-1%" },
   },
   {
@@ -33,26 +32,26 @@ const slides: Slide[] = [
   },
   {
     tipo: "foto",
-    img: media.nieve,
-    alt: "P70 enganchado a la camioneta durante una nevada",
-    rotulo: "Nieve",
-    pos: { m: "34% 70%", d: "50% 70%" },
+    img: fotos.toldoTrasero.img,
+    alt: fotos.toldoTrasero.alt,
+    rotulo: "Toldo abierto",
+    pos: { m: "45% 45%", d: "50% 50%" },
     kb: { x: "-1%", y: "-1.5%" },
   },
   {
     tipo: "foto",
-    img: media.playaMedanos,
-    alt: "Camioneta y P70 en una playa amplia con médanos y el mar de fondo",
-    rotulo: "Playa y médanos",
-    pos: { m: "70% 76%", d: "60% 74%" },
+    img: fotos.interiorLed.img,
+    alt: fotos.interiorLed.alt,
+    rotulo: "Adentro",
+    pos: { m: "50% 40%", d: "50% 42%" },
     kb: { x: "1%", y: "-1%" },
   },
   {
     tipo: "foto",
-    img: media.cocina,
-    alt: "Cocina baulera del P70 desplegada al aire libre, con anafe de dos hornallas",
-    rotulo: "Cocina al aire libre",
-    pos: { m: "45% 60%", d: "45% 58%" },
+    img: fotos.camino.img,
+    alt: fotos.camino.alt,
+    rotulo: "Listo para salir",
+    pos: { m: "55% 60%", d: "50% 62%" },
     kb: { x: "-1%", y: "1%" },
   },
 ];
@@ -61,14 +60,13 @@ const usd = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 });
 
 export function Hero() {
   return (
-    // Ocupa la pantalla entera, por debajo de la barra fija: así la foto de mobile (que
-    // llega después del load) es "de fondo" para Chrome y el LCP sigue siendo el texto.
+    // Ocupa la pantalla entera, por debajo de la barra fija.
     <section aria-labelledby="hero-title" className="zona-oscura relative -mt-[var(--bar-h)] h-[100svh] min-h-[620px] overflow-hidden bg-forest-deep pt-[var(--bar-h)] text-white md:bg-forest">
       {/* Montaje: a sangre en mobile, panel en diagonal en desktop (la foto del flyer de presentación) */}
-      <div data-hero-media className="absolute inset-0 md:left-[40%] md:[clip-path:polygon(16%_0,100%_0,100%_100%,0_100%)]">
+      <div data-hero-media className="absolute inset-x-0 top-0 h-[54%] md:inset-y-0 md:left-[40%] md:h-auto md:[clip-path:polygon(16%_0,100%_0,100%_100%,0_100%)]">
         <HeroMontage slides={slides} />
-        {/* Lectura del texto: degradé verde abajo (mobile); en desktop el texto va sobre el bloque verde */}
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgb(31_63_59/0.96)_0%,rgb(31_63_59/0.7)_38%,transparent_64%)] md:bg-none" />
+        {/* Mobile: la foto arriba, con el camper a la vista, y se funde con el verde donde empieza el texto */}
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgb(31_63_59)_0%,transparent_22%)] md:bg-none" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[linear-gradient(to_bottom,rgb(22_24_27/0.45),transparent)]" />
       </div>
 
@@ -98,11 +96,6 @@ export function Hero() {
         </div>
 
         <HeroClips />
-      </div>
-
-      {/* El cartel del dato faltante, arriba a la derecha (fuera del texto) */}
-      <div className="absolute top-[calc(var(--bar-h)+3.5rem)] right-4 z-10 sm:right-6 md:top-[calc(var(--bar-h)+1.25rem)] lg:right-10">
-        <Missing label="clips reales de los reels para el fondo del hero (ruta, off-road, nieve, playa, noche con estrellas, cocina)" compact short="clips del hero" />
       </div>
 
       <HeroScrollFx />

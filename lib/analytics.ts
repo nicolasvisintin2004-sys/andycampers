@@ -24,6 +24,7 @@ export type EventName =
   | "click_instagram"
   | "click_facebook"
   | "open_clip"
+  | "open_foto"
   | "download";
 
 export function track(event: EventName, params: Params = {}) {

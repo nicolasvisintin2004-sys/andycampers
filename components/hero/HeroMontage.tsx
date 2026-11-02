@@ -154,8 +154,7 @@ function HeroClip({ src, on }: { src: string; on: boolean }) {
  * Primera foto del montaje.
  * - Desktop: la foto es el LCP (panel al 60 %): preload propio con media query
  *   y fetchpriority high, así en mobile no se descarga.
- * - Mobile: ocupa toda la pantalla (Chrome no la cuenta como LCP; el LCP es el
- *   texto). Se ve al instante su versión borrosa (viene en el HTML) y la foto
+ * - Mobile: se ve al instante su versión borrosa (viene en el HTML) y la foto
  *   real se pide después del evento load, sin competir con el texto.
  */
 function PrimeraFoto({ sl }: { sl: Slide }) {

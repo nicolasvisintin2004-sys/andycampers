@@ -6,7 +6,7 @@ import { clips, type ClipKey } from "@/content/media";
 import { track } from "@/lib/analytics";
 import { IconArrow, IconClose, IconPlay } from "@/components/ui/Icons";
 
-const ELEGIDOS = ["medanos", "cocinaPlaya", "despertar"] as const satisfies readonly ClipKey[];
+const ELEGIDOS = ["playa", "altaMontana", "todoABordo"] as const satisfies readonly ClipKey[];
 
 /**
  * Tres videos debajo de "Armá tu P70": miniaturas livianas (~10 KB, prioridad
@@ -120,16 +120,12 @@ function Visor({ i, onNav, onClose }: { i: number; onNav: (i: number) => void; o
           key={c.src}
           className={`aspect-[9/16] max-h-[78svh] w-auto max-w-[88vw] bg-graphite object-cover transition-transform duration-300 ease-[var(--ease-out-expo)] ${open ? "scale-100" : "scale-95"}`}
           poster={c.poster}
+          src={`${c.src}.mp4`}
           autoPlay
-          muted
-          loop
           playsInline
           controls
           aria-label={c.alt}
-        >
-          <source src={`${c.src}.webm`} type="video/webm" />
-          <source src={`${c.src}.mp4`} type="video/mp4" />
-        </video>
+        />
         <button type="button" onClick={() => ir(1)} aria-label="Video siguiente" className={`${flecha} hidden sm:grid`}>
           <IconArrow className="size-5" />
         </button>

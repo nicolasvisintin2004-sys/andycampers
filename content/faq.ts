@@ -1,5 +1,6 @@
 import { falta, type Maybe } from "@/lib/pending";
 import { site } from "@/config/site";
+import { descuentoOpcionales } from "@/config/p70";
 
 /**
  * Preguntas frecuentes del PDF que se descarga al pie de la página
@@ -38,7 +39,7 @@ export const faq: { q: string; a: Maybe<string> }[] = [
   },
   {
     q: "¿Hay opcionales?",
-    a: "Sí: toldo 270°, techo panorámico, porta equipajes, baño plegable, cocina baulera, panel solar y más. Pedile a Andy el listado completo con precios.",
+    a: `Cada nivel trae los suyos y al resto se los podés agregar: en la página y en el catálogo de cada nivel está el listado con precios. Cima los trae todos. ${descuentoOpcionales}.`,
   },
   { q: "¿Cuánto tarda la fabricación y la entrega?", a: falta("plazos de fabricación y entrega") },
   { q: "¿Cuál es la forma de pago? ¿Hay financiación?", a: falta("forma de pago, seña y si hay financiación") },

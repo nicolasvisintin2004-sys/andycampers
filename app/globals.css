@@ -44,7 +44,6 @@
 :root {
   /* Alto de la barra fija de arriba (logo + Instagram, Facebook y WhatsApp) */
   --bar-h: 44px;
-  --cut: clamp(28px, 5vw, 72px);
   /* "only": que el modo oscuro forzado del celular (Samsung Internet, Chrome) no invierta los colores */
   color-scheme: only light;
 }
@@ -103,17 +102,8 @@ body {
 
 /* ───────────────────────── Recursos gráficos ───────────────────────── */
 
-/* Cortes diagonales como las bandas de los flyers */
-@utility cut-top {
-  clip-path: polygon(0 var(--cut), 100% 0, 100% 100%, 0 100%);
-  margin-top: calc(var(--cut) * -1);
-  padding-top: calc(var(--cut) + 3rem);
-}
-@utility cut-top-rev {
-  clip-path: polygon(0 0, 100% var(--cut), 100% 100%, 0 100%);
-  margin-top: calc(var(--cut) * -1);
-  padding-top: calc(var(--cut) + 3rem);
-}
+/* La regla de Andrés para los cortes: lo horizontal queda siempre horizontal (los
+   bordes entre secciones son rectos); solo los bordes verticales van en diagonal. */
 @utility clip-tag {
   clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
 }
@@ -477,13 +467,4 @@ details > summary::-webkit-details-marker {
   to {
     transform: scaleX(1);
   }
-}
-
-/* El selector entra sobre el hero con el corte diagonal de los flyers. Solo
-   el borde superior: la altura sigue siendo una pantalla. */
-.garage-cut {
-  --cut-g: clamp(22px, 4vw, 56px);
-  clip-path: polygon(0 var(--cut-g), 100% 0, 100% 100%, 0 100%);
-  margin-top: calc(var(--cut-g) * -1);
-  padding-top: calc(var(--cut-g) * 0.55);
 }

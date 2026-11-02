@@ -16,7 +16,7 @@ export function Footer() {
   const link = "inline-flex min-h-11 items-center gap-2 hover:text-durazno";
   const titulo = "mb-3 font-cond text-[1.05rem] font-semibold text-durazno uppercase";
   return (
-    <footer className="zona-oscura cut-top-rev cv-auto relative bg-forest-deep text-white">
+    <footer className="zona-oscura cv-auto relative bg-forest-deep pt-14 text-white lg:pt-16">
       <div className="mx-auto max-w-[1440px] px-4 pb-12 sm:px-6 lg:px-10">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr_1fr]">
           <div>
