@@ -1,6 +1,5 @@
 import { falta, type Maybe } from "@/lib/pending";
 import { site } from "@/config/site";
-import { descuentoOpcionales } from "@/config/p70";
 
 /**
  * Preguntas frecuentes del PDF que se descarga al pie de la página
@@ -38,8 +37,8 @@ export const faq: { q: string; a: Maybe<string> }[] = [
     a: "Las paredes llevan 80 mm de aislamiento térmico y la pintura exterior es antirrayones.",
   },
   {
-    q: "¿Hay opcionales?",
-    a: `Cada nivel trae los suyos y al resto se los podés agregar: en la página y en el catálogo de cada nivel está el listado con precios. Cima los trae todos. ${descuentoOpcionales}.`,
+    q: "¿Qué trae cada nivel?",
+    a: "Cada nivel lleva lo suyo: Terra tiene todo lo de Rumbo más heladera, porta equipajes, rueda de auxilio y otras cosas, y Cima lleva todo. En la página y en el catálogo de cada nivel está el listado completo.",
   },
   { q: "¿Cuánto tarda la fabricación y la entrega?", a: falta("plazos de fabricación y entrega") },
   { q: "¿Cuál es la forma de pago? ¿Hay financiación?", a: falta("forma de pago, seña y si hay financiación") },

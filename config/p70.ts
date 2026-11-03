@@ -41,7 +41,7 @@ export interface Equipamiento {
   stats: Stats | null;
 }
 
-/** Los 3 niveles, de más base a más completo. Qué trae cada uno sale de `opcionales`. */
+/** Los 3 niveles, de más base a más completo. Qué trae cada uno sale de `itemsEquipamiento`. */
 export const equipamientos: Equipamiento[] = [
   {
     n: 1,
@@ -69,66 +69,62 @@ export const equipamientos: Equipamiento[] = [
   },
 ];
 
-/* ───────────────────────── Opcionales (flyers marcados por Andrés) ───────────────────────── */
+/* ───────────────────────── Qué lleva cada nivel (flyers marcados por Andrés) ───────────────────────── */
 
-export interface Opcional {
+export interface ItemEquipamiento {
   nombre: string;
   detalle?: string;
-  /** Precio en USD si no viene con el nivel elegido. */
-  precio: number;
-  /** Desde qué nivel viene incluido. En los niveles anteriores es un opcional con precio. */
+  /** Desde qué nivel viene: Rumbo (1), Terra (2) o solo Cima (3). */
   desde: 1 | 2 | 3;
 }
 
 /**
- * Los flyers de Rumbo y Terra tienen tachado lo que ese nivel NO trae (audio de
- * Andrés del 30/10) y Cima trae todo. Los textos con `desde: 3` están tapados
- * por la marca en los dos flyers: se confirman con el flyer limpio.
+ * Andrés marcó los flyers de opcionales con el nombre de cada nivel: lo que no
+ * está tachado es lo que ese nivel lleva (no son opcionales, no se venden aparte
+ * ni tienen precio). Cima lleva todo lo de los dos flyers. Los textos con
+ * `desde: 3` están tapados por la marca en los dos flyers: se confirman con el
+ * flyer limpio.
  */
-export const opcionales: Opcional[] = [
-  { nombre: "Aireador de techo eléctrico", detalle: "Extractor ventilador, muy recomendable. No es aire acondicionado pero es suficiente.", precio: 440, desde: 1 },
-  { nombre: "Batería 1536 W", detalle: "Con picos de 1800 W", precio: 1960, desde: 1 },
-  { nombre: "Panel solar 150 W y conexiones", detalle: "Recupera la batería en 2 horas del uso nocturno", precio: 620, desde: 1 },
-  { nombre: "Bacha en mesada", detalle: "Tanque de 100 litros, bomba de agua automática y entrada. Conexiones y chapones protectores.", precio: 730, desde: 1 },
-  { nombre: "Extensión de mesada", detalle: "Adaptador para usar el portón del espacio técnico como ampliación de la mesada de cocina", precio: 83, desde: 1 },
-  { nombre: "Puerta segunda completa", precio: 1120, desde: 1 },
-  { nombre: "Toberas para el guardado del calzado", precio: 540, desde: 1 },
-  { nombre: "Enganche multidireccional extremo", detalle: "Mayor seguridad", precio: 660, desde: 1 },
-  { nombre: "Chapón cubre chasis", precio: 235, desde: 1 },
-  { nombre: "Ganchos de desatasco", detalle: "x2 unidades", precio: 55, desde: 1 },
-  { nombre: "Trabas para puertas contra el viento", detalle: "x2 unidades", precio: 64, desde: 1 },
-  { nombre: "Luz LED en espacio técnico de herramientas", precio: 44, desde: 1 },
-  { nombre: "Tercera luz de stop", precio: 82, desde: 1 },
+export const itemsEquipamiento: ItemEquipamiento[] = [
+  { nombre: "Aireador de techo eléctrico", detalle: "Extractor ventilador, muy recomendable. No es aire acondicionado pero es suficiente.", desde: 1 },
+  { nombre: "Batería 1536 W", detalle: "Con picos de 1800 W", desde: 1 },
+  { nombre: "Panel solar 150 W y conexiones", detalle: "Recupera la batería en 2 horas del uso nocturno", desde: 1 },
+  { nombre: "Bacha en mesada", detalle: "Tanque de 100 litros, bomba de agua automática y entrada. Conexiones y chapones protectores.", desde: 1 },
+  { nombre: "Extensión de mesada", detalle: "Adaptador para usar el portón del espacio técnico como ampliación de la mesada de cocina", desde: 1 },
+  { nombre: "Puerta segunda completa", desde: 1 },
+  { nombre: "Toberas para el guardado del calzado", desde: 1 },
+  { nombre: "Enganche multidireccional extremo", detalle: "Mayor seguridad", desde: 1 },
+  { nombre: "Chapón cubre chasis", desde: 1 },
+  { nombre: "Ganchos de desatasco", detalle: "x2 unidades", desde: 1 },
+  { nombre: "Trabas para puertas contra el viento", detalle: "x2 unidades", desde: 1 },
+  { nombre: "Luz LED en espacio técnico de herramientas", desde: 1 },
+  { nombre: "Tercera luz de stop", desde: 1 },
 
-  { nombre: "Heladera Dometic a medida", precio: 1560, desde: 2 },
-  { nombre: "Rack porta heladera con desplazamientos", precio: 280, desde: 2 },
-  { nombre: "Baulera frontal de guardado", precio: 720, desde: 2 },
-  { nombre: "Porta equipajes", detalle: "Preparado para sujetar toldo y baño o poner bicicletas", precio: 520, desde: 2 },
-  { nombre: "Rueda de auxilio, cubierta y llanta", precio: 760, desde: 2 },
-  { nombre: "Cubiertas más grandes", detalle: "De 740 a 810 mm de diámetro", precio: 460, desde: 2 },
-  { nombre: "Embellecedor para llantas", detalle: "x2 unidades", precio: 95, desde: 2 },
-  { nombre: "Pie rebatible", detalle: "x2 unidades", precio: 180, desde: 2 },
+  { nombre: "Heladera Dometic a medida", desde: 2 },
+  { nombre: "Rack porta heladera con desplazamientos", desde: 2 },
+  { nombre: "Baulera frontal de guardado", desde: 2 },
+  { nombre: "Porta equipajes", detalle: "Preparado para sujetar toldo y baño o poner bicicletas", desde: 2 },
+  { nombre: "Rueda de auxilio, cubierta y llanta", desde: 2 },
+  { nombre: "Cubiertas más grandes", detalle: "De 740 a 810 mm de diámetro", desde: 2 },
+  { nombre: "Embellecedor para llantas", detalle: "x2 unidades", desde: 2 },
+  { nombre: "Pie rebatible", detalle: "x2 unidades", desde: 2 },
 
-  { nombre: "Toldo 270 grados", precio: 680, desde: 3 },
-  { nombre: "Luces LED en toldo", precio: 440, desde: 3 },
-  { nombre: "Cerramiento lateral 270 grados", precio: 880, desde: 3 },
-  { nombre: "Baño plegable", detalle: "Te podés dar una ducha y también ponerle el inodoro químico adentro", precio: 480, desde: 3 },
-  { nombre: "Duchador baulera con calefón de agua caliente", detalle: "Con porta garrafa", precio: 840, desde: 3 },
-  { nombre: "Cocina baulera completa", detalle: "Con porta garrafa", precio: 720, desde: 3 },
-  { nombre: "Techo panorámico con apertura y luz", detalle: "Le da amplitud, para ver las estrellas de noche", precio: 820, desde: 3 },
-  { nombre: "Freno de mano mecánico", precio: 1140, desde: 3 },
-  { nombre: "Pava eléctrica", precio: 120, desde: 3 },
-  { nombre: "Funda para el camper", precio: 420, desde: 3 },
+  { nombre: "Toldo 270 grados", desde: 3 },
+  { nombre: "Luces LED en toldo", desde: 3 },
+  { nombre: "Cerramiento lateral 270 grados", desde: 3 },
+  { nombre: "Baño plegable", detalle: "Te podés dar una ducha y también ponerle el inodoro químico adentro", desde: 3 },
+  { nombre: "Duchador baulera con calefón de agua caliente", detalle: "Con porta garrafa", desde: 3 },
+  { nombre: "Cocina baulera completa", detalle: "Con porta garrafa", desde: 3 },
+  { nombre: "Techo panorámico con apertura y luz", detalle: "Le da amplitud, para ver las estrellas de noche", desde: 3 },
+  { nombre: "Freno de mano mecánico", desde: 3 },
+  { nombre: "Pava eléctrica", desde: 3 },
+  { nombre: "Funda para el camper", desde: 3 },
 ];
 
 /** Todo lo que trae el nivel. */
-export const incluidos = (n: number) => opcionales.filter((o) => o.desde <= n);
+export const incluidos = (n: number) => itemsEquipamiento.filter((o) => o.desde <= n);
 /** Lo que este nivel suma al anterior. */
-export const nuevosEn = (n: number) => opcionales.filter((o) => o.desde === n);
-/** Lo que se le puede agregar al nivel, con su precio. */
-export const agregables = (n: number) => opcionales.filter((o) => o.desde > n);
-/** Texto del flyer de opcionales. */
-export const descuentoOpcionales = "Eligiendo todos los equipamientos 8% de descuento";
+export const nuevosEn = (n: number) => itemsEquipamiento.filter((o) => o.desde === n);
 
 /* ───────────────────────── Colores (5) ───────────────────────── */
 

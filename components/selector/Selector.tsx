@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { agregables, colores, descuentoOpcionales, equipamientos, hexColor, nombreColor, nombreEq, nuevosEn, videoSelector, type Equipamiento } from "@/config/p70";
+import { colores, equipamientos, hexColor, nombreColor, nombreEq, nuevosEn, videoSelector, type Equipamiento } from "@/config/p70";
 import { isPending } from "@/lib/pending";
 import { ciclarColor, ciclarEq, linkCompartir, setSeleccion, useSeleccion } from "@/lib/selection";
 import { track } from "@/lib/analytics";
@@ -318,7 +318,6 @@ function Detalle({ eq }: { eq: Equipamiento }) {
 
 function Incluye({ eq, className = "" }: { eq: Equipamiento; className?: string }) {
   const anterior = equipamientos.find((e) => e.n === eq.n - 1);
-  const extras = agregables(eq.n);
   return (
     <div className={className}>
       <p className="font-cond text-[1.15rem] font-semibold text-forest uppercase">{anterior ? `Todo lo de ${nombre(anterior)}, más` : "Incluye"}</p>
@@ -330,24 +329,6 @@ function Incluye({ eq, className = "" }: { eq: Equipamiento; className?: string 
           </li>
         ))}
       </ul>
-      {extras.length > 0 ? (
-        <details className="mt-5 border-t border-ink/15 pt-3">
-          <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-3 font-cond text-[1.15rem] font-semibold text-forest uppercase">
-            Se puede agregar ({extras.length}) <IconChevron className="size-4 -rotate-90" />
-          </summary>
-          <ul className="mt-1">
-            {extras.map((o) => (
-              <li key={o.nombre} className="flex items-baseline justify-between gap-3 py-1 text-[0.95rem] leading-snug">
-                <span>{o.nombre}</span>
-                <span className="tabular shrink-0 font-cond font-semibold text-forest">{precioFlyer(o.precio)}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-2 font-cond text-[1rem] font-semibold text-forest">↘ {descuentoOpcionales}</p>
-        </details>
-      ) : (
-        <p className="mt-4 font-cond text-[1.05rem] font-semibold text-forest">Trae todos los opcionales.</p>
-      )}
       {eq.stats && equipamientos.every((e) => e.stats) && <Stats stats={eq.stats} />}
     </div>
   );
