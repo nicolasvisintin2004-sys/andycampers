@@ -44,15 +44,15 @@
 :root {
   /* Alto de la barra fija de arriba (logo + Instagram, Facebook y WhatsApp) */
   --bar-h: 44px;
-  /* "only": que el modo oscuro forzado del celular (Samsung Internet, Chrome) no invierta los colores */
-  color-scheme: only light;
-}
-/* Samsung Internet no fuerza su modo oscuro si la hoja tiene una regla para el modo
-   oscuro: esta repite los mismos colores claros, así la página se ve siempre igual. */
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: only light;
-  }
+  /* La página se ve siempre clara. Declarar "light dark" es lo que frena el modo
+     oscuro forzado de Samsung Internet, Chrome y los navegadores dentro de las apps:
+     les dice que la página ya resuelve el modo oscuro, y no la oscurecen (con "only
+     light" Samsung igual la pinta de marrón). Todos los colores están fijos abajo,
+     así que en modo oscuro se ve igual. Ningún elemento puede llevar color-scheme:
+     light: Chrome oscurece ese elemento. */
+  color-scheme: light dark;
+  background: var(--color-paper);
+  color: var(--color-ink);
 }
 @media (min-width: 1024px) {
   :root {

@@ -66,8 +66,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#16181b",
-  // La página es solo clara: sin esto, el modo oscuro forzado pinta el durazno de marrón.
-  colorScheme: "only light",
+  // Sin esto, el modo oscuro forzado del celular pinta el durazno de marrón (ver globals.css → :root).
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",

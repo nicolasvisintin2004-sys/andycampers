@@ -7,12 +7,26 @@ import { galeria } from "@/content/media";
 import { track } from "@/lib/analytics";
 import { IconArrow, IconClose } from "@/components/ui/Icons";
 
-/** Las dos fotos que van más grandes (2×2 en la grilla). */
-const GRANDES = [0, 7];
-
-/** Las fotos del P70: se tocan y se agrandan. */
+/**
+ * Las fotos del P70: una tira de a 3 que se desliza (en la compu, con las
+ * flechas). Se tocan y se agrandan.
+ */
 export function Galeria() {
   const [abierta, setAbierta] = useState<number | null>(null);
+  const tira = useRef<HTMLUListElement>(null);
+  const [borde, setBorde] = useState({ inicio: true, fin: false });
+
+  const medir = () => {
+    const t = tira.current;
+    if (t) setBorde({ inicio: t.scrollLeft < 4, fin: t.scrollLeft + t.clientWidth > t.scrollWidth - 4 });
+  };
+  const pasar = (d: number) => {
+    const t = tira.current;
+    if (t) t.scrollBy({ left: d * t.clientWidth, behavior: "smooth" });
+  };
+
+  const flecha =
+    "grid size-12 place-items-center border-2 border-ink/20 text-ink transition-colors hover:border-ink hover:bg-ink hover:text-paper disabled:pointer-events-none disabled:opacity-30";
 
   return (
     <section id="fotos" aria-labelledby="fotos-title" className="cv-auto relative overflow-hidden bg-paper pt-14 pb-20 lg:pt-20 lg:pb-28">
@@ -20,34 +34,50 @@ export function Galeria() {
         <h2 id="fotos-title" className="slab font-display-x text-[clamp(2rem,7vw,3.4rem)] uppercase">
           Fotos
         </h2>
-        <p className="titulo-cond mt-4 text-[clamp(1.5rem,4vw,2.2rem)] text-forest">(por dentro y por fuera)</p>
+        <div className="mt-4 flex items-end justify-between gap-4 lg:max-w-[1000px]">
+          <div>
+            <p className="titulo-cond text-[clamp(1.5rem,4vw,2.2rem)] text-forest">(por dentro y por fuera)</p>
+            <p className="mt-1.5 font-cond text-[0.95rem] text-stone">Deslizá para ver las {galeria.length}</p>
+          </div>
+          <div className="flex shrink-0 gap-2">
+            <button type="button" onClick={() => pasar(-1)} disabled={borde.inicio} aria-label="Fotos anteriores" aria-controls="fotos-tira" className={flecha}>
+              <IconArrow className="size-5 rotate-180" />
+            </button>
+            <button type="button" onClick={() => pasar(1)} disabled={borde.fin} aria-label="Más fotos" aria-controls="fotos-tira" className={flecha}>
+              <IconArrow className="size-5" />
+            </button>
+          </div>
+        </div>
 
-        <ul className="mt-8 grid grid-cols-2 gap-1.5 lg:mt-10 lg:grid-cols-4 lg:gap-2">
-          {galeria.map((f, i) => {
-            const grande = GRANDES.includes(i);
-            return (
-              <li key={f.alt} className={grande ? "col-span-2 row-span-2" : ""}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAbierta(i);
-                    track("open_foto", { foto: i + 1 });
-                  }}
-                  aria-haspopup="dialog"
-                  aria-label={`Agrandar foto: ${f.alt}`}
-                  className="group relative block aspect-[3/4] w-full overflow-hidden bg-sand"
-                >
-                  <Image
-                    src={f.img}
-                    alt=""
-                    fill
-                    sizes={grande ? "(min-width: 1024px) 50vw, 100vw" : "(min-width: 1024px) 25vw, 50vw"}
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
-                </button>
-              </li>
-            );
-          })}
+        {/* De a 3 a la vista: cada foto ocupa un tercio menos los espacios */}
+        <ul
+          id="fotos-tira"
+          ref={tira}
+          onScroll={medir}
+          className="no-scrollbar mt-6 flex snap-x snap-mandatory gap-1.5 overflow-x-auto lg:mt-8 lg:max-w-[1000px] lg:gap-2"
+        >
+          {galeria.map((f, i) => (
+            <li key={f.alt} className="w-[calc((100%-0.75rem)/3)] shrink-0 snap-start lg:w-[calc((100%-1rem)/3)]">
+              <button
+                type="button"
+                onClick={() => {
+                  setAbierta(i);
+                  track("open_foto", { foto: i + 1 });
+                }}
+                aria-haspopup="dialog"
+                aria-label={`Agrandar foto: ${f.alt}`}
+                className="group relative block aspect-[3/4] w-full overflow-hidden bg-sand"
+              >
+                <Image
+                  src={f.img}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 330px, 33vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                />
+              </button>
+            </li>
+          ))}
         </ul>
       </div>
       {abierta !== null && createPortal(<Visor i={abierta} onNav={setAbierta} onClose={() => setAbierta(null)} />, document.body)}
