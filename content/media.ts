@@ -73,7 +73,7 @@ export const clips = {
     src: "/video/camper-p70-vir-y-leo",
     poster: "/video/camper-p70-vir-y-leo-poster.jpg",
     mini: "/video/camper-p70-vir-y-leo-mini.jpg",
-    titulo: "El P70 de Vir y Leo",
+    titulo: "Financiá tu P70",
     alt: "Andy muestra en el taller el P70 terminado de Vir y Leo",
     publicado: "2026-11-01",
     duracion: "PT45S",
