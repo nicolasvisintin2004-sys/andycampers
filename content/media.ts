@@ -56,16 +56,34 @@ export const galeria = [
   fotos.duchador,
 ];
 
-/** Videos reales con sonido, comprimidos en /public/video. */
+/** Videos reales con sonido, comprimidos en /public/video. El orden es el de la página. */
 export const clips = {
+  taller: {
+    src: "/video/camper-p70-recorrido-taller",
+    poster: "/video/camper-p70-recorrido-taller-poster.jpg",
+    /** Miniatura 4:5 (232 px) para los videos del hero. */
+    mini: "/video/camper-p70-recorrido-taller-mini.jpg",
+    titulo: "Recién salido del taller",
+    alt: "Recorrido por el P70 terminado, en el taller de AndyCampers",
+    /** Fecha en que se publicó en este sitio (VideoObject.uploadDate). */
+    publicado: "2026-11-01",
+    duracion: "PT17S",
+  },
+  virYLeo: {
+    src: "/video/camper-p70-vir-y-leo",
+    poster: "/video/camper-p70-vir-y-leo-poster.jpg",
+    mini: "/video/camper-p70-vir-y-leo-mini.jpg",
+    titulo: "El P70 de Vir y Leo",
+    alt: "Andy muestra en el taller el P70 terminado de Vir y Leo",
+    publicado: "2026-11-01",
+    duracion: "PT45S",
+  },
   playa: {
     src: "/video/camper-p70-playa",
     poster: "/video/camper-p70-playa-poster.jpg",
-    /** Miniatura 4:5 (232 px) para los videos del hero. */
     mini: "/video/camper-p70-playa-mini.jpg",
     titulo: "Un día en la playa",
     alt: "El P70 y la camioneta AndyCampers por la arena, hasta instalarse frente al mar",
-    /** Fecha en que se publicó en este sitio (VideoObject.uploadDate). */
     publicado: "2026-11-01",
     duracion: "PT1M27S",
   },
@@ -104,24 +122,6 @@ export const clips = {
     alt: "Cocina, toldo, ducha, heladera y panel solar del P70",
     publicado: "2026-11-01",
     duracion: "PT38S",
-  },
-  taller: {
-    src: "/video/camper-p70-recorrido-taller",
-    poster: "/video/camper-p70-recorrido-taller-poster.jpg",
-    mini: "/video/camper-p70-recorrido-taller-mini.jpg",
-    titulo: "Recién salido del taller",
-    alt: "Recorrido por el P70 terminado, en el taller de AndyCampers",
-    publicado: "2026-11-01",
-    duracion: "PT17S",
-  },
-  virYLeo: {
-    src: "/video/camper-p70-vir-y-leo",
-    poster: "/video/camper-p70-vir-y-leo-poster.jpg",
-    mini: "/video/camper-p70-vir-y-leo-mini.jpg",
-    titulo: "El P70 de Vir y Leo",
-    alt: "Andy muestra en el taller el P70 terminado de Vir y Leo",
-    publicado: "2026-11-01",
-    duracion: "PT45S",
   },
 } as const;
 

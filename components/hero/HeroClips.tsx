@@ -6,7 +6,7 @@ import { clips, type ClipKey } from "@/content/media";
 import { track } from "@/lib/analytics";
 import { IconArrow, IconClose, IconPlay } from "@/components/ui/Icons";
 
-const ELEGIDOS = ["playa", "altaMontana", "todoABordo"] as const satisfies readonly ClipKey[];
+const ELEGIDOS = ["taller", "virYLeo", "playa"] as const satisfies readonly ClipKey[];
 
 /**
  * Tres videos debajo de "Armá tu P70": miniaturas livianas (~10 KB, prioridad
