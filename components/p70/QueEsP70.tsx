@@ -21,13 +21,7 @@ export function QueEsP70() {
         <h2 id="p70-title" className="slab font-display-x text-[clamp(2rem,7vw,3.4rem)] uppercase">
           Camper P70
         </h2>
-        <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-          <p className="text-forest">
-            <span className="block font-cond text-[clamp(1.9rem,5vw,2.8rem)] leading-none font-semibold uppercase">Versión acero 100%</span>
-            <span className="titulo-cond mt-1 block text-[clamp(1.25rem,3vw,1.6rem)]">(exclusivo para camionetas)</span>
-          </p>
-          <p className="max-w-md text-lg text-ink/80">Fabricado en Argentina para salir de la ruta. Tocá cada pieza para ver qué la hace distinta.</p>
-        </div>
+        <p className="mt-6 max-w-md text-lg text-ink/80">Fabricado en Argentina para salir de la ruta. Tocá cada pieza para ver qué la hace distinta.</p>
 
         <div className="mt-10 grid gap-12 lg:mt-12 lg:grid-cols-[1.3fr_1fr] lg:gap-14">
           <div className="min-w-0">
