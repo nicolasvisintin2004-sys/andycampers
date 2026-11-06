@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { equipamientoDeSerie, equipamientos, incluidos, inicial, nombreEq, posterUrl, slugEq } from "@/config/p70";
+import { equipamientoDeSerie, equipamientos, incluidos, inicial, nombreEq, nuevosEn, posterUrl, slugEq } from "@/config/p70";
 import { site } from "@/config/site";
 import { isPending } from "@/lib/pending";
 import { Missing } from "@/components/ui/Missing";
@@ -27,6 +27,7 @@ export default async function CatalogoNivel({ params }: { params: Promise<{ nive
   const { nivel } = await params;
   const e = equipamientos.find((x) => slugEq(x.n) === nivel);
   if (!e) notFound();
+  const anterior = equipamientos.find((x) => x.n === e.n - 1);
 
   return (
     <main data-pieza className="mx-auto flex min-h-[960px] w-[540px] flex-col bg-durazno text-ink">
@@ -59,11 +60,27 @@ export default async function CatalogoNivel({ params }: { params: Promise<{ nive
       </div>
 
       <div className="px-8 pt-5">
-        <p className="font-cond text-[1.2rem] font-semibold text-forest uppercase">Incluye</p>
-        <ul className="mt-1 grid grid-cols-2 gap-x-4 gap-y-1 text-[0.86rem] leading-snug font-semibold">
-          {incluidos(e.n).map((o) => (
-            <li key={o.nombre}>{o.nombre}</li>
-          ))}
+        <p className="font-cond text-[1.2rem] font-semibold text-forest uppercase">
+          Incluye {incluidos(e.n).length} equipamientos
+          {anterior && (
+            <span className="font-normal normal-case text-ink/70">
+              {" "}
+              · todo lo de {nombreEq(anterior.n)} y <span className="font-semibold text-forest">{nuevosEn(e.n).length} más (+)</span>
+            </span>
+          )}
+        </p>
+        <ul className="mt-1 grid grid-cols-2 gap-x-4 gap-y-1 text-[0.86rem] leading-snug">
+          {incluidos(e.n).map((o) =>
+            anterior && o.desde === e.n ? (
+              <li key={o.nombre} className="font-semibold text-forest">
+                + {o.nombre}
+              </li>
+            ) : (
+              <li key={o.nombre} className={anterior ? "text-ink/70" : "font-semibold"}>
+                {o.nombre}
+              </li>
+            ),
+          )}
         </ul>
       </div>
 

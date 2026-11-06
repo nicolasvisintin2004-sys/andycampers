@@ -68,7 +68,7 @@ export const colores: ColorP70[] = [
 
 - **`id` del color**: minúsculas, sin espacios ni tildes. Es lo que va en el link compartido (`?eq=2&color=verde`) y en el nombre de los videos. Si cambiás los ids, renombrá los videos igual.
 - **Stats**: se muestran solo si los 3 equipamientos tienen valores (0–100). Con `stats: null` no aparecen.
-- **Precio**: cada equipamiento tiene el suyo (`precio`, el precio real, sin "desde"). `precioDesde` ("Desde USD 16.500") queda para el hero y los buscadores.
+- **Precio**: cada equipamiento tiene el suyo (`precio`, el precio real, sin "desde"). Cada nivel cuesta `precioBase` (USD 17.500) más los precios del flyer de lo que lleva; `precioDesde` (el de Rumbo) queda para el hero, las preguntas y los buscadores.
 - **Combinación inicial** del selector: `inicial`.
 
 ---
@@ -214,7 +214,7 @@ curl -H "Authorization: Bearer $CRON_SECRET" https://andycampers.com.ar/api/cron
 ## 6. SEO
 
 - Una sola URL fuerte (`/`) con title, description, canonical, Open Graph (`public/og/camper-p70-og.jpg`), `sitemap.xml` y `robots.txt`.
-- JSON-LD: `Organization`, `LocalBusiness` (sin dirección ni horario, a propósito), `Product` P70 con `Offer` de USD 16.500 como precio base y `VideoObject` de los clips reales de "En acción" (no de los videos demo).
+- JSON-LD: `Organization`, `LocalBusiness` (sin dirección ni horario, a propósito), `Product` P70 con `Offer` con `precioDesde` (el precio de Rumbo) como precio base y `VideoObject` de los clips reales de "En acción" (no de los videos demo).
 - Ficha técnica y equipamiento en HTML, nunca dentro de imágenes.
 - Después de publicar: validar `/` en la [Prueba de resultados enriquecidos](https://search.google.com/test/rich-results) y subir el sitemap a Search Console.
 

@@ -1,5 +1,10 @@
 import { falta, type Maybe } from "@/lib/pending";
 import { site } from "@/config/site";
+import { equipamientos, nombreEq } from "@/config/p70";
+
+const usd = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 });
+/** "Rumbo U$D 24.133.-", como en los flyers. */
+const precios = equipamientos.map((e) => `${nombreEq(e.n)} U$D ${usd.format(e.precio as number)}.-`);
 
 /**
  * Preguntas frecuentes del PDF que se descarga al pie de la página
@@ -14,7 +19,7 @@ export const faq: { q: string; a: Maybe<string> }[] = [
   },
   {
     q: "¿Cuánto cuesta?",
-    a: "El P70 arranca desde U$D 16.500.- y hay tres niveles de equipamiento, cada uno con su precio. Andy te pasa la cotización de tu configuración por WhatsApp.",
+    a: `Depende del nivel de equipamiento: ${precios.slice(0, -1).join(", ")} y ${precios.at(-1)}. Andy te pasa la cotización de tu configuración por WhatsApp.`,
   },
   {
     q: "¿Qué trae de serie?",

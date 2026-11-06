@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { colores, equipamientos, hexColor, nombreColor, nombreEq, nuevosEn, videoSelector, type Equipamiento } from "@/config/p70";
+import { colores, equipamientos, hexColor, incluidos, nombreColor, nombreEq, nuevosEn, videoSelector, type Equipamiento } from "@/config/p70";
 import { isPending } from "@/lib/pending";
 import { ciclarColor, ciclarEq, linkCompartir, setSeleccion, useSeleccion } from "@/lib/selection";
 import { track } from "@/lib/analytics";
@@ -316,18 +316,41 @@ function Detalle({ eq }: { eq: Equipamiento }) {
   );
 }
 
+/**
+ * La lista entera del nivel: primero lo que trae del nivel anterior y al final,
+ * marcado, lo que suma este (Andrés: "que se note que se agregaron").
+ */
 function Incluye({ eq, className = "" }: { eq: Equipamiento; className?: string }) {
   const anterior = equipamientos.find((e) => e.n === eq.n - 1);
+  const todos = incluidos(eq.n);
+  const nuevos = nuevosEn(eq.n).length;
   return (
     <div className={className}>
-      <p className="font-cond text-[1.15rem] font-semibold text-forest uppercase">{anterior ? `Todo lo de ${nombre(anterior)}, más` : "Incluye"}</p>
-      <ul className="mt-1.5 space-y-1.5">
-        {nuevosEn(eq.n).map((o) => (
-          <li key={o.nombre} className="text-[0.98rem] leading-snug">
-            {o.nombre}
-            {o.detalle && <span className="block text-[0.86rem] text-stone">{o.detalle}</span>}
-          </li>
-        ))}
+      <p className="font-cond text-[1.15rem] font-semibold text-forest uppercase">Incluye {todos.length} equipamientos</p>
+      {anterior && (
+        <p className="text-[0.9rem] text-stone">
+          Todo lo de {nombre(anterior)} y <span className="font-semibold text-forest">{nuevos} más</span>
+        </p>
+      )}
+      <ul className="mt-2 space-y-1">
+        {todos.map((o, i) => {
+          const suma = anterior && o.desde === eq.n;
+          return (
+            <li
+              key={o.nombre}
+              className={`text-[0.98rem] leading-snug ${suma ? "fade-up border-l-2 border-forest bg-forest/10 py-1 pr-2 pl-2.5 font-semibold" : anterior ? "pl-3 text-ink/70" : ""}`}
+              style={suma ? ({ "--d": `${(i - todos.length + nuevos) * 40}ms` } as React.CSSProperties) : undefined}
+            >
+              {suma && (
+                <span className="mr-1.5 bg-forest px-1 py-px align-[0.1em] font-cond text-[0.72rem] font-semibold tracking-wide text-white uppercase">
+                  Suma {nombre(eq)}
+                </span>
+              )}
+              {o.nombre}
+              {o.detalle && (!anterior || suma) && <span className="block text-[0.86rem] font-normal text-stone">{o.detalle}</span>}
+            </li>
+          );
+        })}
       </ul>
       {eq.stats && equipamientos.every((e) => e.stats) && <Stats stats={eq.stats} />}
     </div>
