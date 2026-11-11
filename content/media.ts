@@ -63,7 +63,7 @@ export const clips = {
     poster: "/video/camper-p70-recorrido-taller-poster.jpg",
     /** Miniatura 4:5 (232 px) para los videos del hero. */
     mini: "/video/camper-p70-recorrido-taller-mini.jpg",
-    titulo: "Recién salido del taller",
+    titulo: "Hecho a mano en Santa Fe",
     alt: "Recorrido por el P70 terminado, en el taller de AndyCampers",
     /** Fecha en que se publicó en este sitio (VideoObject.uploadDate). */
     publicado: "2026-11-01",

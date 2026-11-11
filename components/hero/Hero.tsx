@@ -1,6 +1,7 @@
 import { fotos, media } from "@/content/media";
 import { precioDesde } from "@/config/p70";
 import { IconArrowDown } from "@/components/ui/Icons";
+import { Missing } from "@/components/ui/Missing";
 import { HeroMontage, type Slide } from "./HeroMontage";
 import { HeroScrollFx } from "./HeroScrollFx";
 import { HeroClips } from "./HeroClips";
@@ -18,7 +19,7 @@ const slides: Slide[] = [
     tipo: "foto",
     img: fotos.playa.img,
     alt: fotos.playa.alt,
-    rotulo: "Frente al mar",
+    rotulo: "Ágil en la arena",
     pos: { m: "42% 72%", d: "50% 68%" },
     kb: { x: "-1.5%", y: "-1%" },
   },
@@ -26,7 +27,7 @@ const slides: Slide[] = [
     tipo: "foto",
     img: media.cordillera,
     alt: "P70 con camioneta en un camino de ripio frente a la cordillera nevada",
-    rotulo: "Ripio frente a la cordillera",
+    rotulo: "Fuerte en el ripio",
     pos: { m: "50% 60%", d: "50% 55%" },
     kb: { x: "1.5%", y: "-1%" },
   },
@@ -34,7 +35,7 @@ const slides: Slide[] = [
     tipo: "foto",
     img: fotos.toldoTrasero.img,
     alt: fotos.toldoTrasero.alt,
-    rotulo: "Toldo abierto",
+    rotulo: "Práctico para acampar",
     pos: { m: "45% 45%", d: "50% 50%" },
     kb: { x: "-1%", y: "-1.5%" },
   },
@@ -42,7 +43,7 @@ const slides: Slide[] = [
     tipo: "foto",
     img: fotos.interiorLed.img,
     alt: fotos.interiorLed.alt,
-    rotulo: "Adentro",
+    rotulo: "Tu dormitorio en el bosque",
     pos: { m: "50% 40%", d: "50% 42%" },
     kb: { x: "1%", y: "-1%" },
   },
@@ -80,7 +81,8 @@ export function Hero() {
           </span>
         </h1>
         <p className="titulo-cond fade-up mt-4 max-w-[26rem] text-[clamp(1.35rem,5.6vw,1.75rem)] leading-[1.12] text-durazno md:text-[clamp(1.3rem,1.9vw,1.9rem)]" style={{ "--d": "380ms" } as React.CSSProperties}>
-          Con libertad y comodidad, llevando el camping a otro nivel.
+          Con libertad y comodidad, llevando el camping a otro nivel.{" "}
+          <Missing label="frase debajo de “Viajá distinto”: Andrés busca otra o la saca (no quiere “libertad” ni “comodidad”)" compact short="frase a confirmar" className="align-middle" />
         </p>
 
         <div className="fade-up mt-7 flex flex-wrap items-center gap-x-6 gap-y-3" style={{ "--d": "560ms" } as React.CSSProperties}>
