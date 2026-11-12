@@ -9,12 +9,12 @@
 export const FINANCING_OFFERED = false;
 
 export const leadScoring = {
-  aventurero: { n4: 10, n3: 7, n2: 4, n1: 2 },
-  etapa: { activo: 30, comparando: 20, proyectando: 10, averiguando: 0 },
-  inversion: { disponible: 30, organizando: 15, vende: 15, financiacion: 10, sin_definir: 0 },
+  aventurero: { extremo: 10, aventurero: 5, relajado: 2 },
+  etapa: { activo: 30, comparando: 20, proyectando: 5 },
+  inversion: { disponible: 30, organizando: 15, financiacion: 10 },
   /** Puntos de "Necesitaría financiación" cuando FINANCING_OFFERED = true. */
   financiacionSiSeOfrece: 20,
-  plazo: { proximamente: 20, "3a6": 15, este_anio: 8, anio_que_viene: 4, sin_fecha: 0 },
+  plazo: { proximamente: 20, "3a6": 15, sin_fecha: 0 },
   equipamiento: { eq3: 5, eq2: 3, eq1: 2, asesoramiento: 2 },
   /** Marca, modelo y año del vehículo completos. */
   vehiculoCompleto: 5,

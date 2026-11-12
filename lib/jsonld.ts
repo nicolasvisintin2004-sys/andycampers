@@ -6,7 +6,7 @@ import { isPending, type Maybe } from "@/lib/pending";
 const ok = <T,>(v: Maybe<T>) => (isPending(v) ? undefined : v);
 const abs = (path: string) => new URL(path, site.url).toString();
 export const OG_IMAGE = "/og/camper-p70-og.jpg";
-export const DESCRIPCION = `Camper off road P70 de AndyCampers: 100% de acero, exclusivo para camionetas, con frenos eléctricos, suspensión Hard & Soft probada a 165 km/h y aislamiento de 80 mm. Armá tu P70 y cotizalo. Desde USD ${new Intl.NumberFormat("es-AR").format(precioDesde)}.`;
+export const DESCRIPCION = `Camper off road P70 de andycampers: 100% de acero, exclusivo para camionetas, con frenos eléctricos, suspensión Hard & Soft probada a 165 km/h y aislamiento de 80 mm. Armá tu P70 y cotizalo. Desde USD ${new Intl.NumberFormat("es-AR").format(precioDesde)}.`;
 
 export function organizationLd() {
   return {

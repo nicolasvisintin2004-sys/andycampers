@@ -20,7 +20,7 @@ export default function PreguntasPdf() {
       </div>
       <div className="px-8 pt-8 pb-6">
         <h1 className="text-forest">
-          <span className="titulo-cond block text-[3rem] uppercase">Preguntas frecuentes</span>
+          <span className="titulo-cond block text-[3rem] uppercase">Respuestas a preguntas frecuentes</span>
           <span className="titulo-cond mt-1 block text-[1.5rem]">(camper P70 acero 100%)</span>
         </h1>
       </div>

@@ -23,10 +23,10 @@ export function Descargas() {
   return (
     <div className="flex flex-col items-start gap-1">
       <button type="button" onClick={() => setAbierto(true)} aria-haspopup="dialog" className={enlace}>
-        <Flecha /> Descargá el catálogo
+        <Flecha /> Descargá el folleto
       </button>
       <a href={descargas.preguntas} download onClick={() => track("download", { archivo: "preguntas" })} className={enlace}>
-        <Flecha /> Preguntas frecuentes (PDF)
+        <Flecha /> Respuestas a preguntas frecuentes (PDF)
       </a>
       {abierto && createPortal(<Catalogo onClose={() => setAbierto(false)} />, document.body)}
     </div>
@@ -53,17 +53,17 @@ function Catalogo({ onClose }: { onClose: () => void }) {
       ref={ref}
       role="dialog"
       aria-modal="true"
-      aria-label="Catálogo del P70"
+      aria-label="Folleto del P70"
       tabIndex={-1}
       className="fixed inset-0 z-[80] overflow-y-auto bg-ink/80 p-4 outline-none sm:p-8"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="relative mx-auto max-w-5xl bg-durazno p-5 text-ink sm:p-8">
-        <button type="button" onClick={onClose} aria-label="Cerrar catálogo" className="absolute top-2 right-2 grid size-11 place-items-center text-stone hover:text-ink">
+        <button type="button" onClick={onClose} aria-label="Cerrar folleto" className="absolute top-2 right-2 grid size-11 place-items-center text-stone hover:text-ink">
           <IconClose className="size-6" />
         </button>
         <h2 className="text-forest">
-          <span className="titulo-cond block text-[2.2rem] uppercase">Catálogo P70</span>
+          <span className="titulo-cond block text-[2.2rem] uppercase">Folleto P70</span>
           <span className="titulo-cond block text-[1.25rem]">(un nivel por imagen, para guardar en el celular)</span>
         </h2>
         <ul className="mt-6 grid gap-5 sm:grid-cols-3">
@@ -71,7 +71,7 @@ function Catalogo({ onClose }: { onClose: () => void }) {
             <li key={e.n}>
               <a href={descargas.catalogo(e.n)} target="_blank" rel="noopener" className="block bg-white/60 ring-1 ring-ink/10">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={descargas.catalogo(e.n)} alt={`Catálogo del nivel ${nombreEq(e.n)}`} width={1080} height={1920} loading="lazy" className="h-auto w-full" />
+                <img src={descargas.catalogo(e.n)} alt={`Folleto del nivel ${nombreEq(e.n)}`} width={1080} height={1920} loading="lazy" className="h-auto w-full" />
               </a>
               <a
                 href={descargas.catalogo(e.n)}

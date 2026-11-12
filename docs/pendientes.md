@@ -1,13 +1,12 @@
 # Datos pendientes · landing P70
 
-Generado con `npm run pendientes` el 11/11/2026. Cada ítem aparece en el sitio como un cartel rojo
+Generado con `npm run pendientes` el 12/11/2026. Cada ítem aparece en el sitio como un cartel rojo
 ("FALTA: …"). Se completa en el archivo indicado reemplazando `falta("…")` por el dato real.
 
 - [ ] **revisión legal de este texto antes de publicar** — `app/privacidad/page.tsx:26`
-- [ ] **frase debajo de “Viajá distinto”: Andrés busca otra o la saca (no quiere “libertad” ni “comodidad”)** — `components/hero/Hero.tsx:85`
 - [ ] **tercer video del hero: “uno que dice con una tabla” (preguntarle a Andrés cuál es)** — `components/hero/HeroClips.tsx:12`
 - [ ] **título “Hecho a mano en Santa Fe” del video del taller (Andrés lo está pensando)** — `components/hero/HeroClips.tsx:17`
-- [ ] **nombre y código de los 5 colores** — `components/selector/Selector.tsx:437`
+- [ ] **nombre y código de los 5 colores** — `components/selector/Selector.tsx:446`
 - [ ] **descripción de una línea del nivel Rumbo** — `config/p70.ts:115`
 - [ ] **descripción de una línea del nivel Terra** — `config/p70.ts:123`
 - [ ] **descripción de una línea del nivel Cima** — `config/p70.ts:131`

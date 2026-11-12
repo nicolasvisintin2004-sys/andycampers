@@ -132,7 +132,7 @@ export function Selector() {
     const text = `Mirá mi P70: ${nombreEq(sel.eq)} en ${nombreColor(sel.color)}`;
     try {
       if (navigator.share && matchMedia("(pointer: coarse)").matches) {
-        await navigator.share({ title: "Mi P70 · AndyCampers", text, url });
+        await navigator.share({ title: "Mi P70 · andycampers", text, url });
         return;
       }
       await navigator.clipboard.writeText(url);
@@ -157,18 +157,27 @@ export function Selector() {
       id="armalo"
       aria-labelledby="armalo-title"
       onKeyDown={onKeyDown}
-      className="relative isolate flex h-[calc(100svh-var(--bar-h))] min-h-[620px] flex-col overflow-hidden bg-estudio text-ink lg:min-h-[700px]"
+      className="relative isolate flex flex-col overflow-hidden bg-estudio pb-6 text-ink lg:h-[calc(100svh-var(--bar-h))] lg:min-h-[700px] lg:pb-0"
     >
       {/* Piso del estudio: grilla en perspectiva, como el de los renders de los flyers */}
       <div aria-hidden className="pointer-events-none absolute inset-x-[-30%] top-[54%] bottom-[-40%] -z-10 garage-floor" />
 
-      {/* Encabezado: el bloque de los flyers y, chico, cuántos niveles hay */}
+      {/* Encabezado: el bloque de los flyers y, chico, cuántos niveles hay (en mobile, el nivel y su precio) */}
       <div className="relative z-10 flex items-start justify-between gap-3 pt-6 pr-2 pl-4 sm:pl-6 lg:pt-8 lg:pr-8 lg:pl-10">
         <div>
           <h2 id="armalo-title" className="slab font-display-x text-[1.55rem] uppercase lg:text-[2.2rem]">
             Armá tu P70
           </h2>
-          <p className="titulo-cond mt-2 text-[1.05rem] text-stone lg:text-[1.3rem]">({equipamientos.length} niveles de equipamiento)</p>
+          <p className="titulo-cond mt-2 hidden text-[1.3rem] text-stone lg:block">({equipamientos.length} niveles de equipamiento)</p>
+          {/* Mobile: el nivel y su precio arriba, cerca del camper (pedido de Andrés: que se vea siempre) */}
+          <p key={eq.n} className="fade-up mt-3 flex flex-col items-start gap-1 lg:hidden" aria-live="polite">
+            <span className="font-cond text-[1.3rem] leading-none font-semibold text-forest uppercase">{nombre(eq)}</span>
+            {isPending(eq.precio) ? (
+              <Missing label={eq.precio} compact short="precio" />
+            ) : (
+              <span className="tabular font-cond text-[1.6rem] leading-none font-light">{precioFlyer(eq.precio)}</span>
+            )}
+          </p>
         </div>
         <div className="flex items-center">
           <button
@@ -198,7 +207,7 @@ export function Selector() {
         {/* El camper, y pegados abajo los niveles y los colores */}
         <div className="flex min-h-0 flex-1 flex-col">
           <div
-            className="stage min-h-0 flex-1 touch-pan-y select-none"
+            className="stage h-[83vw] max-h-[420px] shrink-0 touch-pan-y select-none lg:h-auto lg:max-h-none lg:min-h-0 lg:flex-1"
             style={{ "--piso": videoSelector.pisoY, "--base": videoSelector.pedestal.frente + 0.04 } as React.CSSProperties}
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}

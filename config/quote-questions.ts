@@ -46,11 +46,11 @@ export const preguntas: PreguntaCotizador[] = [
     tipo: "opciones",
     estilo: "niveles",
     titulo: "¿Qué tan aventurero sos?",
+    // Andrés (audios del 11/11): máximo 3 opciones por pregunta.
     opciones: [
-      { id: "n1", label: "Nivel 1", detalle: "Ruta asfaltada y camping con servicios" },
-      { id: "n2", label: "Nivel 2", detalle: "Me animo al ripio y a lugares tranquilos" },
-      { id: "n3", label: "Nivel 3", detalle: "Busco lugares donde casi no llega nadie" },
-      { id: "n4", label: "Nivel 4", detalle: "Off-road de verdad: barro, arena, nieve" },
+      { id: "relajado", label: "Relajado", detalle: "Ruta asfaltada y camping con servicios" },
+      { id: "aventurero", label: "Aventurero", detalle: "Me animo al ripio y a lugares tranquilos" },
+      { id: "extremo", label: "Extremo, off-road, 4x4", detalle: "Busco lugares donde casi no llega nadie" },
     ],
   },
   {
@@ -58,11 +58,10 @@ export const preguntas: PreguntaCotizador[] = [
     tipo: "opciones",
     titulo: "¿Para qué tipo de viajes estás pensando usarlo?",
     opciones: [
-      { id: "escapadas", label: "Escapadas y fines de semana" },
+      { id: "escapadas", label: "Escapada de fin de semana" },
       { id: "largos", label: "Viajes largos" },
-      { id: "offroad", label: "Off-Road / aventura" },
-      { id: "actividad", label: "Surf, pesca u otra actividad" },
-      { id: "indefinido", label: "Todavía no lo tengo definido" },
+      { id: "deportes", label: "Deportes / kitesurf" },
+      { id: "offroad", label: "Off-road, aventura, pesca, caza" },
     ],
   },
   {
@@ -72,8 +71,7 @@ export const preguntas: PreguntaCotizador[] = [
     opciones: [
       { id: "activo", label: "Estoy buscando activamente y quiero comprar próximamente" },
       { id: "comparando", label: "Estoy comparando opciones para decidir cuál comprar" },
-      { id: "proyectando", label: "Me interesa, pero todavía estoy proyectando la compra" },
-      { id: "averiguando", label: "Por ahora estoy averiguando" },
+      { id: "proyectando", label: "Estoy averiguando, pero todavía estoy proyectando la compra" },
     ],
   },
   {
@@ -82,10 +80,8 @@ export const preguntas: PreguntaCotizador[] = [
     titulo: "¿Cómo tenés pensado encarar la inversión?",
     opciones: [
       { id: "disponible", label: "Tengo el presupuesto disponible" },
-      { id: "organizando", label: "Estoy organizando / reuniendo el presupuesto" },
-      { id: "vende", label: "Necesito vender otro vehículo u otro bien para comprarlo" },
+      { id: "organizando", label: "Estoy organizando / reuniendo el presupuesto, necesito vender otro vehículo" },
       { id: "financiacion", label: "Necesitaría financiación" },
-      { id: "sin_definir", label: "Todavía no tengo definido el presupuesto" },
     ],
   },
   {
@@ -101,8 +97,6 @@ export const preguntas: PreguntaCotizador[] = [
     opciones: [
       { id: "proximamente", label: "Lo quiero comprar próximamente" },
       { id: "3a6", label: "Dentro de 3 a 6 meses" },
-      { id: "este_anio", label: "Más adelante este año" },
-      { id: "anio_que_viene", label: "El año que viene" },
       { id: "sin_fecha", label: "Todavía no tengo una fecha definida" },
     ],
   },
@@ -119,7 +113,7 @@ export const preguntas: PreguntaCotizador[] = [
   {
     id: "origen",
     tipo: "opciones",
-    titulo: "¿Cómo conociste AndyCampers?",
+    titulo: "¿Cómo conociste andycampers?",
     opciones: [
       { id: "instagram", label: "Instagram" },
       { id: "recomendacion", label: "Recomendación de alguien" },

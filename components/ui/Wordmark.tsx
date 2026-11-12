@@ -9,7 +9,7 @@ import { site } from "@/config/site";
 export function Wordmark({ className = "" }: { className?: string }) {
   if (!isPending(site.logoSvg)) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={site.logoSvg} alt="AndyCampers" className={className} />;
+    return <img src={site.logoSvg} alt="andycampers" className={className} />;
   }
   return (
     <span className={`font-display-x leading-none tracking-[-0.03em] ${/\btext-(\[|xs|sm|base|lg|\dxl)/.test(className) ? "" : "text-[1.15rem]"} ${className}`}>

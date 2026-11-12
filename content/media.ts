@@ -64,7 +64,7 @@ export const clips = {
     /** Miniatura 4:5 (232 px) para los videos del hero. */
     mini: "/video/camper-p70-recorrido-taller-mini.jpg",
     titulo: "Hecho a mano en Santa Fe",
-    alt: "Recorrido por el P70 terminado, en el taller de AndyCampers",
+    alt: "Recorrido por el P70 terminado, en el taller de andycampers",
     /** Fecha en que se publicó en este sitio (VideoObject.uploadDate). */
     publicado: "2026-11-01",
     duracion: "PT17S",
@@ -83,7 +83,7 @@ export const clips = {
     poster: "/video/camper-p70-playa-poster.jpg",
     mini: "/video/camper-p70-playa-mini.jpg",
     titulo: "Un día en la playa",
-    alt: "El P70 y la camioneta AndyCampers por la arena, hasta instalarse frente al mar",
+    alt: "El P70 y la camioneta andycampers por la arena, hasta instalarse frente al mar",
     publicado: "2026-11-01",
     duracion: "PT1M27S",
   },

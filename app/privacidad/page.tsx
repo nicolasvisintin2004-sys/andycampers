@@ -6,7 +6,7 @@ import { isPending } from "@/lib/pending";
 
 export const metadata: Metadata = {
   title: "Política de privacidad",
-  description: "Cómo trata AndyCampers los datos personales que dejás en el sitio, según la Ley 25.326 de Protección de Datos Personales.",
+  description: "Cómo trata andycampers los datos personales que dejás en el sitio, según la Ley 25.326 de Protección de Datos Personales.",
   alternates: { canonical: "/privacidad" },
 };
 

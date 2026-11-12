@@ -47,7 +47,7 @@ export function ContactBar() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => track("click_facebook", { ubicacion: "barra" })}
-              aria-label="Facebook de AndyCampers"
+              aria-label="Facebook de andycampers"
               className={link}
             >
               <IconFacebook className="size-5" />

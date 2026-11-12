@@ -54,7 +54,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className={titulo}>Visitas al taller</p>
+            <p className={titulo}>Visitas a la fábrica</p>
             <p className="max-w-xs text-white/85">{site.visitas.texto}</p>
             <a href={waLink(site.visitas.mensaje)} target="_blank" rel="noopener noreferrer" className={`${link} mt-1 font-semibold`}>
               <IconWhatsApp className="size-5" /> Coordinar una visita
@@ -64,7 +64,7 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col gap-1 text-sm text-white/65 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {year} {site.name}. Precios en dólares de referencia, sujetos a confirmación.
+            © {year} {site.name}.
           </p>
           <div className="flex flex-wrap items-center gap-x-6">
             <Link href="/privacidad" className="inline-flex min-h-11 items-center hover:text-white">
@@ -84,11 +84,11 @@ export function Footer() {
       {/* La barra de los flyers */}
       <div className="flex items-center justify-between bg-grafito px-4 py-3 sm:px-6 lg:px-10">
         <span className="flex items-center gap-1">
-          <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram de AndyCampers" className="grid size-11 place-items-center hover:text-durazno">
+          <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram de andycampers" className="grid size-11 place-items-center hover:text-durazno">
             <IconInstagram className="size-6" />
           </a>
           {!isPending(site.social.facebook) && (
-            <a href={site.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook de AndyCampers" className="grid size-11 place-items-center hover:text-durazno">
+            <a href={site.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook de andycampers" className="grid size-11 place-items-center hover:text-durazno">
               <IconFacebook className="size-6" />
             </a>
           )}

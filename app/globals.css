@@ -425,8 +425,9 @@ details > summary::-webkit-details-marker {
   position: relative;
   --piso: 0.66;
   --base: 0.22;
-  /* mobile: el cuadro se agranda más que la pantalla (los bordes del render están vacíos) */
-  --box-w: min(165cqw, 178cqh);
+  /* mobile: el cuadro se agranda más que la pantalla (los bordes del render están vacíos).
+     El área mide 83vw de alto (Selector): con 200cqh el camper no se achica. */
+  --box-w: min(165cqw, 200cqh);
   --suelo: calc(97cqh - var(--base) * var(--box-w) * 9 / 16);
 }
 @media (min-width: 1024px) {

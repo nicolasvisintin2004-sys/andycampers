@@ -1,7 +1,6 @@
 import { fotos, media } from "@/content/media";
 import { precioDesde } from "@/config/p70";
 import { IconArrowDown } from "@/components/ui/Icons";
-import { Missing } from "@/components/ui/Missing";
 import { HeroMontage, type Slide } from "./HeroMontage";
 import { HeroScrollFx } from "./HeroScrollFx";
 import { HeroClips } from "./HeroClips";
@@ -81,8 +80,7 @@ export function Hero() {
           </span>
         </h1>
         <p className="titulo-cond fade-up mt-4 max-w-[26rem] text-[clamp(1.35rem,5.6vw,1.75rem)] leading-[1.12] text-durazno md:text-[clamp(1.3rem,1.9vw,1.9rem)]" style={{ "--d": "380ms" } as React.CSSProperties}>
-          Con libertad y comodidad, llevando el camping a otro nivel.{" "}
-          <Missing label="frase debajo de “Viajá distinto”: Andrés busca otra o la saca (no quiere “libertad” ni “comodidad”)" compact short="frase a confirmar" className="align-middle" />
+          Descubrí la vida que querés vivir moviéndote.
         </p>
 
         <div className="fade-up mt-7 flex flex-wrap items-center gap-x-6 gap-y-3" style={{ "--d": "560ms" } as React.CSSProperties}>

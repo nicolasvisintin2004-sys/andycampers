@@ -11,7 +11,7 @@ export const site = {
    * Para publicar: NEXT_PUBLIC_DEMO=false en el hosting (y sin datos pendientes).
    */
   demo: process.env.NEXT_PUBLIC_DEMO !== "false",
-  name: "AndyCampers",
+  name: "andycampers",
   legalName: falta("razón social y CUIT del responsable de los datos") as Maybe<string>,
   /** Base de canonical, sitemap y vistas previas. En Netlify la define el build con $URL. */
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://andycampers.com.ar",
@@ -35,10 +35,10 @@ export const site = {
     youtube: falta("canal de YouTube (si tiene)") as Maybe<string>,
   },
 
-  /** La dirección y el horario del taller no se publican: las visitas se coordinan por mensaje. */
+  /** La dirección y el horario de la fábrica no se publican: las visitas se coordinan por mensaje. */
   visitas: {
-    texto: "Se coordinan por mensaje: escribile a Andy y arreglan el día.",
-    mensaje: "Hola Andy, quiero coordinar una visita al taller para ver el P70",
+    texto: "Coordinamos por mensaje, escribime al WhatsApp.",
+    mensaje: "Hola Andy, quiero coordinar una visita a la fábrica para ver el P70",
   },
   /** Ruta del logo en vector dentro de /public, ej. "/logo-andycampers.svg". */
   logoSvg: falta("logo en vector (SVG)") as Maybe<string>,

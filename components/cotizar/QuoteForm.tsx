@@ -406,7 +406,7 @@ function QuoteFormInner() {
                     aria-describedby={errores.consentimiento ? "e-consentimiento" : undefined}
                   />
                   <span className="text-ink/85">
-                    Acepto que AndyCampers use mis datos para responder esta consulta, según la{" "}
+                    Acepto que andycampers use mis datos para responder esta consulta, según la{" "}
                     <Link href="/privacidad" target="_blank" className="font-semibold underline underline-offset-4">
                       política de privacidad
                     </Link>{" "}
@@ -467,14 +467,12 @@ function Tecla({ on, letra }: { on: boolean; letra: string }) {
 /* ───────────── Pregunta 1: selector de dificultad ───────────── */
 
 const iconosNivel = [
-  // 1 · ruta asfaltada
+  // relajado · ruta asfaltada
   <path key="1" d="M4 20 L10 4 M20 20 L14 4 M12 6 v2 M12 11 v2.5 M12 16.5 v3" />,
-  // 2 · ripio
+  // aventurero · ripio
   <path key="2" d="M3 18 h18 M5 15.5 h.01 M9 16 h.01 M13 15.5 h.01 M17 16 h.01 M7 13 l3 -4 3 3 2 -2 4 4" />,
-  // 3 · lugares remotos
-  <path key="3" d="M2 19 l6 -10 4 6 3 -4 7 8 Z M15 5.5 a2 2 0 1 0 .01 0" />,
-  // 4 · off-road de verdad
-  <path key="4" d="M2 19 l7 -13 4 6 3 -3 6 10 Z M7.5 9 l1.5 1.5 1.5 -1.5 M4 19 c2 -2 4 -2 6 0 s4 2 6 0 4 -2 6 0" />,
+  // extremo · off-road
+  <path key="3" d="M2 19 l7 -13 4 6 3 -3 6 10 Z M7.5 9 l1.5 1.5 1.5 -1.5 M4 19 c2 -2 4 -2 6 0 s4 2 6 0 4 -2 6 0" />,
 ];
 
 function Niveles({
@@ -496,7 +494,7 @@ function Niveles({
           {p.titulo}
         </Titulo>
       </div>
-      <div role="radiogroup" aria-labelledby={`q-${p.id}`} className="mt-7 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+      <div role="radiogroup" aria-labelledby={`q-${p.id}`} className="mt-7 grid gap-2.5 sm:grid-cols-3">
         {p.opciones.map((o, i) => {
           const on = value === o.id;
           return (
@@ -505,7 +503,7 @@ function Niveles({
               type="button"
               role="radio"
               aria-checked={on}
-              aria-label={`${o.label}: ${o.detalle}`}
+              aria-label={o.detalle ? `${o.label}: ${o.detalle}` : o.label}
               whileTap={{ scale: 0.98 }}
               onClick={() => onPick(o.id)}
               className={`group relative flex items-center gap-4 border-2 p-4 text-left transition-[border-color,background-color,color,transform] duration-200 sm:flex-col sm:items-start sm:gap-3 lg:min-h-[248px] lg:p-5 ${
@@ -525,13 +523,13 @@ function Niveles({
                 {iconosNivel[i]}
               </svg>
               <span className="min-w-0 flex-1">
-                <span className={`block font-cond text-[0.95rem] font-semibold uppercase ${on ? "text-durazno" : "text-forest"}`}>
+                <span className={`block font-cond text-[1.25rem] leading-tight font-semibold uppercase lg:text-[1.35rem] ${on ? "text-durazno" : "text-forest"}`}>
                   {o.label}
                 </span>
-                <span className="mt-1 block text-[1.02rem] leading-snug font-medium lg:text-[1.08rem]">{o.detalle}</span>
+                {o.detalle && <span className="mt-1 block text-[1rem] leading-snug font-medium lg:text-[1.05rem]">{o.detalle}</span>}
                 {/* Barra que se llena según el nivel */}
                 <span className="mt-3 flex gap-1" aria-hidden>
-                  {[0, 1, 2, 3].map((k) => (
+                  {p.opciones.map((_, k) => (
                     <span
                       key={k}
                       className={`h-1.5 flex-1 -skew-x-[24deg] transition-colors duration-300 ${k <= i ? (on ? "bg-durazno" : "bg-forest/70 group-hover:bg-forest") : on ? "bg-bone/15" : "bg-ink/10"}`}

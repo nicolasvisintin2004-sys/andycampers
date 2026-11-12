@@ -8,7 +8,7 @@ const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 
 const base = (over = {}) => ({
   respuestas: {
-    aventurero: "n4",
+    aventurero: "extremo",
     viaje: "offroad",
     etapa: "activo",
     inversion: "disponible",
@@ -30,16 +30,16 @@ const base = (over = {}) => ({
 const casos = [
   { nombre: "caliente (100)", body: base(), esperado: { status: 200, categoria: "caliente" } },
   {
-    nombre: "tibio (56)",
+    nombre: "tibio (57)",
     body: base({
-      respuestas: { aventurero: "n2", etapa: "comparando", inversion: "organizando", plazo: "3a6", equipamiento: "asesoramiento", vehiculo: { tipo: "camioneta", marca: "", modelo: "", anio: "" } },
+      respuestas: { aventurero: "aventurero", etapa: "comparando", inversion: "organizando", plazo: "3a6", equipamiento: "asesoramiento", vehiculo: { tipo: "camioneta", marca: "", modelo: "", anio: "" } },
       seleccion: { eq: 2, color: "c3" },
     }),
     esperado: { status: 200, categoria: "tibio" },
   },
   {
-    nombre: "frío (4)",
-    body: base({ respuestas: { aventurero: "n1", etapa: "averiguando", inversion: "sin_definir", plazo: "sin_fecha", equipamiento: "eq1", vehiculo: { tipo: "camioneta" } }, seleccion: { eq: 1, color: "c1", elegida: false } }),
+    nombre: "frío (19)",
+    body: base({ respuestas: { aventurero: "relajado", etapa: "proyectando", inversion: "financiacion", plazo: "sin_fecha", equipamiento: "eq1", vehiculo: { tipo: "camioneta" } }, seleccion: { eq: 1, color: "c1", elegida: false } }),
     esperado: { status: 200, categoria: "frio" },
   },
   {

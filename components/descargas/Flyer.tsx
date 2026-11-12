@@ -2,7 +2,7 @@ import { site } from "@/config/site";
 import { IconFacebook, IconInstagram } from "@/components/ui/Icons";
 
 /**
- * Piezas de los flyers de AndyCampers, para las descargas (catálogo y PDF):
+ * Piezas de los flyers de andycampers, para las descargas (catálogo y PDF):
  * el encabezado con el bloque verde y el logo, y la barra grafito del pie.
  */
 export function FlyerHeader({ titulo, chico = false }: { titulo: string; chico?: boolean }) {
