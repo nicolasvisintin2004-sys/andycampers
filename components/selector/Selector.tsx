@@ -411,7 +411,7 @@ function Ctas({ onQuiero, onShare }: { onQuiero: () => void; onShare: () => void
 function Colores({ active, onPick, onPrime }: { active: string; onPick: (id: string) => void; onPrime: (id: string) => void }) {
   return (
     // Tres columnas: las muestras quedan centradas justo debajo de los niveles, tenga lo que tenga a los costados.
-    <div className="relative z-10 grid grid-cols-[1fr_auto_1fr] items-center gap-x-3 px-4 pt-3 pb-[5.75rem] sm:gap-x-5 sm:px-6 lg:pt-4 lg:pb-0">
+    <div className="relative z-10 grid grid-cols-[1fr_auto_1fr] items-center gap-x-3 px-4 pt-3 pb-4 sm:gap-x-5 sm:px-6 lg:pt-4 lg:pb-0">
       <span className="pestana hidden justify-self-end font-cond text-[0.95rem] font-semibold uppercase sm:inline-block" id="color-label">
         Elegí tu color
       </span>

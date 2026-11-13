@@ -16,7 +16,7 @@ export function QueEsP70() {
   const h = hotspots[active];
 
   return (
-    <section id="p70" aria-labelledby="p70-title" className="max-lg:cv-auto relative overflow-hidden bg-durazno pt-14 pb-20 lg:pt-20 lg:pb-28">
+    <section id="p70" aria-labelledby="p70-title" className="max-lg:cv-auto relative overflow-hidden bg-durazno pt-10 pb-20 lg:pt-14 lg:pb-28">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
         <h2 id="p70-title" className="slab font-display-x text-[clamp(2rem,7vw,3.4rem)] uppercase">
           Camper P70
