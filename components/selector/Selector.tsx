@@ -411,11 +411,12 @@ function Ctas({ onQuiero, onShare }: { onQuiero: () => void; onShare: () => void
 function Colores({ active, onPick, onPrime }: { active: string; onPick: (id: string) => void; onPrime: (id: string) => void }) {
   return (
     // Tres columnas: las muestras quedan centradas justo debajo de los niveles, tenga lo que tenga a los costados.
-    <div className="relative z-10 grid grid-cols-[1fr_auto_1fr] items-center gap-x-3 px-4 pt-3 pb-4 sm:gap-x-5 sm:px-6 lg:pt-4 lg:pb-0">
+    // En el celu las muestras se reparten todo el ancho de Rumbo, Terra y Cima (pedido de Andrés, 13/11).
+    <div className="relative z-10 grid grid-cols-[1fr_auto_1fr] items-center gap-x-3 px-5 pt-3 pb-4 sm:gap-x-5 sm:px-6 lg:pt-4 lg:pb-0">
       <span className="pestana hidden justify-self-end font-cond text-[0.95rem] font-semibold uppercase sm:inline-block" id="color-label">
         Elegí tu color
       </span>
-      <div role="radiogroup" aria-labelledby="color-label" data-group="color" className="col-start-2 flex items-center gap-1 sm:gap-2">
+      <div role="radiogroup" aria-labelledby="color-label" data-group="color" className="col-span-3 flex items-center justify-between sm:col-span-1 sm:col-start-2 sm:justify-start sm:gap-2">
         {colores.map((c, i) => {
           const on = c.id === active;
           return (
@@ -441,11 +442,11 @@ function Colores({ active, onPick, onPrime }: { active: string; onPick: (id: str
           );
         })}
       </div>
-      {coloresPendientes && (
-        <div className="col-span-3 mt-1 justify-self-center sm:col-span-1 sm:col-start-3 sm:mt-0 sm:justify-self-start">
-          <Missing label="nombre y código de los 5 colores" compact short="nombres" />
-        </div>
-      )}
+      {/* El nombre del color elegido (y, mientras falten, el cartel de los códigos) */}
+      <div className="col-span-3 mt-1 flex items-center justify-center gap-2 sm:col-span-1 sm:col-start-3 sm:mt-0 sm:justify-self-start" aria-live="polite">
+        <span className="font-cond text-[0.95rem] font-semibold whitespace-nowrap text-ink/75 uppercase">{nombreColor(active)}</span>
+        {coloresPendientes && <Missing label="código exacto de los 5 colores" compact short="códigos" />}
+      </div>
     </div>
   );
 }

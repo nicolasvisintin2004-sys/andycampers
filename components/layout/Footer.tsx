@@ -56,8 +56,9 @@ export function Footer() {
           <div>
             <p className={titulo}>Visitas a la fábrica</p>
             <p className="max-w-xs text-white/85">{site.visitas.texto}</p>
-            <a href={waLink(site.visitas.mensaje)} target="_blank" rel="noopener noreferrer" className={`${link} mt-1 font-semibold`}>
-              <IconWhatsApp className="size-5" /> Coordinar una visita
+            <a href={waLink(site.visitas.mensaje)} target="_blank" rel="noopener noreferrer" aria-label={`Coordinar una visita por WhatsApp al ${site.whatsapp.local}`} className={`${link} mt-1 font-semibold`}>
+              {/* Andrés (13/11): el teléfono también acá, aunque esté arriba */}
+              <IconWhatsApp className="size-5" /> {site.whatsapp.local}
             </a>
           </div>
         </div>

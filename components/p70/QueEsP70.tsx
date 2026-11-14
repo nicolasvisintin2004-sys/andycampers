@@ -21,12 +21,10 @@ export function QueEsP70() {
         <h2 id="p70-title" className="slab font-display-x text-[clamp(2rem,7vw,3.4rem)] uppercase">
           Camper P70
         </h2>
-        <p className="mt-6 max-w-md text-lg text-ink/80">Fabricado en Argentina para salir de la ruta. Tocá cada pieza para ver qué la hace distinta.</p>
-
-        <div className="mt-10 grid gap-12 lg:mt-12 lg:grid-cols-[1.3fr_1fr] lg:gap-14">
+        <div className="mt-8 grid gap-12 lg:mt-10 lg:grid-cols-[1.3fr_1fr] lg:gap-14">
           <div className="min-w-0">
-            {/* Plano sobre el verde de los flyers, con las piezas clave */}
-            <div className="zona-oscura blueprint-grid bg-forest p-4 text-white sm:p-6">
+            {/* Plano sobre el verde de los flyers, con las piezas clave. En el celu ocupa casi todo el ancho (Andrés, 13/11). */}
+            <div className="zona-oscura blueprint-grid -mx-3 bg-forest p-4 text-white sm:mx-0 sm:p-6">
               <P70Drawing tone="blueprint" showHotspots active={h.id} className="h-auto w-full" idPrefix="p70s" />
               <ul className="no-scrollbar -mx-4 mt-4 flex snap-x gap-2 overflow-x-auto scroll-px-4 px-4 sm:mx-0 sm:grid sm:grid-cols-5 sm:overflow-visible sm:px-0" aria-label="Piezas clave">
                 {hotspots.map((it, i) => (
@@ -36,12 +34,12 @@ export function QueEsP70() {
                       onClick={() => setActive(i)}
                       onPointerEnter={(e) => e.pointerType === "mouse" && setActive(i)}
                       aria-pressed={i === active}
-                      className={`flex min-h-11 w-[9.5rem] flex-col items-start gap-0.5 border-t-2 px-1 pt-2 pb-1 text-left transition-colors sm:w-full ${
-                        i === active ? "border-durazno text-white" : "border-white/20 text-white/65 hover:text-white"
+                      className={`flex h-full min-h-11 w-[9.5rem] flex-col items-start gap-0.5 border px-3 pt-2 pb-2 text-left transition-colors sm:w-full ${
+                        i === active ? "border-durazno bg-durazno text-forest" : "border-white/35 bg-white/[0.07] text-white/80 hover:border-white/70 hover:text-white"
                       }`}
                     >
                       <span className="font-cond text-[1rem] leading-tight font-semibold uppercase">{it.titulo}</span>
-                      <span className="tabular font-cond text-[0.95rem] text-durazno/90">{it.dato}</span>
+                      <span className={`tabular font-cond text-[0.95rem] ${i === active ? "text-forest/80" : "text-durazno/90"}`}>{it.dato}</span>
                     </button>
                   </li>
                 ))}

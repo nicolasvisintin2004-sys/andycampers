@@ -3,9 +3,10 @@
  *
  * Una escena simple de Three.js (un camper low-poly genérico: caja con ruedas)
  * gira 360° sobre una base brújula fija (N, S, E y O en gris suave), sobre el
- * fondo claro del estudio del sitio, pintada con el color de cada combinación y
- * con una ETIQUETA ROJA "DEMO · Nivel · Color X". Una flecha verde en la base
- * marca hacia dónde apunta la lanza.
+ * fondo claro del estudio del sitio. El camper es todo gris grafito y lo único que
+ * lleva el color de cada combinación son los guardabarros y el aro de la llanta
+ * (Andrés, 13/11). Sin carteles: Andrés no quiere ver el "DEMO" en la página.
+ * Una flecha verde en la base marca hacia dónde apunta la lanza.
  * Se renderiza cuadro por cuadro en Chrome (playwright-core) y se codifica con
  * ffmpeg-static, sin depender de un ffmpeg instalado.
  *
@@ -132,7 +133,8 @@ disco.rotation.x=-Math.PI/2;disco.receiveShadow=true;scene.add(disco);
 const camper=new THREE.Group();scene.add(camper);
 const std=(color,o={})=>new THREE.MeshStandardMaterial({color,flatShading:true,roughness:0.62,metalness:0.18,...o});
 const dark=std(0x16181b,{roughness:0.8}),steel=std(0x2a2e33,{roughness:0.55,metalness:0.5}),tire=std(0x0e0f11,{roughness:0.95,metalness:0});
-const body=std(0xffffff);
+// Carrocería gris grafito (como el P70 real); el color elegido va en guardabarros y aro.
+const body=std(0x60666d),acento=std(0xffffff);
 const add=(geo,mat,x,y,z,o={})=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);if(o.rx)m.rotation.x=o.rx;if(o.ry)m.rotation.y=o.ry;if(o.rz)m.rotation.z=o.rz;m.castShadow=true;m.receiveShadow=true;camper.add(m);return m;};
 
 // Perfil lateral facetado (x = largo, y = alto), extruido al ancho del camper
@@ -154,12 +156,12 @@ add(new THREE.BoxGeometry(0.03,0.42,1.2),steel,1.54,0.84,0);
 // Chasis, guardabarros y ruedas
 add(new THREE.BoxGeometry(2.9,0.16,1.1),dark,0.05,0.5,0);
 for(const z of [1,-1]){
-  add(new THREE.BoxGeometry(1.02,0.08,0.4),steel,0.35,1.0,z*(ANCHO/2+0.22));
-  add(new THREE.BoxGeometry(0.08,0.36,0.4),steel,-0.14,0.84,z*(ANCHO/2+0.22),{rz:-0.5});
-  add(new THREE.BoxGeometry(0.08,0.36,0.4),steel,0.84,0.84,z*(ANCHO/2+0.22),{rz:0.5});
+  add(new THREE.BoxGeometry(1.02,0.08,0.4),acento,0.35,1.0,z*(ANCHO/2+0.22));
+  add(new THREE.BoxGeometry(0.08,0.36,0.4),acento,-0.14,0.84,z*(ANCHO/2+0.22),{rz:-0.5});
+  add(new THREE.BoxGeometry(0.08,0.36,0.4),acento,0.84,0.84,z*(ANCHO/2+0.22),{rz:0.5});
   add(new THREE.CylinderGeometry(0.42,0.42,0.32,18),tire,0.35,0.42,z*(ANCHO/2+0.2),{rx:Math.PI/2});
   add(new THREE.CylinderGeometry(0.24,0.24,0.33,12),steel,0.35,0.42,z*(ANCHO/2+0.2),{rx:Math.PI/2});
-  add(new THREE.TorusGeometry(0.255,0.035,6,24),body,0.35,0.42,z*(ANCHO/2+0.2+0.165));
+  add(new THREE.TorusGeometry(0.255,0.035,6,24),acento,0.35,0.42,z*(ANCHO/2+0.2+0.165));
 }
 // Lanza en A, baulera frontal, rueda jockey y enganche
 const lanza=new THREE.BoxGeometry(1.7,0.1,0.1);
@@ -192,24 +194,16 @@ cam.lookAt(0,ty,0);cam.updateMatrixWorld();
 const proj=(x,z)=>{const v=new THREE.Vector3(x,0,z).project(cam);return{x:(v.x+1)/2,y:(1-v.y)/2};};
 window.__pedestal={radio:R,cx:proj(0,0).x,cy:proj(0,0).y,rx:proj(R,0).x-proj(0,0).x,frente:proj(0,R).y-proj(0,0).y,fondo:proj(0,0).y-proj(0,-R).y};
 
-/* ── Composición final con la etiqueta DEMO (canvas 2D) ── */
+/* ── Composición final (canvas 2D) ── */
 const out=document.createElement("canvas");out.width=W;out.height=H;const ctx=out.getContext("2d");
 const ANG0=THREE.MathUtils.degToRad(-38);
 
 window.renderFrame=(i,frames,colorHex,label)=>{
-  body.color.set(colorHex);
+  acento.color.set(colorHex);
   camper.rotation.y=ANG0+(i/frames)*Math.PI*2;
   renderer.render(scene,cam);
   ctx.fillStyle=FONDO;ctx.fillRect(0,0,W,H);
   ctx.drawImage(renderer.domElement,0,0);
-  // Etiqueta roja: arriba al centro (fuera del recorte de los bordes en la web)
-  ctx.font="700 38px Arial, sans-serif";
-  const tw=ctx.measureText(label).width,pw=tw+64,ph=74,px=(W-pw)/2,py=70;
-  ctx.fillStyle="#E00000";ctx.fillRect(px,py,pw,ph);
-  ctx.setLineDash([6,6]);ctx.lineWidth=3;ctx.strokeStyle="#ffffff";ctx.strokeRect(px+6,py+6,pw-12,ph-12);ctx.setLineDash([]);
-  ctx.fillStyle="#ffffff";ctx.textBaseline="middle";ctx.textAlign="center";ctx.fillText(label,W/2,py+ph/2+2);
-  ctx.font="500 24px Arial, sans-serif";ctx.fillStyle="rgba(22,24,27,.62)";
-  ctx.fillText("Video provisorio · no es el render del producto real",W/2,py+ph+34);
   return out.toDataURL("image/jpeg",0.93).slice(23);
 };
 window.__ready=true;

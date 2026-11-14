@@ -27,15 +27,15 @@ export const faq: { q: string; a: Maybe<string> }[] = [
   },
   {
     q: "¿Es homologado? ¿Tiene patente?",
-    a: "Sí. El chasis es vehicular, de chapa plegada con corte láser (no caño ni perfiles de construcción), homologado y con patente. Para circular trae tortuga homologada, cadenas y pata estabilizadora.",
+    a: "Sí. El chasis es vehicular, fabricado en chapa plegada con corte láser de precisión (no es caño ni perfil de construcción), homologado y con patente. Para circular trae tortuga homologada, cadenas y pata estabilizadora.",
   },
   {
     q: "¿Cómo frena?",
-    a: "Tiene frenos eléctricos que se accionan solos cuando pisás el freno de la camioneta.",
+    a: "Tiene frenos eléctricos que se accionan al pisar el freno de la camioneta.",
   },
   {
     q: "¿A qué velocidad se puede viajar?",
-    a: "La suspensión inteligente Hard & Soft fue probada a 165 km/h: suave en los pozos y estable en ruta. Igual, respetá siempre las velocidades máximas para vehículos con tráiler.",
+    a: "La suspensión inteligente Hard & Soft fue probada en ripio y a 165 km/h en autopista: suave en los pozos para cuidar la carga del interior y estable en ruta. Igual, respetá siempre las velocidades máximas para vehículos con tráiler.",
   },
   {
     q: "¿Cómo se comporta con frío o calor?",

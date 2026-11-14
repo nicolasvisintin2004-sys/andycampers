@@ -32,10 +32,10 @@ export const hotspots: Hotspot[] = [
     y: 402,
     dx: -60,
     dy: 62,
-    titulo: "Chasis vehicular",
-    dato: "Corte láser",
+    titulo: "Chasis",
+    dato: "Corte láser de precisión",
     texto:
-      "Chapa plegada con corte láser: no es caño ni perfiles de construcción. Es un chasis vehicular, homologado y con patente.",
+      "Fabricado en chapa plegada con corte láser (no es caño ni perfil de construcción). Es un chasis vehicular con precisión láser, homologado y con patente.",
     zoom: "100 300 600 240",
   },
   {
@@ -46,9 +46,9 @@ export const hotspots: Hotspot[] = [
     dx: -150,
     dy: 50,
     titulo: "Suspensión Hard & Soft",
-    dato: "165 km/h",
+    dato: "Probado a 165 km/h",
     texto:
-      "Inteligente: responde suave en los pozos para cuidar el interior y le da estabilidad en ruta. Probada a 165 km/h.",
+      "Inteligente: responde suave en los pozos para cuidar la carga del interior y le da estabilidad en ruta. Probado en ripio y a 165 km/h en autopista.",
     zoom: "560 330 540 220",
   },
   {
@@ -59,8 +59,8 @@ export const hotspots: Hotspot[] = [
     dx: 130,
     dy: 60,
     titulo: "Frenos eléctricos",
-    dato: "Automáticos",
-    texto: "Se accionan solos cuando pisás el freno de la camioneta. No tenés que hacer nada distinto al manejar.",
+    dato: "Al pisar el freno",
+    texto: "Se accionan al pisar el freno de la camioneta. No tenés que hacer nada distinto al manejar.",
     zoom: "640 320 520 230",
   },
   {

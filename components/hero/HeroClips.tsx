@@ -3,19 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { clips, type ClipKey } from "@/content/media";
-import { falta, isPending, type Pending } from "@/lib/pending";
 import { track } from "@/lib/analytics";
-import { Missing } from "@/components/ui/Missing";
 import { IconArrow, IconClose, IconPlay } from "@/components/ui/Icons";
 
-/** El tercero queda libre: Andrés quiere otro video en lugar del de la playa. */
-const LUGARES: (ClipKey | Pending)[] = ["taller", "virYLeo", falta("tercer video del hero: “uno que dice con una tabla” (preguntarle a Andrés cuál es)")];
-const ELEGIDOS = LUGARES.filter((l): l is ClipKey => !isPending(l));
-
-/** Títulos que Andrés todavía está pensando: llevan un cartel chico encima. */
-const A_CONFIRMAR: Partial<Record<ClipKey, Pending>> = {
-  taller: falta("título “Hecho a mano en Santa Fe” del video del taller (Andrés lo está pensando)"),
-};
+/** Los tres videos del hero, en orden (Andrés, 13/11: el tercero es "Todo a bordo", el de la tabla). */
+const ELEGIDOS: ClipKey[] = ["taller", "virYLeo", "todoABordo"];
 
 const forma = "aspect-[4/5] w-[clamp(84px,25vw,108px)] [clip-path:polygon(14%_0,100%_0,86%_100%,0_100%)] md:w-[clamp(96px,8vw,128px)]";
 
@@ -31,24 +23,14 @@ export function HeroClips() {
       <p className="font-cond text-[1rem] text-white/80">Mirá el P70 en acción</p>
       {/* Fotos en paralelogramo, como la tira de fotos de los flyers de opcionales */}
       <ul className="mt-2.5 flex">
-        {LUGARES.map((k, i) => {
-          if (isPending(k)) {
-            return (
-              <li key="falta" className={i > 0 ? "-ml-2.5" : ""}>
-                <div className={`${forma} grid place-items-center bg-falta/25 px-4 outline-2 -outline-offset-4 outline-falta outline-dashed`}>
-                  <Missing label={k} compact short="video" />
-                </div>
-              </li>
-            );
-          }
+        {ELEGIDOS.map((k, i) => {
           const c = clips[k];
-          const revisar = A_CONFIRMAR[k];
           return (
             <li key={k} className={`relative ${i > 0 ? "-ml-2.5" : ""}`}>
               <button
                 type="button"
                 onClick={() => {
-                  setAbierto(ELEGIDOS.indexOf(k));
+                  setAbierto(i);
                   track("open_clip", { clip: k });
                 }}
                 aria-label={`Ver video: ${c.titulo}`}
@@ -73,7 +55,6 @@ export function HeroClips() {
                   {c.titulo}
                 </span>
               </button>
-              {revisar && <Missing label={revisar} compact short="título" className="pointer-events-none absolute top-1 left-3" />}
             </li>
           );
         })}

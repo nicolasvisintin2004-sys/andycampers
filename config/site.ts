@@ -24,6 +24,8 @@ export const site = {
   whatsapp: {
     number: "5493415641103",
     display: "+54 9 341 564-1103",
+    /** Como lo escribe Andrés, para el pie. */
+    local: "341 564-1103",
     /** Para JSON-LD (formato internacional con guiones). */
     e164: "+54-9-341-564-1103",
   },
@@ -37,7 +39,7 @@ export const site = {
 
   /** La dirección y el horario de la fábrica no se publican: las visitas se coordinan por mensaje. */
   visitas: {
-    texto: "Coordinamos por mensaje, escribime al WhatsApp.",
+    texto: "Coordinamos por mensaje, escribime al WhatsApp:",
     mensaje: "Hola Andy, quiero coordinar una visita a la fábrica para ver el P70",
   },
   /** Ruta del logo en vector dentro de /public, ej. "/logo-andycampers.svg". */

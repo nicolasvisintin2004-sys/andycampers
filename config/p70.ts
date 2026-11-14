@@ -149,11 +149,13 @@ export interface ColorP70 {
 }
 
 export const colores: ColorP70[] = [
-  { id: "c1", nombre: falta("nombre del color 1"), hex: falta("hex del color 1"), hexDemo: "#e4572e" },
-  { id: "c2", nombre: falta("nombre del color 2"), hex: falta("hex del color 2"), hexDemo: "#4f8a5b" },
-  { id: "c3", nombre: falta("nombre del color 3"), hex: falta("hex del color 3"), hexDemo: "#d9a62e" },
-  { id: "c4", nombre: falta("nombre del color 4"), hex: falta("hex del color 4"), hexDemo: "#c9c4ba" },
-  { id: "c5", nombre: falta("nombre del color 5"), hex: falta("hex del color 5"), hexDemo: "#3f6e8c" },
+  // Nombres y orden de Andrés (13/11). Los códigos exactos todavía no los pasó: se usa el tono provisorio.
+  // El id no cambia aunque cambie el orden: lo usan los videos y los links compartidos.
+  { id: "c1", nombre: "Naranja Misiones", hex: falta("código del color Naranja Misiones"), hexDemo: "#e4572e" },
+  { id: "c2", nombre: "Verde Entre Ríos", hex: falta("código del color Verde Entre Ríos"), hexDemo: "#4f8a5b" },
+  { id: "c3", nombre: "Amarillo Santa Fe", hex: falta("código del color Amarillo Santa Fe"), hexDemo: "#d9a62e" },
+  { id: "c5", nombre: "Azul Antártico", hex: falta("código del color Azul Antártico"), hexDemo: "#3f6e8c" },
+  { id: "c4", nombre: "Blanco Bariloche", hex: falta("código del color Blanco Bariloche"), hexDemo: "#c9c4ba" },
 ];
 
 /** Combinación con la que arranca el selector (sin link compartido). Arranca en verde, el color de la marca. */
@@ -170,7 +172,7 @@ export const videoSelector = {
    * reemplazan los archivos con los mismos nombres, si no los navegadores siguen
    * mostrando los viejos que tienen guardados.
    */
-  version: 4,
+  version: 5,
   /** Duración de TODOS los videos, en segundos (deben ser iguales). Más largo = gira más lento. */
   duracion: 14,
   /**
@@ -194,7 +196,7 @@ export const videoSelector = {
   pedestal: { rx: 0.285, frente: 0.177, fondo: 0.116 },
   /**
    * `true` mientras se usen los videos generados por scripts/generate-placeholder-videos.
-   * Muestra el cartel rojo de "videos demo" en el selector.
+   * Ya no llevan cartel (Andrés no quiere verlo): sirve para acordarse de reemplazarlos por los renders reales.
    */
   sonDemo: true,
 } as const;
