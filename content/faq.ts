@@ -1,4 +1,4 @@
-import { falta, type Maybe } from "@/lib/pending";
+import type { Maybe } from "@/lib/pending";
 import { site } from "@/config/site";
 import { equipamientos, nombreEq } from "@/config/p70";
 
@@ -31,7 +31,7 @@ export const faq: { q: string; a: Maybe<string> }[] = [
   },
   {
     q: "¿Cómo frena?",
-    a: "Tiene frenos eléctricos que se accionan al pisar el freno de la camioneta.",
+    a: "Tiene frenos eléctricos que se accionan automáticamente al pisar el freno de la camioneta.",
   },
   {
     q: "¿A qué velocidad se puede viajar?",
@@ -39,14 +39,14 @@ export const faq: { q: string; a: Maybe<string> }[] = [
   },
   {
     q: "¿Cómo se comporta con frío o calor?",
-    a: "Las paredes llevan 80 mm de aislamiento térmico y la pintura exterior es antirrayones.",
+    a: "Toda la carrocería de acero lleva 80 mm de aislamiento térmico y la pintura exterior es antirrayones.",
   },
   {
     q: "¿Qué trae cada nivel?",
     a: "Cada nivel lleva lo suyo: Terra tiene todo lo de Rumbo más heladera, porta equipajes, rueda de auxilio y otras cosas, y Cima lleva todo. En la página y en el catálogo de cada nivel está el listado completo.",
   },
-  { q: "¿Cuánto tarda la fabricación y la entrega?", a: falta("plazos de fabricación y entrega") },
-  { q: "¿Cuál es la forma de pago? ¿Hay financiación?", a: falta("forma de pago, seña y si hay financiación") },
-  { q: "¿Qué garantía tiene?", a: falta("garantía del P70") },
+  { q: "¿Cuánto tarda la fabricación y la entrega?", a: "Solemos tener stock. Si no, la fabricación lleva 45 días o más, según la lista de espera al momento de encargar." },
+  { q: "¿Cuál es la forma de pago? ¿Hay financiación?", a: "Se puede pagar en efectivo o con financiación total." },
+  { q: "¿Qué garantía tiene?", a: "2 años de garantía por fallas de fabricación." },
   { q: "¿Puedo verlo en persona?", a: `Sí. ${site.visitas.texto}` },
 ];

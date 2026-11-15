@@ -25,7 +25,7 @@ export function Cotizar() {
   };
 
   return (
-    <section id="cotizar" aria-labelledby="cotizar-title" className="max-lg:cv-auto relative overflow-hidden bg-paper pt-14 pb-20 lg:pt-20 lg:pb-28">
+    <section id="cotizar" aria-labelledby="cotizar-title" className="max-lg:cv-auto relative overflow-hidden bg-paper pt-10 pb-12 lg:pt-14 lg:pb-16">
       <div className="mx-auto grid max-w-[1440px] gap-7 px-4 sm:px-6 lg:grid-cols-[minmax(320px,0.75fr)_1.6fr] lg:gap-16 lg:px-10">
         <div className="lg:sticky lg:top-8 lg:self-start">
           <h2 id="cotizar-title" className="slab font-display-x text-[clamp(1.9rem,6.4vw,3rem)] uppercase lg:text-[clamp(1.6rem,2.2vw,2.3rem)]">

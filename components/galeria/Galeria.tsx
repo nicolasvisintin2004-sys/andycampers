@@ -29,7 +29,7 @@ export function Galeria() {
     "grid size-12 place-items-center border-2 border-ink/20 text-ink transition-colors hover:border-ink hover:bg-ink hover:text-paper disabled:pointer-events-none disabled:opacity-30";
 
   return (
-    <section id="fotos" aria-labelledby="fotos-title" className="cv-auto relative overflow-hidden bg-paper pt-14 pb-20 lg:pt-20 lg:pb-28">
+    <section id="fotos" aria-labelledby="fotos-title" className="cv-auto relative overflow-hidden bg-paper pt-10 pb-12 lg:pt-14 lg:pb-16">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
         <h2 id="fotos-title" className="slab font-display-x text-[clamp(2rem,7vw,3.4rem)] uppercase">
           Fotos

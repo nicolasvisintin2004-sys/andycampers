@@ -261,29 +261,28 @@ export const ficha: { grupo: string; filas: FilaFicha[] }[] = [
   {
     grupo: "General",
     filas: [
-      { label: "Construcción", valor: "Acero 100%" },
+      // Andrés (14/11): sin "Carga útil" ni "Circulación" (lo de circulación lo define después).
+      { label: "Construcción", valor: "Acero 100%, como tu camioneta" },
       { label: "Remolque", valor: "Exclusivo para camionetas" },
       { label: "Peso aproximado", valor: "1.100 kg" },
-      { label: "Carga útil", valor: falta("carga útil del P70") },
-      { label: "Capacidad de personas", valor: falta("capacidad de personas") },
+      { label: "Tanque de agua", valor: "100 litros" },
+      { label: "Capacidad de personas", valor: "2, con posibilidad de extender a 4 con carpa de techo" },
       { label: "Terminación", valor: "Pintura antirrayones" },
-      { label: "Circulación", valor: "Tortuga homologada, cadenas y pata estabilizadora" },
     ],
   },
   {
     grupo: "Medidas",
     filas: [
-      { label: "Exteriores (largo × ancho × alto)", valor: falta("medidas exteriores del P70") },
-      { label: "Interiores", valor: falta("medidas interiores del P70") },
-      { label: "Cama", valor: falta("medida de la cama") },
+      { label: "Exteriores", valor: "Largo 4 m · ancho 2,10 m · alto 2 m (según el equipamiento, con o sin toldo)" },
+      { label: "Interiores", valor: "Colchón de 2,06 × 1,40 m" },
     ],
   },
   {
     grupo: "Compra",
     filas: [
-      { label: "Garantía", valor: falta("garantía del P70") },
-      { label: "Fabricación y entrega", valor: falta("plazos de fabricación y entrega") },
-      { label: "Forma de pago y seña", valor: falta("forma de pago y seña") },
+      { label: "Garantía", valor: "2 años por fallas de fabricación" },
+      { label: "Fabricación y entrega", valor: "Solemos tener stock; si no, 45 días o más según la lista de espera al momento de encargar" },
+      { label: "Forma de pago", valor: "Efectivo o financiación total" },
     ],
   },
 ];

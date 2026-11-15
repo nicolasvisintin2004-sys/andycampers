@@ -46,10 +46,10 @@ export const site = {
   logoSvg: falta("logo en vector (SVG)") as Maybe<string>,
 
   comercial: {
-    plazos: falta("plazos de fabricación y entrega") as Maybe<string>,
-    formaDePago: falta("forma de pago y seña") as Maybe<string>,
-    financiacion: falta("si ofrece financiación y en qué condiciones") as Maybe<string>,
-    garantia: falta("garantía del P70") as Maybe<string>,
+    plazos: "Solemos tener stock; si no, 45 días o más según la lista de espera al momento de encargar" as Maybe<string>,
+    formaDePago: "Efectivo o financiación total" as Maybe<string>,
+    financiacion: "Financiación total" as Maybe<string>,
+    garantia: "2 años por fallas de fabricación" as Maybe<string>,
   },
 
   credito: { texto: "Diseño y desarrollo: Visintin Studio", url: "https://visintinstudio.com.ar" as string | null },

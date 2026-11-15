@@ -52,16 +52,19 @@ export function Selector() {
   const [sound, setSoundState] = useState(false);
   const [sheet, setSheet] = useState(false);
   const [barVisible, setBarVisible] = useState(false);
+  const [montado, setMontado] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const eq = equipamientos.find((e) => e.n === sel.eq) ?? equipamientos[0];
 
   useEffect(() => setSoundState(soundEnabled()), []);
+  useEffect(() => setMontado(true), []);
 
-  // Barra fija de mobile: solo mientras el selector está en pantalla.
+  // Barra fija de mobile: aparece al entrar a "Armá tu P70" (con ~200 px de la sección a la vista) y se queda
+  // mientras estés en ella; se va recién cuando los colores suben por arriba de la pantalla (Andrés, 14/11).
   useEffect(() => {
     const el = section.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => setBarVisible(e.intersectionRatio > 0.35), { threshold: [0, 0.35, 0.6] });
+    const io = new IntersectionObserver(([e]) => setBarVisible(e.isIntersecting), { rootMargin: "-120px 0px -200px 0px" });
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -221,43 +224,48 @@ export function Selector() {
         </div>
       </div>
 
-      {/* Barra fija inferior (mobile): el nivel, su precio y el CTA */}
-      <div
-        className={`fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-white px-4 pt-2.5 pb-[calc(0.65rem+env(safe-area-inset-bottom))] shadow-[0_-10px_30px_-18px_rgb(22_24_27/0.5)] transition-transform duration-500 ease-[var(--ease-out-expo)] sm:px-6 lg:hidden ${
-          barVisible ? "translate-y-0" : "pointer-events-none translate-y-full"
-        }`}
-        aria-hidden={!barVisible}
-      >
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setSheet(true)}
-            tabIndex={barVisible ? 0 : -1}
-            aria-haspopup="dialog"
-            className="flex min-h-12 min-w-0 flex-1 flex-col items-start justify-center gap-0.5 text-left"
+      {/* Barra fija inferior (mobile): el nivel, su precio y el CTA. Va en el body: dentro de la sección
+          (que es "isolate") la tapaba la sección siguiente al ir bajando. */}
+      {montado &&
+        createPortal(
+          <div
+            className={`fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-white px-4 pt-2.5 pb-[calc(0.65rem+env(safe-area-inset-bottom))] shadow-[0_-10px_30px_-18px_rgb(22_24_27/0.5)] transition-transform duration-500 ease-[var(--ease-out-expo)] sm:px-6 lg:hidden ${
+              barVisible ? "translate-y-0" : "pointer-events-none translate-y-full"
+            }`}
+            aria-hidden={!barVisible}
           >
-            <span className="flex max-w-full items-center gap-2">
-              <span className="font-cond text-[1.05rem] leading-none font-semibold uppercase">{nombre(eq)}</span>
-              {isPending(eq.precio) ? (
-                <Missing label={eq.precio} compact short="precio" />
-              ) : (
-                <span className="tabular font-cond text-[1.05rem] leading-none font-light">{precioFlyer(eq.precio)}</span>
-              )}
-            </span>
-            <span className="flex items-center gap-1 text-sm text-stone">
-              Qué incluye <IconChevron className="size-4 rotate-180" />
-            </span>
-          </button>
-          <button
-            type="button"
-            onClick={quieroAsi}
-            tabIndex={barVisible ? 0 : -1}
-            className="inline-flex min-h-12 items-center bg-forest px-5 font-semibold text-white transition-colors hover:bg-forest-deep active:scale-[0.98]"
-          >
-            Lo quiero así
-          </button>
-        </div>
-      </div>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setSheet(true)}
+                tabIndex={barVisible ? 0 : -1}
+                aria-haspopup="dialog"
+                className="flex min-h-12 min-w-0 flex-1 flex-col items-start justify-center gap-0.5 text-left"
+              >
+                <span className="flex max-w-full items-center gap-2">
+                  <span className="font-cond text-[1.05rem] leading-none font-semibold uppercase">{nombre(eq)}</span>
+                  {isPending(eq.precio) ? (
+                    <Missing label={eq.precio} compact short="precio" />
+                  ) : (
+                    <span className="tabular font-cond text-[1.05rem] leading-none font-light">{precioFlyer(eq.precio)}</span>
+                  )}
+                </span>
+                <span className="flex items-center gap-1 text-sm text-stone">
+                  Qué incluye <IconChevron className="size-4 rotate-180" />
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={quieroAsi}
+                tabIndex={barVisible ? 0 : -1}
+                className="inline-flex min-h-12 items-center bg-forest px-5 font-semibold text-white transition-colors hover:bg-forest-deep active:scale-[0.98]"
+              >
+                Lo quiero así
+              </button>
+            </div>
+          </div>,
+          document.body,
+        )}
 
       {sheet && createPortal(<Sheet eq={eq} onClose={() => setSheet(false)} onQuiero={quieroAsi} onShare={compartir} />, document.body)}
 

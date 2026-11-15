@@ -10,7 +10,7 @@ import { Enter } from "@/components/ui/Enter";
  */
 export function InAction() {
   return (
-    <section aria-labelledby="accion-title" className="zona-oscura cv-auto relative overflow-hidden bg-forest-deep pt-14 pb-20 text-bone lg:pt-20 lg:pb-28">
+    <section aria-labelledby="accion-title" className="zona-oscura cv-auto relative overflow-hidden bg-forest-deep pt-10 pb-12 text-bone lg:pt-14 lg:pb-16">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
         <h2 id="accion-title" className="slab font-display-x text-[clamp(1.9rem,6.4vw,3.2rem)] uppercase [--slab-bg:var(--color-durazno)] [--slab-fg:var(--color-forest-deep)]">
           En acción
