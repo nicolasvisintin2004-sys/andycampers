@@ -7,7 +7,7 @@ import { P70Drawing, hotspots } from "./P70Drawing";
 
 /**
  * "Qué es el P70": las características en una sola sección, con la gráfica de
- * los flyers: el bloque verde del título, el croquis sobre verde bosque y la ficha
+ * los flyers: el bloque verde del título, el modelo 3D sobre verde bosque y la ficha
  * como la tabla de opcionales (filas alternadas). "Equipamiento base" ya no va acá
  * (Andrés, 14/11: ahora están los 3 niveles); sigue en los catálogos descargables.
  * Todo el texto es HTML: Google lo lee y el comprador lo puede comparar.

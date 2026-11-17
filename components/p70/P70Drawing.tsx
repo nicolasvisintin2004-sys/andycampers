@@ -1,12 +1,9 @@
 /**
- * Croquis del P70: el render de la "Versión acero 100%" de los flyers, redibujado
- * en vector (scripts/croquis-p70.mjs → croquis-svg.ts) para que se vea nítido,
- * con las cotas (largo y alto) y los puntos de las piezas clave. Sin textos al
- * lado de las líneas: Andrés (14/11) dice que no se llegan a leer; la info está
- * en los botones de abajo.
+ * Croquis del P70: la captura del modelo 3D que pasó Andrés (16/11), con su fondo,
+ * las cotas (largo y alto) y los puntos de las piezas clave. Sin textos al lado
+ * de las líneas: Andrés (14/11) dice que no se llegan a leer; la info está en los
+ * botones de abajo. Coordenadas = píxeles de la imagen (1222 × 740).
  */
-
-import { CROQUIS_SVG } from "./croquis-svg";
 
 export interface Hotspot {
   id: string;
@@ -26,10 +23,10 @@ export const hotspots: Hotspot[] = [
   {
     id: "chasis",
     n: "01",
-    x: 510,
-    y: 455,
-    dx: -70,
-    dy: 80,
+    x: 420,
+    y: 512,
+    dx: -60,
+    dy: 70,
     titulo: "Chasis",
     dato: "Corte láser de precisión",
     texto:
@@ -38,10 +35,10 @@ export const hotspots: Hotspot[] = [
   {
     id: "suspension",
     n: "02",
-    x: 740,
-    y: 430,
-    dx: -50,
-    dy: 105,
+    x: 830,
+    y: 470,
+    dx: -70,
+    dy: 90,
     titulo: "Suspensión Hard & Soft",
     dato: "Probado a 165 km/h",
     texto:
@@ -50,10 +47,10 @@ export const hotspots: Hotspot[] = [
   {
     id: "frenos",
     n: "03",
-    x: 845,
-    y: 478,
-    dx: 95,
-    dy: 57,
+    x: 908,
+    y: 553,
+    dx: 90,
+    dy: 60,
     titulo: "Frenos eléctricos",
     dato: "Automático al pisar el freno",
     texto: "Se accionan automáticamente al pisar el freno de la camioneta.",
@@ -61,10 +58,10 @@ export const hotspots: Hotspot[] = [
   {
     id: "aislamiento",
     n: "04",
-    x: 870,
-    y: 240,
-    dx: 70,
-    dy: -150,
+    x: 700,
+    y: 250,
+    dx: 50,
+    dy: -110,
     titulo: "Aislamiento térmico",
     dato: "80 mm",
     texto: "Toda la carrocería de acero lleva 80 mm de aislamiento térmico y la pintura exterior es antirrayones.",
@@ -72,22 +69,20 @@ export const hotspots: Hotspot[] = [
   {
     id: "portones",
     n: "05",
-    x: 955,
-    y: 290,
+    x: 1048,
+    y: 300,
     dx: 50,
-    dy: 70,
+    dy: -90,
     titulo: "Dos portones traseros",
     dato: "Cocina + técnico",
     texto: "Uno abre la cocina, con mesada y alacenas iluminadas; el otro, el espacio técnico para herramientas y equipo.",
   },
 ];
 
-/** Dónde va la imagen dentro del viewBox, y sus bordes reales (para las cotas). */
-/** El dibujo está en coordenadas 1200 × 720; acá se ubica dentro del viewBox. */
-const DIBUJO = "translate(113 34) scale(0.75)";
-const LARGO = { x1: 139, x2: 976, y: 612 };
-const ALTO = { x: 1052, y1: 45, y2: 560 };
-const SUELO = 560;
+/** La imagen y las cotas: largo de punta del acople a la cola, alto del piso a la parrilla. */
+const IMG = { src: "/media/p70/croquis-p70-3d.webp", w: 1222, h: 740 };
+const LARGO = { x1: 48, x2: 1072, y: 684 };
+const ALTO = { x: 1110, y1: 52, y2: 652 };
 
 export function P70Drawing({
   // Durazno de los flyers: la pieza activa se lee sobre el bloque verde.
@@ -96,7 +91,7 @@ export function P70Drawing({
   active,
   showHotspots = false,
   className = "",
-  title = "Croquis del camper P70 versión acero, con sus medidas",
+  title = "Modelo 3D del camper P70, con sus medidas",
 }: {
   accent?: string;
   line?: string;
@@ -107,14 +102,10 @@ export function P70Drawing({
 }) {
   const detalle = "rgb(236 231 223 / .55)";
   return (
-    <svg viewBox="100 20 1060 650" className={className} role="img" aria-label={title} fill="none" strokeLinejoin="round">
+    <svg viewBox={`0 0 ${IMG.w} ${IMG.h}`} className={className} role="img" aria-label={title} fill="none" strokeLinejoin="round">
       <title>{title}</title>
 
-      {/* Suelo */}
-      <line x1="110" y1={SUELO} x2="1130" y2={SUELO} stroke="rgb(236 231 223 / .3)" strokeWidth="1.5" />
-
-      {/* Contenido fijo generado por el script (no viene de usuarios) */}
-      <g transform={DIBUJO} dangerouslySetInnerHTML={{ __html: CROQUIS_SVG }} />
+      <image href={IMG.src} width={IMG.w} height={IMG.h} />
 
       {/* Cotas: largo 4 m y alto 2 m (Andrés, 14/11) */}
       {/* En el celu el croquis se ve chico: las medidas van más grandes (en px del viewBox). */}
@@ -123,7 +114,7 @@ export function P70Drawing({
         <line x1={LARGO.x1} y1={LARGO.y - 12} x2={LARGO.x1} y2={LARGO.y + 12} stroke={detalle} strokeWidth="1.5" />
         <line x1={LARGO.x2} y1={LARGO.y - 12} x2={LARGO.x2} y2={LARGO.y + 12} stroke={detalle} strokeWidth="1.5" />
         <path d={`M${LARGO.x1} ${LARGO.y} l16 -6 v12 Z M${LARGO.x2} ${LARGO.y} l-16 -6 v12 Z`} fill={line} stroke="none" />
-        <text x={(LARGO.x1 + LARGO.x2) / 2} y={LARGO.y + 44} textAnchor="middle">
+        <text x={(LARGO.x1 + LARGO.x2) / 2} y={LARGO.y + 42} textAnchor="middle">
           4 m
         </text>
 

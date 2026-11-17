@@ -221,6 +221,15 @@ export function Selector() {
 
           <Niveles active={sel.eq} onPick={(n) => elegir({ eq: n })} onPrime={(n) => prime(n, sel.color)} />
           <Colores active={sel.color} onPick={(c) => elegir({ color: c })} onPrime={(c) => prime(sel.eq, c)} />
+          {/* Mobile: el detalle del nivel también a mano dentro de la sección (Andrés, 16/11) */}
+          <button
+            type="button"
+            onClick={() => setSheet(true)}
+            aria-haspopup="dialog"
+            className="mx-4 mt-5 inline-flex min-h-12 items-center justify-center gap-2 border-2 border-forest bg-white/80 px-4 font-semibold text-forest transition-colors hover:bg-white active:scale-[0.98] sm:mx-6 lg:hidden"
+          >
+            Ver qué incluye {nombre(eq)} <IconChevron className="size-4 rotate-180" />
+          </button>
         </div>
       </div>
 
@@ -234,31 +243,30 @@ export function Selector() {
             }`}
             aria-hidden={!barVisible}
           >
-            <div className="flex items-center gap-3">
+            <p className="flex max-w-full items-center gap-2">
+              <span className="font-cond text-[1.05rem] leading-none font-semibold uppercase">{nombre(eq)}</span>
+              {isPending(eq.precio) ? (
+                <Missing label={eq.precio} compact short="precio" />
+              ) : (
+                <span className="tabular font-cond text-[1.05rem] leading-none font-light">{precioFlyer(eq.precio)}</span>
+              )}
+            </p>
+            {/* "Qué incluye" como botón a la vista, al lado del CTA (Andrés, 16/11) */}
+            <div className="mt-2 grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setSheet(true)}
                 tabIndex={barVisible ? 0 : -1}
                 aria-haspopup="dialog"
-                className="flex min-h-12 min-w-0 flex-1 flex-col items-start justify-center gap-0.5 text-left"
+                className="inline-flex min-h-12 items-center justify-center gap-1.5 border-2 border-forest bg-white px-3 font-semibold text-forest transition-colors hover:bg-forest/5 active:scale-[0.98]"
               >
-                <span className="flex max-w-full items-center gap-2">
-                  <span className="font-cond text-[1.05rem] leading-none font-semibold uppercase">{nombre(eq)}</span>
-                  {isPending(eq.precio) ? (
-                    <Missing label={eq.precio} compact short="precio" />
-                  ) : (
-                    <span className="tabular font-cond text-[1.05rem] leading-none font-light">{precioFlyer(eq.precio)}</span>
-                  )}
-                </span>
-                <span className="flex items-center gap-1 text-sm text-stone">
-                  Qué incluye <IconChevron className="size-4 rotate-180" />
-                </span>
+                Ver qué incluye <IconChevron className="size-4 rotate-180" />
               </button>
               <button
                 type="button"
                 onClick={quieroAsi}
                 tabIndex={barVisible ? 0 : -1}
-                className="inline-flex min-h-12 items-center bg-forest px-5 font-semibold text-white transition-colors hover:bg-forest-deep active:scale-[0.98]"
+                className="inline-flex min-h-12 items-center justify-center bg-forest px-3 font-semibold text-white transition-colors hover:bg-forest-deep active:scale-[0.98]"
               >
                 Lo quiero así
               </button>
