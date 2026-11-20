@@ -280,7 +280,7 @@ export const ficha: { grupo: string; filas: FilaFicha[] }[] = [
   {
     grupo: "Compra",
     filas: [
-      { label: "Garantía", valor: "2 años por fallas de fabricación" },
+      { label: "Garantía", valor: "2 años" },
       { label: "Fabricación y entrega", valor: "Solemos tener stock; si no, 45 días o más según la lista de espera al momento de encargar" },
       { label: "Forma de pago", valor: "Efectivo o financiación total" },
     ],

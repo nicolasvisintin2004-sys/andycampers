@@ -89,6 +89,18 @@ body {
 
 /* Título de sección con el subtítulo liviano entre paréntesis de los flyers:
    "EQUIPAMIENTO BASE (en ambos modelos)". */
+/* Corte en diagonal de los botones (Andrés, 20/11): paralelogramo; --sk es cuánto se inclina.
+   corte-ini / corte-fin dejan recto el lado de afuera del primero y del último de una fila. */
+@utility corte-diag {
+  clip-path: polygon(var(--sk, 12px) 0, 100% 0, calc(100% - var(--sk, 12px)) 100%, 0 100%);
+}
+@utility corte-ini {
+  clip-path: polygon(0 0, 100% 0, calc(100% - var(--sk, 12px)) 100%, 0 100%);
+}
+@utility corte-fin {
+  clip-path: polygon(var(--sk, 12px) 0, 100% 0, 100% 100%, 0 100%);
+}
+
 @utility titulo-cond {
   font-family: var(--font-cond);
   font-weight: 300;

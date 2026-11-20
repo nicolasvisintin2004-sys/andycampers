@@ -4,6 +4,7 @@ import { IconArrowDown } from "@/components/ui/Icons";
 import { HeroMontage, type Slide } from "./HeroMontage";
 import { HeroScrollFx } from "./HeroScrollFx";
 import { HeroClips } from "./HeroClips";
+import { LogoP70 } from "@/components/ui/LogoP70";
 
 /**
  * Hero "vender la experiencia".
@@ -71,15 +72,21 @@ export function Hero() {
       </div>
 
       <div data-hero-copy className="relative z-10 flex h-full flex-col justify-end px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:px-6 md:w-[44%] md:justify-center md:pr-4 md:pb-10 lg:px-10 xl:pl-16">
-        <h1 id="hero-title" className="font-display-x text-[clamp(2.8rem,13vw,4.6rem)] uppercase md:text-[clamp(3rem,5.4vw,6.2rem)]">
-          <span className="hero-line" style={{ "--i": 0 } as React.CSSProperties}>
-            <span>Viajá</span>
+        {/* "Viajá distinto." un poco más chico y, a la derecha, el P70 con la tipografía del folleto (Andrés, 20/11) */}
+        <h1 id="hero-title" className="font-display-x flex items-center gap-[0.25em] text-[clamp(1.9rem,8.6vw,3.4rem)] uppercase md:text-[clamp(2.4rem,3.7vw,4.6rem)]">
+          <span className="block">
+            <span className="hero-line -mt-[0.2em] pt-[0.2em]" style={{ "--i": 0 } as React.CSSProperties}>
+              <span>Viajá</span>
+            </span>
+            <span className="hero-line" style={{ "--i": 1 } as React.CSSProperties}>
+              <span>distinto.</span>
+            </span>
           </span>
-          <span className="hero-line" style={{ "--i": 1 } as React.CSSProperties}>
-            <span>distinto.</span>
+          <span className="fade-up block shrink-0" style={{ "--d": "300ms" } as React.CSSProperties}>
+            <LogoP70 className="block h-[1.3em] w-auto text-durazno md:h-[1.5em]" />
           </span>
         </h1>
-        <p className="titulo-cond fade-up mt-4 max-w-[26rem] text-[clamp(1.35rem,5.6vw,1.75rem)] leading-[1.12] text-durazno md:text-[clamp(1.3rem,1.9vw,1.9rem)]" style={{ "--d": "380ms" } as React.CSSProperties}>
+        <p className="titulo-cond fade-up mt-4 max-w-[30rem] text-[clamp(1.55rem,6.4vw,2.05rem)] leading-[1.12] text-durazno md:text-[clamp(1.5rem,2.2vw,2.25rem)]" style={{ "--d": "380ms" } as React.CSSProperties}>
           Descubrí la vida que querés vivir moviéndote.
         </p>
 

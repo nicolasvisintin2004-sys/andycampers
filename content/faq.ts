@@ -31,7 +31,7 @@ export const faq: { q: string; a: Maybe<string> }[] = [
   },
   {
     q: "¿Cómo frena?",
-    a: "Tiene frenos eléctricos que se accionan automáticamente al pisar el freno de la camioneta.",
+    a: "Tiene frenos eléctricos que se accionan automáticamente al pisar el freno de la camioneta. Al entrar pasado a una curva, alinean rápidamente al camper detrás de la camioneta.",
   },
   {
     q: "¿A qué velocidad se puede viajar?",
@@ -39,7 +39,7 @@ export const faq: { q: string; a: Maybe<string> }[] = [
   },
   {
     q: "¿Cómo se comporta con frío o calor?",
-    a: "Toda la carrocería de acero lleva 80 mm de aislamiento térmico y la pintura exterior es antirrayones.",
+    a: "Toda la carrocería de acero lleva en su interior un conjunto de 3 cuerpos, llegando a los 80 mm de aislante térmico. La pintura exterior es antirrayones.",
   },
   {
     q: "¿Qué trae cada nivel?",
@@ -47,6 +47,6 @@ export const faq: { q: string; a: Maybe<string> }[] = [
   },
   { q: "¿Cuánto tarda la fabricación y la entrega?", a: "Solemos tener stock. Si no, la fabricación lleva 45 días o más, según la lista de espera al momento de encargar." },
   { q: "¿Cuál es la forma de pago? ¿Hay financiación?", a: "Se puede pagar en efectivo o con financiación total." },
-  { q: "¿Qué garantía tiene?", a: "2 años de garantía por fallas de fabricación." },
+  { q: "¿Qué garantía tiene?", a: "2 años de garantía." },
   { q: "¿Puedo verlo en persona?", a: `Sí. ${site.visitas.texto}` },
 ];

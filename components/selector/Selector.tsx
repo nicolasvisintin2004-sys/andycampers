@@ -226,9 +226,11 @@ export function Selector() {
             type="button"
             onClick={() => setSheet(true)}
             aria-haspopup="dialog"
-            className="mx-4 mt-5 inline-flex min-h-12 items-center justify-center gap-2 border-2 border-forest bg-white/80 px-4 font-semibold text-forest transition-colors hover:bg-white active:scale-[0.98] sm:mx-6 lg:hidden"
+            className="group corte-diag mx-4 mt-4 flex min-h-12 bg-forest p-[2px] [--sk:12px] active:scale-[0.98] sm:mx-6 lg:hidden"
           >
-            Ver qué incluye {nombre(eq)} <IconChevron className="size-4 rotate-180" />
+            <span className="corte-diag inline-flex w-full items-center justify-center gap-2 bg-white/90 px-4 font-semibold text-forest transition-colors [--sk:11px] group-hover:bg-white">
+              Ver qué incluye {nombre(eq)} <IconChevron className="size-4 rotate-180" />
+            </span>
           </button>
         </div>
       </div>
@@ -258,9 +260,12 @@ export function Selector() {
                 onClick={() => setSheet(true)}
                 tabIndex={barVisible ? 0 : -1}
                 aria-haspopup="dialog"
-                className="inline-flex min-h-12 items-center justify-center gap-1.5 border-2 border-forest bg-white px-3 font-semibold text-forest transition-colors hover:bg-forest/5 active:scale-[0.98]"
+                className="group corte-diag flex min-h-12 bg-forest p-[2px] [--sk:10px] active:scale-[0.98]"
               >
-                Ver qué incluye <IconChevron className="size-4 rotate-180" />
+                {/* Borde verde con el corte en diagonal (Andrés, 20/11): el clip-path no deja ver un border común */}
+                <span className="corte-diag inline-flex w-full items-center justify-center gap-1.5 bg-white px-3 font-semibold text-forest transition-colors [--sk:9px] group-hover:bg-[#eef2f1]">
+                  Ver qué incluye <IconChevron className="size-4 rotate-180" />
+                </span>
               </button>
               <button
                 type="button"
@@ -432,9 +437,11 @@ function Colores({ active, onPick, onPrime }: { active: string; onPick: (id: str
       <span className="pestana hidden justify-self-end font-cond text-[0.95rem] font-semibold uppercase sm:inline-block" id="color-label">
         Elegí tu color
       </span>
-      <div role="radiogroup" aria-labelledby="color-label" data-group="color" className="col-span-3 flex items-center justify-between sm:col-span-1 sm:col-start-2 sm:justify-start sm:gap-2">
+      {/* Más juntos y con el nombre siempre debajo de cada color (Andrés, 20/11) */}
+      <div role="radiogroup" aria-labelledby="color-label" data-group="color" className="col-span-3 flex items-start justify-center sm:col-span-1 sm:col-start-2">
         {colores.map((c, i) => {
           const on = c.id === active;
+          const nombre = isPending(c.nombre) ? `Color ${pad(i + 1)}` : c.nombre;
           return (
             <button
               key={c.id}
@@ -446,21 +453,22 @@ function Colores({ active, onPick, onPrime }: { active: string; onPick: (id: str
               onPointerEnter={(ev) => ev.pointerType === "mouse" && onPrime(c.id)}
               onPointerDown={() => onPrime(c.id)}
               onFocus={() => onPrime(c.id)}
-              aria-label={`Color ${pad(i + 1)}${isPending(c.nombre) ? "" : `: ${c.nombre}`}`}
-              title={isPending(c.nombre) ? `Color ${pad(i + 1)}` : c.nombre}
-              className="group grid size-11 place-items-center lg:size-12"
+              aria-label={`Color ${pad(i + 1)}: ${nombre}`}
+              className="group flex w-[3.9rem] flex-col items-center sm:w-[3.6rem]"
             >
-              <span className={`relative grid size-full place-items-center rounded-full transition-transform duration-300 ease-[var(--ease-out-expo)] ${on ? "scale-100" : "scale-[0.78] group-hover:scale-[0.86]"}`}>
+              <span className={`relative grid size-11 place-items-center rounded-full transition-transform duration-300 ease-[var(--ease-out-expo)] ${on ? "scale-100" : "scale-[0.78] group-hover:scale-[0.86]"}`}>
                 <span aria-hidden className={`absolute inset-0 rounded-full ring-2 transition-colors ${on ? "ring-forest" : "ring-transparent"}`} />
                 <span aria-hidden className="size-[74%] rounded-full shadow-[inset_0_-5px_9px_rgb(0_0_0/0.28),inset_0_3px_6px_rgb(255_255_255/0.3),0_2px_6px_-2px_rgb(0_0_0/0.35)]" style={{ background: hexColor(c) }} />
+              </span>
+              <span aria-hidden className={`mt-0.5 font-cond text-[0.68rem] leading-[1.05] uppercase transition-colors ${on ? "font-semibold text-ink" : "text-ink/60 group-hover:text-ink/85"}`}>
+                {nombre}
               </span>
             </button>
           );
         })}
       </div>
-      {/* El nombre del color elegido (y, mientras falten, el cartel de los códigos) */}
-      <div className="col-span-3 mt-1 flex items-center justify-center gap-2 sm:col-span-1 sm:col-start-3 sm:mt-0 sm:justify-self-start" aria-live="polite">
-        <span className="font-cond text-[0.95rem] font-semibold whitespace-nowrap text-ink/75 uppercase">{nombreColor(active)}</span>
+      {/* Mientras falten, el cartel de los códigos */}
+      <div className="col-span-3 mt-2 flex items-center justify-center sm:col-span-1 sm:col-start-3 sm:mt-0 sm:justify-self-start">
         {coloresPendientes && <Missing label="código exacto de los 5 colores" compact short="códigos" />}
       </div>
     </div>

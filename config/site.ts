@@ -49,7 +49,7 @@ export const site = {
     plazos: "Solemos tener stock; si no, 45 días o más según la lista de espera al momento de encargar" as Maybe<string>,
     formaDePago: "Efectivo o financiación total" as Maybe<string>,
     financiacion: "Financiación total" as Maybe<string>,
-    garantia: "2 años por fallas de fabricación" as Maybe<string>,
+    garantia: "2 años" as Maybe<string>,
   },
 
   credito: { texto: "Diseño y desarrollo: Visintin Studio", url: "https://visintinstudio.com.ar" as string | null },

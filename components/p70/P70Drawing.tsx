@@ -35,10 +35,11 @@ export const hotspots: Hotspot[] = [
   {
     id: "suspension",
     n: "02",
-    x: 830,
-    y: 470,
+    // Sale de abajo, de la suspensión que asoma detrás de la rueda, no del guardabarros (Andrés, 20/11).
+    x: 783,
+    y: 527,
     dx: -70,
-    dy: 90,
+    dy: 80,
     titulo: "Suspensión Hard & Soft",
     dato: "Probado a 165 km/h",
     texto:
@@ -52,8 +53,9 @@ export const hotspots: Hotspot[] = [
     dx: 90,
     dy: 60,
     titulo: "Frenos eléctricos",
-    dato: "Automático al pisar el freno",
-    texto: "Se accionan automáticamente al pisar el freno de la camioneta.",
+    dato: "Automático",
+    texto:
+      "Se accionan automáticamente al pisar el freno de la camioneta. Al entrar pasado a una curva, alinean rápidamente al camper detrás de la camioneta.",
   },
   {
     id: "aislamiento",
@@ -64,24 +66,30 @@ export const hotspots: Hotspot[] = [
     dy: -110,
     titulo: "Aislamiento térmico",
     dato: "80 mm",
-    texto: "Toda la carrocería de acero lleva 80 mm de aislamiento térmico y la pintura exterior es antirrayones.",
+    texto: "Toda la carrocería de acero lleva en su interior un conjunto de 3 cuerpos, llegando a los 80 mm de aislante térmico.",
   },
   {
-    id: "portones",
+    // Antes "Dos portones traseros" (Andrés, 20/11). El punto va en la puerta.
+    id: "aberturas",
     n: "05",
-    x: 1048,
-    y: 300,
-    dx: 50,
-    dy: -90,
-    titulo: "Dos portones traseros",
-    dato: "Cocina + técnico",
-    texto: "Uno abre la cocina, con mesada y alacenas iluminadas; el otro, el espacio técnico para herramientas y equipo.",
+    x: 640,
+    y: 400,
+    dx: -80,
+    dy: -70,
+    titulo: "Aberturas estanco",
+    dato: "Puertas y portones probados",
+    texto:
+      "Las puertas y portones son otro de nuestros fuertes: un diseño que expulsa el agua de lluvia en ruta, con burletes dispuestos estratégicamente para no permitir el ingreso de polvillo al habitáculo. Calidad probada.",
   },
 ];
 
 /** La imagen y las cotas: largo de punta del acople a la cola, alto del piso a la parrilla. */
 const IMG = { src: "/media/p70/croquis-p70-3d.webp", w: 1222, h: 740 };
-const LARGO = { x1: 48, x2: 1072, y: 684 };
+/**
+ * El largo va paralelo al chasis (Andrés, 20/11): en esta vista el chasis sube hacia
+ * atrás, así que la cota también. Se dibuja derecha y se gira con el ángulo del chasis.
+ */
+const LARGO = { x: 50, y: 722, largo: 990, grados: -3.3 };
 const ALTO = { x: 1110, y1: 52, y2: 652 };
 
 export function P70Drawing({
@@ -110,13 +118,15 @@ export function P70Drawing({
       {/* Cotas: largo 4 m y alto 2 m (Andrés, 14/11) */}
       {/* En el celu el croquis se ve chico: las medidas van más grandes (en px del viewBox). */}
       <g fontFamily="var(--font-jetbrains), monospace" fontWeight="600" fill={line} className="text-[40px] sm:text-[26px]">
-        <line x1={LARGO.x1} y1={LARGO.y} x2={LARGO.x2} y2={LARGO.y} stroke={detalle} strokeWidth="1.5" />
-        <line x1={LARGO.x1} y1={LARGO.y - 12} x2={LARGO.x1} y2={LARGO.y + 12} stroke={detalle} strokeWidth="1.5" />
-        <line x1={LARGO.x2} y1={LARGO.y - 12} x2={LARGO.x2} y2={LARGO.y + 12} stroke={detalle} strokeWidth="1.5" />
-        <path d={`M${LARGO.x1} ${LARGO.y} l16 -6 v12 Z M${LARGO.x2} ${LARGO.y} l-16 -6 v12 Z`} fill={line} stroke="none" />
-        <text x={(LARGO.x1 + LARGO.x2) / 2} y={LARGO.y + 42} textAnchor="middle">
-          4 m
-        </text>
+        <g transform={`translate(${LARGO.x} ${LARGO.y}) rotate(${LARGO.grados})`}>
+          <line x1={0} y1={0} x2={LARGO.largo} y2={0} stroke={detalle} strokeWidth="1.5" />
+          <line x1={0} y1={-12} x2={0} y2={12} stroke={detalle} strokeWidth="1.5" />
+          <line x1={LARGO.largo} y1={-12} x2={LARGO.largo} y2={12} stroke={detalle} strokeWidth="1.5" />
+          <path d={`M0 0 l16 -6 v12 Z M${LARGO.largo} 0 l-16 -6 v12 Z`} fill={line} stroke="none" />
+          <text x={LARGO.largo / 2} y={-14} textAnchor="middle">
+            4 m
+          </text>
+        </g>
 
         <line x1={ALTO.x} y1={ALTO.y1} x2={ALTO.x} y2={ALTO.y2} stroke={detalle} strokeWidth="1.5" />
         <line x1={ALTO.x - 12} y1={ALTO.y1} x2={ALTO.x + 12} y2={ALTO.y1} stroke={detalle} strokeWidth="1.5" />

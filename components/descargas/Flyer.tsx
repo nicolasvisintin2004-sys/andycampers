@@ -1,10 +1,22 @@
 import { site } from "@/config/site";
 import { IconFacebook, IconInstagram } from "@/components/ui/Icons";
+import { LogoP70 } from "@/components/ui/LogoP70";
 
 /**
  * Piezas de los flyers de andycampers, para las descargas (catálogo y PDF):
  * el encabezado con el bloque verde y el logo, y la barra grafito del pie.
  */
+/** Catálogo (Andrés, 20/11): arriba de todo "Andycampers P70", con el P70 del folleto, sin el logo suelto al costado. */
+export function FlyerHeaderMarca() {
+  return (
+    <header className="overflow-hidden pl-8">
+      <p className="slab font-display-x inline-flex items-center gap-[0.3em] text-[2.15rem] uppercase">
+        Andycampers <LogoP70 className="block h-[0.8em] w-auto" />
+      </p>
+    </header>
+  );
+}
+
 export function FlyerHeader({ titulo, chico = false }: { titulo: string; chico?: boolean }) {
   return (
     <header className="flex items-center justify-between gap-6 overflow-hidden pl-8">
