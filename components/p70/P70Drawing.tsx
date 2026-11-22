@@ -121,8 +121,8 @@ export function P70Drawing({
       <image href={IMG.src} width={IMG.w} height={IMG.h} />
 
       {/* Cotas: largo 4 m y alto 2 m (Andrés, 14/11), ancho 2,10 m (22/11) */}
-      {/* En el celu el croquis se ve chico: las medidas van más grandes (en px del viewBox). */}
-      <g fontFamily="var(--font-jetbrains), monospace" fontWeight="600" fill={line} className="text-[40px] sm:text-[26px]">
+      {/* En el celu el croquis se ve chico (85% del ancho): las medidas van más grandes (en px del viewBox). */}
+      <g fontFamily="var(--font-jetbrains), monospace" fontWeight="600" fill={line} className="text-[46px] sm:text-[26px]">
         <g transform={`translate(${LARGO.x} ${LARGO.y}) rotate(${LARGO.grados})`}>
           <line x1={0} y1={0} x2={LARGO.largo} y2={0} stroke={detalle} strokeWidth="1.5" />
           <line x1={0} y1={-12} x2={0} y2={12} stroke={detalle} strokeWidth="1.5" />

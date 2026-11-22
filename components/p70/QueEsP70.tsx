@@ -27,9 +27,9 @@ export function QueEsP70() {
         </h2>
         <div className="mt-6 grid gap-8 lg:mt-8 lg:grid-cols-[1.3fr_1fr] lg:gap-12">
           <div className="min-w-0">
-            {/* Sin verde alrededor y, en tablet y compu, más chico (Andrés, 22/11). En el celu ocupa casi todo el ancho (13/11). */}
+            {/* Sin verde alrededor y más chico: en tablet y compu (Andrés, 22/11) y también en el celu (pedido posterior del mismo día). */}
             <div>
-              <P70Drawing showHotspots active={h.id} className="mx-auto block h-auto w-[calc(100%-8px)] sm:w-4/5" />
+              <P70Drawing showHotspots active={h.id} className="mx-auto block h-auto w-[85%] sm:w-4/5" />
               {/* Cortados en diagonal (Andrés, 20/11) y cada uno del ancho de su texto, unos 10 px más altos que su
                   contenido (22/11): el alto mínimo cambia con el ancho porque el texto entra en más o menos renglones. */}
               <ul className="no-scrollbar -mx-4 mt-4 flex snap-x overflow-x-auto scroll-px-4 px-4 sm:mx-0 sm:overflow-visible sm:px-0" aria-label="Piezas clave">
