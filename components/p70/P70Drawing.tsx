@@ -1,8 +1,9 @@
 /**
  * Croquis del P70: la captura del modelo 3D que pasó Andrés (16/11), con su fondo,
- * las cotas (largo y alto) y los puntos de las piezas clave. Sin textos al lado
+ * las cotas (largo, ancho y alto) y los puntos de las piezas clave. Sin textos al lado
  * de las líneas: Andrés (14/11) dice que no se llegan a leer; la info está en los
- * botones de abajo. Coordenadas = píxeles de la imagen (1222 × 740).
+ * botones de abajo. Coordenadas = píxeles de la imagen (1222 × 740); el lienzo
+ * sigue 100 px más abajo, con el mismo fondo, para que entre la cota del largo.
  */
 
 export interface Hotspot {
@@ -83,13 +84,16 @@ export const hotspots: Hotspot[] = [
   },
 ];
 
-/** La imagen y las cotas: largo de punta del acople a la cola, alto del piso a la parrilla. */
-const IMG = { src: "/media/p70/croquis-p70-3d.webp", w: 1222, h: 740 };
+/** La imagen y las cotas: largo de punta del acople a la cola, ancho de rueda a rueda, alto del piso a la parrilla. */
+const IMG = { src: "/media/p70/croquis-p70-3d.webp", w: 1222, h: 740, fondo: "#2e333f" };
+const LIENZO_H = 840;
 /**
- * El largo va paralelo al chasis (Andrés, 20/11): en esta vista el chasis sube hacia
- * atrás, así que la cota también. Se dibuja derecha y se gira con el ángulo del chasis.
+ * Las cotas del piso siguen la perspectiva (Andrés, 22/11), se dibujan derechas y se giran:
+ * el largo con el riel del chasis (7,5°; no con la lanza, que va al centro y es más chata)
+ * y el ancho con los travesaños y el eje (18,1°).
  */
-const LARGO = { x: 50, y: 722, largo: 990, grados: -3.3 };
+const LARGO = { x: 50, y: 800, largo: 990, grados: -7.5 };
+const ANCHO = { x: 429, y: 565, largo: 344, grados: 18.1 };
 const ALTO = { x: 1110, y1: 52, y2: 652 };
 
 export function P70Drawing({
@@ -110,12 +114,13 @@ export function P70Drawing({
 }) {
   const detalle = "rgb(236 231 223 / .55)";
   return (
-    <svg viewBox={`0 0 ${IMG.w} ${IMG.h}`} className={className} role="img" aria-label={title} fill="none" strokeLinejoin="round">
+    <svg viewBox={`0 0 ${IMG.w} ${LIENZO_H}`} className={className} role="img" aria-label={title} fill="none" strokeLinejoin="round">
       <title>{title}</title>
 
+      <rect width={IMG.w} height={LIENZO_H} fill={IMG.fondo} />
       <image href={IMG.src} width={IMG.w} height={IMG.h} />
 
-      {/* Cotas: largo 4 m y alto 2 m (Andrés, 14/11) */}
+      {/* Cotas: largo 4 m y alto 2 m (Andrés, 14/11), ancho 2,10 m (22/11) */}
       {/* En el celu el croquis se ve chico: las medidas van más grandes (en px del viewBox). */}
       <g fontFamily="var(--font-jetbrains), monospace" fontWeight="600" fill={line} className="text-[40px] sm:text-[26px]">
         <g transform={`translate(${LARGO.x} ${LARGO.y}) rotate(${LARGO.grados})`}>
@@ -123,8 +128,19 @@ export function P70Drawing({
           <line x1={0} y1={-12} x2={0} y2={12} stroke={detalle} strokeWidth="1.5" />
           <line x1={LARGO.largo} y1={-12} x2={LARGO.largo} y2={12} stroke={detalle} strokeWidth="1.5" />
           <path d={`M0 0 l16 -6 v12 Z M${LARGO.largo} 0 l-16 -6 v12 Z`} fill={line} stroke="none" />
-          <text x={LARGO.largo / 2} y={-14} textAnchor="middle">
+          {/* Corrido hacia adelante para no chocar con el 2,10 m */}
+          <text x={380} y={-14} textAnchor="middle">
             4 m
+          </text>
+        </g>
+        <g transform={`translate(${ANCHO.x} ${ANCHO.y}) rotate(${ANCHO.grados})`}>
+          <line x1={0} y1={0} x2={ANCHO.largo} y2={0} stroke={detalle} strokeWidth="1.5" />
+          <line x1={0} y1={-12} x2={0} y2={12} stroke={detalle} strokeWidth="1.5" />
+          <line x1={ANCHO.largo} y1={-12} x2={ANCHO.largo} y2={12} stroke={detalle} strokeWidth="1.5" />
+          <path d={`M0 0 l16 -6 v12 Z M${ANCHO.largo} 0 l-16 -6 v12 Z`} fill={line} stroke="none" />
+          {/* dy en em: baja lo mismo que crece la letra en el celu */}
+          <text x={ANCHO.largo / 2} y={8} dy="0.88em" textAnchor="middle">
+            2,10 m
           </text>
         </g>
 

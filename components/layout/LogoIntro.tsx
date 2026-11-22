@@ -7,7 +7,7 @@ import { Wordmark } from "@/components/ui/Wordmark";
 /** Una sola vez por carga de página (al volver a la home navegando, no se repite). */
 let jugado = false;
 
-/** Lo pone en <html> el script del <head> (app/layout.tsx) antes de pintar. */
+/** Lo pone en <html> el script del principio del <body> (app/layout.tsx) antes de pintar. */
 export const INTRO_SCRIPT = `try{if(location.pathname==="/"&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("con-intro")}catch(e){}`;
 
 /**

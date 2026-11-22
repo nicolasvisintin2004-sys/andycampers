@@ -73,7 +73,7 @@ export function Hero() {
 
       <div data-hero-copy className="relative z-10 flex h-full flex-col justify-end px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:px-6 md:w-[44%] md:justify-center md:pr-4 md:pb-10 lg:px-10 xl:pl-16">
         {/* "Viajá distinto." un poco más chico y, a la derecha, el P70 con la tipografía del folleto (Andrés, 20/11) */}
-        <h1 id="hero-title" className="font-display-x flex items-center gap-[0.25em] text-[clamp(1.9rem,8.6vw,3.4rem)] uppercase md:text-[clamp(2.4rem,3.7vw,4.6rem)]">
+        <h1 id="hero-title" className="font-display-x flex items-center gap-[0.25em] text-[min(8.4vw,3.4rem)] uppercase md:text-[clamp(1.75rem,3.7vw,4.6rem)]">
           <span className="block">
             <span className="hero-line -mt-[0.2em] pt-[0.2em]" style={{ "--i": 0 } as React.CSSProperties}>
               <span>Viajá</span>
@@ -83,7 +83,7 @@ export function Hero() {
             </span>
           </span>
           <span className="fade-up block shrink-0" style={{ "--d": "300ms" } as React.CSSProperties}>
-            <LogoP70 className="block h-[1.3em] w-auto text-durazno md:h-[1.5em]" />
+            <LogoP70 a10grados className="block h-[1.3em] w-auto text-durazno md:h-[1.5em]" />
           </span>
         </h1>
         <p className="titulo-cond fade-up mt-4 max-w-[30rem] text-[clamp(1.55rem,6.4vw,2.05rem)] leading-[1.12] text-durazno md:text-[clamp(1.5rem,2.2vw,2.25rem)]" style={{ "--d": "380ms" } as React.CSSProperties}>
@@ -91,11 +91,16 @@ export function Hero() {
         </p>
 
         <div className="fade-up mt-7 flex flex-wrap items-center gap-x-6 gap-y-3" style={{ "--d": "560ms" } as React.CSSProperties}>
+          {/* Misma medida, letra y diagonal que Rumbo / Terra / Cima, con las puntas redondeadas (Andrés, 22/11).
+              El ancho es la cuenta de la grilla de Niveles (Selector.tsx): si cambia allá, cambiarla acá. */}
           <a
             href="#armalo"
-            className="group inline-flex min-h-14 items-center gap-3 bg-durazno px-7 text-lg font-semibold text-forest-deep transition-colors hover:bg-white"
+            className="group ml-[5px] inline-flex h-12 w-[calc((min(100vw,36rem)-3.5rem)/3)] -skew-x-12 items-center justify-center rounded-[10px] bg-durazno font-semibold text-forest-deep transition-colors hover:bg-white sm:w-[calc((min(100vw,36rem)-4rem)/3)] lg:h-[3.25rem] lg:w-[calc((36rem-2.5rem)/3)]"
           >
-            Armá tu P70 <IconArrowDown className="size-5 transition-transform duration-300 group-hover:translate-y-0.5" />
+            <span className="inline-flex skew-x-12 items-center gap-[3px] font-cond text-[length:min(1.02rem,4vw)] whitespace-nowrap uppercase sm:gap-2 lg:text-[1.15rem]">
+              Armá tu P70
+              <IconArrowDown className="size-[13px] transition-transform duration-300 group-hover:translate-y-0.5 max-[22rem]:hidden sm:size-[18px]" />
+            </span>
           </a>
           <p className="tabular font-cond text-[1.05rem] text-white/80">
             Desde <span className="font-semibold text-white">U$D {usd.format(precioDesde)}.-</span>

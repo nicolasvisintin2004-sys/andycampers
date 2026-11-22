@@ -9,7 +9,8 @@ import { IconArrow, IconClose, IconPlay } from "@/components/ui/Icons";
 /** Los tres videos del hero, en orden (Andrés, 13/11: el tercero es "Todo a bordo", el de la tabla). */
 const ELEGIDOS: ClipKey[] = ["taller", "virYLeo", "todoABordo"];
 
-const forma = "aspect-[4/5] w-[clamp(84px,25vw,108px)] [clip-path:polygon(14%_0,100%_0,86%_100%,0_100%)] md:w-[clamp(96px,8vw,128px)]";
+// Un 15% más grandes (Andrés, 22/11).
+const forma = "aspect-[4/5] w-[clamp(96px,28.5vw,124px)] [clip-path:polygon(14%_0,100%_0,86%_100%,0_100%)] md:w-[clamp(110px,9.2vw,147px)]";
 
 /**
  * Tres videos debajo de "Armá tu P70": miniaturas livianas (~10 KB, prioridad

@@ -76,11 +76,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es-AR" className={`${archivo.variable} ${barlow.variable} ${barlowSc.variable}`} suppressHydrationWarning>
-      <head>
-        {/* Decide la entrada del logo antes de pintar (ver LogoIntro) */}
-        <script dangerouslySetInnerHTML={{ __html: INTRO_SCRIPT }} />
-      </head>
       <body className="min-h-dvh">
+        {/* Decide la entrada del logo antes de pintar (ver LogoIntro): por eso va primero.
+            No ponerlo en un <head> propio: Netlify agrega ahí un salto de línea y un comentario,
+            React no encuentra el script al hidratar y redibuja la página entera (error #418). */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_SCRIPT }} />
         <ContactBar />
         {children}
         <LogoIntro />

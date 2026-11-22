@@ -261,7 +261,7 @@ body {
 }
 
 /* ───────────── Entrada del logo (components/layout/LogoIntro.tsx) ─────────────
-   El script del <head> pone html.con-intro (solo en la home y sin movimiento
+   El script del principio del <body> pone html.con-intro (solo en la home y sin movimiento
    reducido). El logo grande sale en el HTML; el JS lo lleva achicándose a la
    barra de arriba. Si el JS no llega, a los 2,6 s se funde solo. */
 .logo-intro {

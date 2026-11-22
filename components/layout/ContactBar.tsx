@@ -26,7 +26,8 @@ export function ContactBar() {
     <header data-barra className="zona-oscura fixed inset-x-0 top-0 z-[55] h-[var(--bar-h)] bg-grafito text-white">
       <div className="flex h-full items-center justify-between gap-3 px-4 sm:px-6 lg:px-10">
         <Link href="/" aria-label={`${site.name}, inicio`} className="inline-flex min-h-11 items-center" data-logo-target>
-          <Wordmark className="text-[1.3rem] lg:text-[1.5rem]" />
+          {/* Abajo de 376 px se achica con la pantalla: si no, empuja al WhatsApp afuera */}
+          <Wordmark className="text-[length:min(1.3rem,calc(10vw_-_17px))] lg:text-[1.5rem]" />
         </Link>
 
         <nav aria-label="Contacto" className="-mr-2 flex items-center sm:mr-0">

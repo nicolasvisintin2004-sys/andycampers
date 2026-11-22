@@ -8,7 +8,7 @@ import { LogoP70 } from "@/components/ui/LogoP70";
 
 /**
  * "Qué es el P70": las características en una sola sección, con la gráfica de
- * los flyers: el bloque verde del título, el modelo 3D sobre verde bosque y la ficha
+ * los flyers: el bloque verde del título, el modelo 3D directo sobre el durazno (con el texto de la pieza en verde) y la ficha
  * como la tabla de opcionales (filas alternadas). "Equipamiento base" ya no va acá
  * (Andrés, 14/11: ahora están los 3 niveles); sigue en los catálogos descargables.
  * Todo el texto es HTML: Google lo lee y el comprador lo puede comparar.
@@ -27,32 +27,36 @@ export function QueEsP70() {
         </h2>
         <div className="mt-6 grid gap-8 lg:mt-8 lg:grid-cols-[1.3fr_1fr] lg:gap-12">
           <div className="min-w-0">
-            {/* Plano sobre el verde de los flyers, con las piezas clave. En el celu ocupa casi todo el ancho (Andrés, 13/11). */}
-            <div className="zona-oscura blueprint-grid -mx-3 bg-forest p-4 text-white sm:mx-0 sm:p-6">
-              <P70Drawing showHotspots active={h.id} className="h-auto w-full" />
-              {/* Más chicos, cortados en diagonal y con el corte en diagonal entre uno y otro;
-                  en el celu, más rectangulares (Andrés, 20/11). */}
+            {/* Sin verde alrededor y, en tablet y compu, más chico (Andrés, 22/11). En el celu ocupa casi todo el ancho (13/11). */}
+            <div>
+              <P70Drawing showHotspots active={h.id} className="mx-auto block h-auto w-[calc(100%-8px)] sm:w-4/5" />
+              {/* Cortados en diagonal (Andrés, 20/11) y cada uno del ancho de su texto, unos 10 px más altos que su
+                  contenido (22/11): el alto mínimo cambia con el ancho porque el texto entra en más o menos renglones. */}
               <ul className="no-scrollbar -mx-4 mt-4 flex snap-x overflow-x-auto scroll-px-4 px-4 sm:mx-0 sm:overflow-visible sm:px-0" aria-label="Piezas clave">
                 {hotspots.map((it, i) => (
-                  <li key={it.id} className="-ml-1.5 shrink-0 snap-start first:ml-0 sm:min-w-0 sm:flex-1">
+                  <li key={it.id} className="-ml-1.5 shrink-0 snap-start first:ml-0 sm:shrink sm:basis-auto">
                     <button
                       type="button"
                       onClick={() => setActive(i)}
                       onPointerEnter={(e) => e.pointerType === "mouse" && setActive(i)}
                       aria-pressed={i === active}
-                      className={`flex h-full min-h-11 w-[12.5rem] flex-col items-start justify-center gap-0.5 py-1.5 pr-5 text-left transition-colors sm:w-full sm:py-2 ${
+                      className={`group flex h-full min-h-[3.625rem] flex-col items-start justify-center gap-0.5 py-1.5 pr-5 text-left transition-colors sm:min-h-[7.125rem] sm:py-2 min-[45.5rem]:min-h-[6.125rem] min-[55.5rem]:min-h-[5.125rem] lg:min-h-[7.125rem] min-[83.125rem]:min-h-[6.125rem] ${
                         i === 0 ? "corte-ini pl-3" : i === hotspots.length - 1 ? "corte-fin pl-5" : "corte-diag pl-5"
-                      } ${i === active ? "bg-durazno text-forest" : "bg-white/[0.12] text-white/85 hover:bg-white/[0.22] hover:text-white"}`}
+                      } ${i === active ? "bg-forest text-white" : "bg-white/85 text-ink hover:bg-white"}`}
                     >
-                      <span className="font-cond text-[0.9rem] leading-tight font-semibold uppercase">{it.titulo}</span>
-                      <span className={`tabular font-cond text-[0.84rem] leading-tight ${i === active ? "text-forest/80" : "text-durazno/90"}`}>{it.dato}</span>
+                      {/* El clip-path tapa el contorno de foco: con teclado se subraya el título */}
+                      <span className="font-cond text-[0.9rem] leading-tight font-semibold text-balance uppercase group-focus-visible:underline group-focus-visible:underline-offset-4">{it.titulo}</span>
+                      <span className={`tabular font-cond text-[0.84rem] leading-tight ${i === active ? "text-durazno" : "text-forest"}`}>{it.dato}</span>
                     </button>
                   </li>
                 ))}
               </ul>
-              <p key={h.id} className="fade-up mt-4 min-h-[4.5rem] max-w-xl text-white/90" aria-live="polite">
-                {h.texto}
-              </p>
+              {/* El texto de la pieza elegida sí va sobre el cuadro verde (22/11): el marco se sacó solo del croquis */}
+              <div className="zona-oscura blueprint-grid mt-3 bg-forest p-4 text-white sm:p-5">
+                <p key={h.id} className="fade-up min-h-[4.5rem] max-w-xl text-white/90" aria-live="polite">
+                  {h.texto}
+                </p>
+              </div>
             </div>
           </div>
 
