@@ -3,7 +3,8 @@ import { precioDesde } from "@/config/p70";
 import { IconArrowDown } from "@/components/ui/Icons";
 import { HeroMontage, type Slide } from "./HeroMontage";
 import { HeroScrollFx } from "./HeroScrollFx";
-import { HeroClips } from "./HeroClips";
+import { HeroFotos } from "./HeroFotos";
+import { HeroAjuste } from "./HeroAjuste";
 import { LogoP70 } from "@/components/ui/LogoP70";
 
 /**
@@ -71,33 +72,29 @@ export function Hero() {
         <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[linear-gradient(to_bottom,rgb(22_24_27/0.45),transparent)]" />
       </div>
 
-      <div data-hero-copy className="relative z-10 flex h-full flex-col justify-end px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:px-6 md:w-[44%] md:justify-center md:pr-4 md:pb-10 lg:px-10 xl:pl-16">
-        {/* "Viajá distinto." un poco más chico y, a la derecha, el P70 con la tipografía del folleto (Andrés, 20/11) */}
-        <h1 id="hero-title" className="font-display-x flex items-center gap-[0.25em] text-[min(8.4vw,3.4rem)] uppercase md:text-[clamp(1.75rem,3.7vw,4.6rem)]">
-          <span className="block">
-            <span className="hero-line -mt-[0.2em] pt-[0.2em]" style={{ "--i": 0 } as React.CSSProperties}>
-              <span>Viajá</span>
-            </span>
-            <span className="hero-line" style={{ "--i": 1 } as React.CSSProperties}>
-              <span>distinto.</span>
-            </span>
-          </span>
-          <span className="fade-up block shrink-0" style={{ "--d": "300ms" } as React.CSSProperties}>
-            <LogoP70 a10grados className="block h-[1.3em] w-auto text-durazno md:h-[1.5em]" />
+      <div data-hero-copy className="@container relative z-10 flex h-full flex-col justify-end px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:px-6 md:w-[44%] md:justify-center md:pr-4 md:pb-10 lg:px-10 xl:pl-16">
+        {/* Sin "Viajá distinto." (Andrés, 25/11): queda el P70 a la derecha y el texto de abajo, del ancho justo
+            para que "vivir" termine donde termina el 0. 12,15 = ancho del primer renglón en em (Barlow Semi
+            Condensed Light); 100cqw = ancho de esta columna. */}
+        <h1 id="hero-title" className="font-display-x flex justify-end text-[min(8.4vw,3.4rem)] uppercase md:text-[clamp(1.75rem,3.7vw,4.6rem)]">
+          <span className="fade-up block" style={{ "--d": "200ms" } as React.CSSProperties}>
+            <LogoP70 a10grados title="Camper P70" className="block h-[1.3em] w-auto text-durazno md:h-[1.5em]" />
           </span>
         </h1>
-        <p className="titulo-cond fade-up mt-4 max-w-[30rem] text-[clamp(1.55rem,6.4vw,2.05rem)] leading-[1.12] text-durazno md:text-[clamp(1.5rem,2.2vw,2.25rem)]" style={{ "--d": "380ms" } as React.CSSProperties}>
-          Descubrí la vida que querés vivir moviéndote.
+        <p className="titulo-cond fade-up mt-3 text-[calc(100cqw/12.15)] leading-[1.1] text-durazno" style={{ "--d": "380ms" } as React.CSSProperties}>
+          <span data-hero-renglon className="whitespace-nowrap">Descubrí la vida que querés vivir</span>
+          <br />
+          moviéndote.
         </p>
 
         <div className="fade-up mt-7 flex flex-wrap items-center gap-x-6 gap-y-3" style={{ "--d": "560ms" } as React.CSSProperties}>
-          {/* Misma medida, letra y diagonal que Rumbo / Terra / Cima, con las puntas redondeadas (Andrés, 22/11).
-              El ancho es la cuenta de la grilla de Niveles (Selector.tsx): si cambia allá, cambiarla acá. */}
+          {/* La diagonal y la letra de Rumbo / Terra / Cima con las puntas redondeadas (22/11), un 15% más grande y
+              con contorno negro para que se lea como botón (25/11). El ancho sale de la grilla de Niveles (Selector.tsx). */}
           <a
             href="#armalo"
-            className="group ml-[5px] inline-flex h-12 w-[calc((min(100vw,36rem)-3.5rem)/3)] -skew-x-12 items-center justify-center rounded-[10px] bg-durazno font-semibold text-forest-deep transition-colors hover:bg-white sm:w-[calc((min(100vw,36rem)-4rem)/3)] lg:h-[3.25rem] lg:w-[calc((36rem-2.5rem)/3)]"
+            className="group ml-[6px] inline-flex h-[3.45rem] w-[calc((min(100vw,36rem)-3.5rem)/3*1.15)] -skew-x-12 items-center justify-center rounded-[10px] border-2 border-ink bg-durazno font-semibold text-forest-deep transition-colors hover:bg-white sm:w-[calc((min(100vw,36rem)-4rem)/3*1.15)] lg:h-[3.75rem] lg:w-[calc((36rem-2.5rem)/3*1.15)]"
           >
-            <span className="inline-flex skew-x-12 items-center gap-[3px] font-cond text-[length:min(1.02rem,4vw)] whitespace-nowrap uppercase sm:gap-2 lg:text-[1.15rem]">
+            <span className="inline-flex skew-x-12 items-center gap-[3px] font-cond text-[length:min(1.17rem,4.6vw)] whitespace-nowrap uppercase sm:gap-2 lg:text-[1.3rem]">
               Armá tu P70
               <IconArrowDown className="size-[13px] transition-transform duration-300 group-hover:translate-y-0.5 max-[22rem]:hidden sm:size-[18px]" />
             </span>
@@ -107,10 +104,11 @@ export function Hero() {
           </p>
         </div>
 
-        <HeroClips />
+        <HeroFotos />
       </div>
 
       <HeroScrollFx />
+      <HeroAjuste />
     </section>
   );
 }

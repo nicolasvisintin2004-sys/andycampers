@@ -19,7 +19,7 @@ export function QueEsP70() {
   const h = hotspots[active];
 
   return (
-    <section id="p70" aria-labelledby="p70-title" className="max-lg:cv-auto relative overflow-hidden bg-durazno pt-8 pb-10 lg:pt-12 lg:pb-14">
+    <section id="p70" aria-labelledby="p70-title" className="max-lg:cv-auto relative overflow-hidden bg-durazno pt-8 pb-7 lg:pt-12 lg:pb-10">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
         {/* Solo "P70", con la tipografía del folleto (Andrés, 20/11) */}
         <h2 id="p70-title" className="slab font-display-x text-[clamp(2rem,7vw,3.4rem)] uppercase">
@@ -27,12 +27,14 @@ export function QueEsP70() {
         </h2>
         <div className="mt-6 grid gap-8 lg:mt-8 lg:grid-cols-[1.3fr_1fr] lg:gap-12">
           <div className="min-w-0">
-            {/* Sin verde alrededor y más chico: en tablet y compu (Andrés, 22/11) y también en el celu (pedido posterior del mismo día). */}
+            {/* Sin verde alrededor y con el camper más chico (22/11); el gris de fondo, del ancho del cuadro verde (25/11). */}
             <div>
-              <P70Drawing showHotspots active={h.id} className="mx-auto block h-auto w-[85%] sm:w-4/5" />
+              <div className="bg-[#2e333f]">
+                <P70Drawing showHotspots active={h.id} className="mx-auto block h-auto w-[85%] sm:w-4/5" />
+              </div>
               {/* Cortados en diagonal (Andrés, 20/11) y cada uno del ancho de su texto, unos 10 px más altos que su
                   contenido (22/11): el alto mínimo cambia con el ancho porque el texto entra en más o menos renglones. */}
-              <ul className="no-scrollbar -mx-4 mt-4 flex snap-x overflow-x-auto scroll-px-4 px-4 sm:mx-0 sm:overflow-visible sm:px-0" aria-label="Piezas clave">
+              <ul className="no-scrollbar -mx-4 mt-3 flex snap-x overflow-x-auto scroll-px-4 px-4 sm:mx-0 sm:overflow-visible sm:px-0" aria-label="Piezas clave" data-piezas>
                 {hotspots.map((it, i) => (
                   <li key={it.id} className="-ml-1.5 shrink-0 snap-start first:ml-0 sm:shrink sm:basis-auto">
                     <button

@@ -93,7 +93,8 @@ const LIENZO_H = 840;
  * y el ancho con los travesaños y el eje (18,1°).
  */
 const LARGO = { x: 50, y: 800, largo: 990, grados: -7.5 };
-const ANCHO = { x: 429, y: 565, largo: 344, grados: 18.1 };
+// Corrido 6 cm hacia atrás, más cerca de la rueda (Andrés, 25/11), por el mismo eje del largo
+const ANCHO = { x: 489, y: 557, largo: 344, grados: 18.1 };
 const ALTO = { x: 1110, y1: 52, y2: 652 };
 
 export function P70Drawing({

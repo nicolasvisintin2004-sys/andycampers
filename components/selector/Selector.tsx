@@ -226,9 +226,9 @@ export function Selector() {
             type="button"
             onClick={() => setSheet(true)}
             aria-haspopup="dialog"
-            className="group corte-diag mx-4 mt-4 flex min-h-12 bg-forest p-[2px] [--sk:12px] active:scale-[0.98] sm:mx-6 lg:hidden"
+            className="group corte-ini mx-4 mt-4 flex min-h-12 bg-forest p-[2px] [--sk:12px] active:scale-[0.98] sm:mx-6 lg:hidden"
           >
-            <span className="corte-diag inline-flex w-full items-center justify-center gap-2 bg-white/90 px-4 font-semibold text-forest transition-colors [--sk:11px] group-hover:bg-white">
+            <span className="corte-ini inline-flex w-full items-center justify-center gap-2 bg-white/90 px-4 font-semibold text-forest transition-colors [--sk:11px] group-hover:bg-white">
               Ver qué incluye {nombre(eq)} <IconChevron className="size-4 rotate-180" />
             </span>
           </button>
@@ -260,10 +260,11 @@ export function Selector() {
                 onClick={() => setSheet(true)}
                 tabIndex={barVisible ? 0 : -1}
                 aria-haspopup="dialog"
-                className="group corte-diag flex min-h-12 bg-forest p-[2px] [--sk:10px] active:scale-[0.98]"
+                className="group corte-ini flex min-h-12 bg-forest p-[2px] [--sk:10px] active:scale-[0.98]"
               >
-                {/* Borde verde con el corte en diagonal (Andrés, 20/11): el clip-path no deja ver un border común */}
-                <span className="corte-diag inline-flex w-full items-center justify-center gap-1.5 bg-white px-3 font-semibold text-forest transition-colors [--sk:9px] group-hover:bg-[#eef2f1]">
+                {/* Borde verde con el corte en diagonal (20/11): punta izquierda recta y la diagonal solo a la derecha (25/11).
+                    El clip-path no deja ver un border común. */}
+                <span className="corte-ini inline-flex w-full items-center justify-center gap-1.5 bg-white px-3 font-semibold text-forest transition-colors [--sk:9px] group-hover:bg-[#eef2f1]">
                   Ver qué incluye <IconChevron className="size-4 rotate-180" />
                 </span>
               </button>
@@ -271,8 +272,9 @@ export function Selector() {
                 type="button"
                 onClick={quieroAsi}
                 tabIndex={barVisible ? 0 : -1}
-                className="inline-flex min-h-12 items-center justify-center bg-forest px-3 font-semibold text-white transition-colors hover:bg-forest-deep active:scale-[0.98]"
+                className="corte-fin inline-flex min-h-12 items-center justify-center bg-forest px-3 font-semibold text-white transition-colors [--sk:10px] hover:bg-forest-deep active:scale-[0.98]"
               >
+                {/* Con la diagonal a la izquierda, paralela a la de "Ver qué incluye" (25/11) */}
                 Lo quiero así
               </button>
             </div>
