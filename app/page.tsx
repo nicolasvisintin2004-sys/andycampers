@@ -5,6 +5,7 @@ import { InAction } from "@/components/accion/InAction";
 import { Cotizar } from "@/components/cotizar/Cotizar";
 import { Footer } from "@/components/layout/Footer";
 import { JsonLd } from "@/components/ui/JsonLd";
+import { Diagonales } from "@/components/ui/Diagonales";
 import { productLd, videosLd } from "@/lib/jsonld";
 
 /**
@@ -23,6 +24,7 @@ export default function Home() {
       </main>
       <Footer />
       <JsonLd data={[productLd(), ...videosLd()]} />
+      <Diagonales />
     </>
   );
 }

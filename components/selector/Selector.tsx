@@ -10,6 +10,7 @@ import { blip, haptic, setSound, soundEnabled } from "@/lib/ui-sound";
 import { Missing } from "@/components/ui/Missing";
 import { IconShare, IconSound, IconSoundOff, IconChevron, IconClose } from "@/components/ui/Icons";
 import { Stage, type StageHandle } from "./Stage";
+import { ConP70 } from "@/components/ui/LogoP70";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -35,10 +36,8 @@ const usd = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 });
 /** Precio con el formato de los flyers: "U$D 16.500.-". */
 export const precioFlyer = (n: number) => `U$D ${usd.format(n)}.-`;
 const nombre = (e: Equipamiento) => (isPending(e.nombre) ? nombreEq(e.n) : e.nombre);
-const coloresPendientes = colores.some((c) => isPending(c.nombre) || isPending(c.hex));
-
 /**
- * "Armá tu P70": el camper girando en un estudio claro (como los renders de los
+ * "Elegí tu P70" (antes "Armá tu P70"): el camper girando en un estudio claro (como los renders de los
  * flyers), los 3 niveles pegados abajo del camper y los colores debajo.
  * Pocas palabras: el nombre del nivel, su precio y lo que incluye.
  * Desktop: el detalle del nivel a la izquierda. Mobile: el detalle en una hoja
@@ -169,7 +168,7 @@ export function Selector() {
       <div className="relative z-10 flex items-start justify-between gap-3 pt-6 pr-2 pl-4 sm:pl-6 lg:pt-8 lg:pr-8 lg:pl-10">
         <div>
           <h2 id="armalo-title" className="slab font-display-x text-[1.55rem] uppercase lg:text-[2.2rem]">
-            Armá tu P70
+            <ConP70 texto="Elegí tu P70" alto="h-[0.74em]" />
           </h2>
           <p className="titulo-cond mt-2 hidden text-[1.3rem] text-stone lg:block">({equipamientos.length} niveles de equipamiento)</p>
           {/* Mobile: el nivel y su precio arriba, cerca del camper (pedido de Andrés: que se vea siempre) */}
@@ -226,10 +225,10 @@ export function Selector() {
             type="button"
             onClick={() => setSheet(true)}
             aria-haspopup="dialog"
-            className="group corte-ini mx-4 mt-4 flex min-h-12 bg-forest p-[2px] [--sk:12px] active:scale-[0.98] sm:mx-6 lg:hidden"
+            className="group corte-ini mx-4 mt-4 flex min-h-12 bg-forest p-[2px] active:scale-[0.98] sm:mx-6 lg:hidden"
           >
-            <span className="corte-ini inline-flex w-full items-center justify-center gap-2 bg-white/90 px-4 font-semibold text-forest transition-colors [--sk:11px] group-hover:bg-white">
-              Ver qué incluye {nombre(eq)} <IconChevron className="size-4 rotate-180" />
+            <span className="corte-ini inline-flex w-full items-center justify-center gap-2 bg-white/90 px-4 font-semibold text-forest transition-colors group-hover:bg-white">
+              Ver qué incluye <span className="uppercase">{nombre(eq)}</span> <IconChevron className="size-4 rotate-180" />
             </span>
           </button>
         </div>
@@ -260,11 +259,11 @@ export function Selector() {
                 onClick={() => setSheet(true)}
                 tabIndex={barVisible ? 0 : -1}
                 aria-haspopup="dialog"
-                className="group corte-ini flex min-h-12 bg-forest p-[2px] [--sk:10px] active:scale-[0.98]"
+                className="group corte-ini flex min-h-12 bg-forest p-[2px] active:scale-[0.98]"
               >
                 {/* Borde verde con el corte en diagonal (20/11): punta izquierda recta y la diagonal solo a la derecha (25/11).
                     El clip-path no deja ver un border común. */}
-                <span className="corte-ini inline-flex w-full items-center justify-center gap-1.5 bg-white px-3 font-semibold text-forest transition-colors [--sk:9px] group-hover:bg-[#eef2f1]">
+                <span className="corte-ini inline-flex w-full items-center justify-center gap-1.5 bg-white px-3 font-semibold text-forest transition-colors group-hover:bg-[#eef2f1]">
                   Ver qué incluye <IconChevron className="size-4 rotate-180" />
                 </span>
               </button>
@@ -272,7 +271,7 @@ export function Selector() {
                 type="button"
                 onClick={quieroAsi}
                 tabIndex={barVisible ? 0 : -1}
-                className="corte-fin inline-flex min-h-12 items-center justify-center bg-forest px-3 font-semibold text-white transition-colors [--sk:10px] hover:bg-forest-deep active:scale-[0.98]"
+                className="corte-fin -ml-[var(--sk)] inline-flex min-h-12 items-center justify-center bg-forest px-3 font-semibold text-white transition-colors hover:bg-forest-deep active:scale-[0.98]"
               >
                 {/* Con la diagonal a la izquierda, paralela a la de "Ver qué incluye" (25/11) */}
                 Lo quiero así
@@ -423,7 +422,7 @@ function Ctas({ onQuiero, onShare }: { onQuiero: () => void; onShare: () => void
         Lo quiero así
       </button>
       <button type="button" onClick={onShare} className="inline-flex min-h-11 items-center gap-2.5 px-1 font-semibold text-ink/75 transition-colors hover:text-ink">
-        <IconShare className="size-5" /> Compartir mi P70
+        <IconShare className="size-5" /> <span><ConP70 texto="Compartir mi P70" /></span>
       </button>
     </div>
   );
@@ -469,10 +468,7 @@ function Colores({ active, onPick, onPrime }: { active: string; onPick: (id: str
           );
         })}
       </div>
-      {/* Mientras falten, el cartel de los códigos */}
-      <div className="col-span-3 mt-2 flex items-center justify-center sm:col-span-1 sm:col-start-3 sm:mt-0 sm:justify-self-start">
-        {coloresPendientes && <Missing label="código exacto de los 5 colores" compact short="códigos" />}
-      </div>
+      {/* Sin el cartel rojo de los códigos (Andrés, 27/11): los colores quedan con su tono provisorio */}
     </div>
   );
 }

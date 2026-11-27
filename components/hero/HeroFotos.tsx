@@ -8,7 +8,9 @@ import { track } from "@/lib/analytics";
 import { IconArrow } from "@/components/ui/Icons";
 import { VisorFotos } from "@/components/galeria/VisorFotos";
 
-const forma = "aspect-[4/5] w-[clamp(96px,28.5vw,124px)] [clip-path:polygon(14%_0,100%_0,86%_100%,0_100%)] md:w-[clamp(110px,9.2vw,147px)]";
+const forma = "aspect-[4/5] w-[clamp(96px,28.5vw,124px)] md:w-[clamp(110px,9.2vw,147px)]";
+// La primera con el borde izquierdo recto, alineado con el texto y la punta de "Elegí tu P70" (Andrés, 27/11)
+const corte = (i: number) => (i === 0 ? "[clip-path:polygon(0_0,100%_0,86%_100%,0_100%)]" : "[clip-path:polygon(14%_0,100%_0,86%_100%,0_100%)]");
 
 /**
  * Todas las fotos del P70 debajo de "Armá tu P70" (Andrés, 25/11: reemplazan a los 3 videos, que siguen en
@@ -50,7 +52,7 @@ export function HeroFotos() {
               }}
               aria-haspopup="dialog"
               aria-label={`Agrandar foto: ${f.alt}`}
-              className={`group relative block overflow-hidden bg-forest ${forma}`}
+              className={`group relative block overflow-hidden bg-forest ${forma} ${corte(i)}`}
             >
               <Image src={f.img} alt="" fill sizes="150px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
             </button>

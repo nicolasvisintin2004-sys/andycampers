@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ConP70 } from "@/components/ui/LogoP70";
 
 export default function NotFound() {
   return (
@@ -7,7 +8,9 @@ export default function NotFound() {
         <h1 className="font-display-x text-[clamp(2.6rem,10vw,5rem)] uppercase">Te saliste del mapa.</h1>
         <p className="titulo-cond mt-4 text-[1.6rem] text-durazno">(esta página no existe)</p>
         <Link href="/" className="mt-8 inline-flex min-h-14 items-center bg-durazno px-7 text-lg font-semibold text-forest-deep hover:bg-white">
-          Volver al P70
+          <span>
+            <ConP70 texto="Volver al P70" />
+          </span>
         </Link>
       </div>
     </main>

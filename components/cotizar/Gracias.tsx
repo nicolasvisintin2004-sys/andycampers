@@ -8,6 +8,7 @@ import { track } from "@/lib/analytics";
 import { mensajeGracias } from "@/lib/whatsapp";
 import { IconWhatsApp } from "@/components/ui/Icons";
 import { GRACIAS_KEY } from "./QuoteForm";
+import { ConP70 } from "@/components/ui/LogoP70";
 
 
 const mensajes: Record<string, { titulo: string; texto: string }> = {
@@ -70,7 +71,9 @@ export function Gracias() {
                 />
               </div>
               <figcaption className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-ink/15 pt-4">
-                <span className="font-cond text-[1.05rem] font-semibold text-stone uppercase">Tu P70</span>
+                <span className="font-cond text-[1.05rem] font-semibold text-stone uppercase">
+                  <ConP70 texto="Tu P70" />
+                </span>
                 <span className="flex items-center gap-3 font-cond text-[1.15rem] font-semibold uppercase">
                   {nombreEq(sel.eq)}
                   <span aria-hidden className="size-4 rounded-full ring-1 ring-ink/20" style={{ background: hexColor(colores[ci]) }} />

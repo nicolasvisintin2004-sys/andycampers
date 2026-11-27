@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 /**
  * "P70" con la tipografía del folleto: el vector que pasó Andrés (Logo P70.svg, 19/11).
  * Toma el color del texto (currentColor); el tamaño, de la clase (alto o ancho).
@@ -9,6 +11,29 @@ const D = [
   "M21476 12180c0,0 1384,0 1384,0 1488,0 2706,1218 2706,2706 0,0 0,2576 0,2576 0,1488 -1218,2706 -2706,2706 0,0 -1384,0 -1384,0 -1488,0 -2706,-1218 -2706,-2706 0,0 0,-2576 0,-2576 0,-1488 1218,-2706 2706,-2706zm561 1952c0,0 0,0 0,0 2,0 5,0 7,0 52,0 195,0 247,0 2,0 4,0 7,0 0,0 0,0 0,0 2,0 5,0 7,0 495,4 898,410 898,905 0,0 0,2273 0,2273 0,493 -399,897 -889,905 -5,0 -11,0 -16,0 0,0 0,0 0,0 -6,0 -12,0 -17,0 -46,-1 -181,-1 -228,0 -5,0 -11,0 -16,0 0,0 0,0 0,0 -6,0 -11,0 -17,0 -491,-9 -888,-413 -888,-905 0,0 0,-2273 0,-2273 0,-496 404,-902 899,-905 2,0 4,0 7,0z",
   "M11209 15890c122,-531 274,-1573 175,-2148 -140,-809 -1182,-1551 -2177,-1551 0,0 -3890,-1 -3890,-1 0,0 -1196,7915 -1196,7915 0,0 2415,61 2415,61 0,0 404,-2630 404,-2630 0,0 1579,4 1579,4 821,2 2347,-157 2689,-1651zm-2733 -162c0,0 -1201,0 -1201,0 0,0 274,-1719 274,-1719 0,0 1033,6 1033,6 303,2 569,141 504,585 0,0 -91,619 -91,619 -60,410 -261,509 -518,509z",
 ];
+
+/**
+ * Un texto con "P70" adentro, con el P70 dibujado con la letra del folleto (Andrés, 27/11: en títulos y
+ * botones; dentro de frases queda escrito normal). El alto del P70 es el de las mayúsculas del texto.
+ */
+export function ConP70({ texto, alto = "h-[0.72em]" }: { texto: string; alto?: string }) {
+  const partes = texto.split("P70");
+  return (
+    <>
+      {partes.map((p, i) => (
+        <Fragment key={i}>
+          {p}
+          {i < partes.length - 1 && (
+            <>
+              <LogoP70 title={null} className={`inline-block w-auto align-baseline ${alto}`} />
+              <span className="sr-only">P70</span>
+            </>
+          )}
+        </Fragment>
+      ))}
+    </>
+  );
+}
 
 /** El 7 con sus dos cortes a 10° (en el original, 11,3° y 9,7°). */
 const SIETE_10 =

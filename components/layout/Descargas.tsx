@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { descargas, equipamientos, nombreEq, slugEq } from "@/config/p70";
 import { track } from "@/lib/analytics";
 import { IconClose } from "@/components/ui/Icons";
+import { ConP70 } from "@/components/ui/LogoP70";
 
 const enlace = "group inline-flex min-h-12 items-center gap-3 text-left font-cond text-[1.2rem] font-semibold uppercase transition-colors hover:text-durazno";
 const Flecha = () => (
@@ -63,7 +64,9 @@ function Catalogo({ onClose }: { onClose: () => void }) {
           <IconClose className="size-6" />
         </button>
         <h2 className="text-forest">
-          <span className="titulo-cond block text-[2.2rem] uppercase">Folleto P70</span>
+          <span className="titulo-cond block text-[2.2rem] uppercase">
+            <ConP70 texto="Folleto P70" />
+          </span>
           <span className="titulo-cond block text-[1.25rem]">(un nivel por imagen, para guardar en el celular)</span>
         </h2>
         <ul className="mt-6 grid gap-5 sm:grid-cols-3">

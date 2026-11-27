@@ -5,7 +5,7 @@ import { HeroMontage, type Slide } from "./HeroMontage";
 import { HeroScrollFx } from "./HeroScrollFx";
 import { HeroFotos } from "./HeroFotos";
 import { HeroAjuste } from "./HeroAjuste";
-import { LogoP70 } from "@/components/ui/LogoP70";
+import { ConP70, LogoP70 } from "@/components/ui/LogoP70";
 
 /**
  * Hero "vender la experiencia".
@@ -78,7 +78,7 @@ export function Hero() {
             Condensed Light); 100cqw = ancho de esta columna. */}
         <h1 id="hero-title" className="font-display-x flex justify-end text-[min(8.4vw,3.4rem)] uppercase md:text-[clamp(1.75rem,3.7vw,4.6rem)]">
           <span className="fade-up block" style={{ "--d": "200ms" } as React.CSSProperties}>
-            <LogoP70 a10grados title="Camper P70" className="block h-[1.3em] w-auto text-durazno md:h-[1.5em]" />
+            <LogoP70 title="Camper P70" className="block h-[1.3em] w-auto text-durazno md:h-[1.5em]" />
           </span>
         </h1>
         <p className="titulo-cond fade-up mt-3 text-[calc(100cqw/12.15)] leading-[1.1] text-durazno" style={{ "--d": "380ms" } as React.CSSProperties}>
@@ -89,13 +89,17 @@ export function Hero() {
 
         <div className="fade-up mt-7 flex flex-wrap items-center gap-x-6 gap-y-3" style={{ "--d": "560ms" } as React.CSSProperties}>
           {/* La diagonal y la letra de Rumbo / Terra / Cima con las puntas redondeadas (22/11), un 15% más grande y
-              con contorno negro para que se lea como botón (25/11). El ancho sale de la grilla de Niveles (Selector.tsx). */}
+              con contorno para que se lea como botón (25/11), gris y "Elegí tu P70" (27/11). El ancho sale de la
+              grilla de Niveles (Selector.tsx). El margen izquierdo deja la punta de abajo alineada con el texto y
+              las fotos: medio alto × tan(12°). */}
           <a
             href="#armalo"
-            className="group ml-[6px] inline-flex h-[3.45rem] w-[calc((min(100vw,36rem)-3.5rem)/3*1.15)] -skew-x-12 items-center justify-center rounded-[10px] border-2 border-ink bg-durazno font-semibold text-forest-deep transition-colors hover:bg-white sm:w-[calc((min(100vw,36rem)-4rem)/3*1.15)] lg:h-[3.75rem] lg:w-[calc((36rem-2.5rem)/3*1.15)]"
+            className="group ml-[5.87px] inline-flex h-[3.45rem] w-[calc((min(100vw,36rem)-3.5rem)/3*1.15)] -skew-x-12 items-center justify-center rounded-[10px] border-2 border-[#464b51] bg-durazno font-semibold text-forest-deep transition-colors hover:bg-white sm:w-[calc((min(100vw,36rem)-4rem)/3*1.15)] lg:ml-[6.38px] lg:h-[3.75rem] lg:w-[calc((36rem-2.5rem)/3*1.15)]"
           >
             <span className="inline-flex skew-x-12 items-center gap-[3px] font-cond text-[length:min(1.17rem,4.6vw)] whitespace-nowrap uppercase sm:gap-2 lg:text-[1.3rem]">
-              Armá tu P70
+              <span>
+                <ConP70 texto="Elegí tu P70" />
+              </span>
               <IconArrowDown className="size-[13px] transition-transform duration-300 group-hover:translate-y-0.5 max-[22rem]:hidden sm:size-[18px]" />
             </span>
           </a>

@@ -3,6 +3,7 @@ import { site } from "@/config/site";
 import { LazyVideo } from "@/components/ui/LazyVideo";
 import { IconInstagram } from "@/components/ui/Icons";
 import { Enter } from "@/components/ui/Enter";
+import { ConP70 } from "@/components/ui/LogoP70";
 
 /** Primero los 3 que estaban arriba de todo (Andrés, 25/11: ahí ahora van las fotos). */
 const PRIMEROS: ClipKey[] = ["taller", "virYLeo", "todoABordo"];
@@ -29,7 +30,9 @@ export function InAction() {
               <div className="relative aspect-[9/16] overflow-hidden bg-forest">
                 <LazyVideo src={c.src} poster={c.poster} label={c.alt} className="h-full w-full object-cover" />
               </div>
-              <figcaption className="mt-3 font-cond text-[1.05rem] font-semibold uppercase">{c.titulo}</figcaption>
+              <figcaption className="mt-3 font-cond text-[1.05rem] font-semibold uppercase">
+                <ConP70 texto={c.titulo} />
+              </figcaption>
             </figure>
           </Enter>
         ))}

@@ -273,7 +273,8 @@ export const ficha: { grupo: string; filas: FilaFicha[] }[] = [
   {
     grupo: "Medidas",
     filas: [
-      { label: "Exteriores", valor: "Largo 4 m · ancho 2,10 m · alto 2 m (según el equipamiento, con o sin toldo)" },
+      // Ancho y alto corregidos por Andrés (27/11): 2,16 m y 2,10 m
+      { label: "Exteriores", valor: "Largo 4 m · ancho 2,16 m · alto 2,10 m (según el equipamiento, con o sin toldo)" },
       { label: "Interiores", valor: "Colchón de 2,06 × 1,40 m" },
     ],
   },

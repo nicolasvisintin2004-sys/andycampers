@@ -36,14 +36,14 @@ export function QueEsP70() {
                   contenido (22/11): el alto mínimo cambia con el ancho porque el texto entra en más o menos renglones. */}
               <ul className="no-scrollbar -mx-4 mt-3 flex snap-x overflow-x-auto scroll-px-4 px-4 sm:mx-0 sm:overflow-visible sm:px-0" aria-label="Piezas clave" data-piezas>
                 {hotspots.map((it, i) => (
-                  <li key={it.id} className="-ml-1.5 shrink-0 snap-start first:ml-0 sm:shrink sm:basis-auto">
+                  <li key={it.id} className="shrink-0 snap-start sm:shrink sm:basis-auto">
                     <button
                       type="button"
                       onClick={() => setActive(i)}
                       onPointerEnter={(e) => e.pointerType === "mouse" && setActive(i)}
                       aria-pressed={i === active}
                       className={`group flex h-full min-h-[3.625rem] flex-col items-start justify-center gap-0.5 py-1.5 pr-5 text-left transition-colors sm:min-h-[7.125rem] sm:py-2 min-[45.5rem]:min-h-[6.125rem] min-[55.5rem]:min-h-[5.125rem] lg:min-h-[7.125rem] min-[83.125rem]:min-h-[6.125rem] ${
-                        i === 0 ? "corte-ini pl-3" : i === hotspots.length - 1 ? "corte-fin pl-5" : "corte-diag pl-5"
+                        i === 0 ? "corte-ini pl-3" : `${i === hotspots.length - 1 ? "corte-fin" : "corte-diag"} ml-[calc(8px-var(--sk))] pl-5`
                       } ${i === active ? "bg-forest text-white" : "bg-white/85 text-ink hover:bg-white"}`}
                     >
                       {/* El clip-path tapa el contorno de foco: con teclado se subraya el título */}

@@ -228,7 +228,7 @@ function QuoteFormInner() {
         </button>
         <div className="flex h-2 flex-1 gap-1" role="progressbar" aria-label="Progreso del formulario" aria-valuemin={1} aria-valuemax={TOTAL} aria-valuenow={s.step + 1}>
           {Array.from({ length: TOTAL }, (_, i) => (
-            <span key={i} className={`h-full flex-1 -skew-x-[24deg] transition-colors duration-300 ${i < s.step ? "bg-forest" : i === s.step ? "bg-ink/45" : "bg-ink/12"}`} />
+            <span key={i} className={`h-full flex-1 -skew-x-12 transition-colors duration-300 ${i < s.step ? "bg-forest" : i === s.step ? "bg-ink/45" : "bg-ink/12"}`} />
           ))}
         </div>
         <span className="tabular font-cond text-sm text-stone">
@@ -532,7 +532,7 @@ function Niveles({
                   {p.opciones.map((_, k) => (
                     <span
                       key={k}
-                      className={`h-1.5 flex-1 -skew-x-[24deg] transition-colors duration-300 ${k <= i ? (on ? "bg-durazno" : "bg-forest/70 group-hover:bg-forest") : on ? "bg-bone/15" : "bg-ink/10"}`}
+                      className={`h-1.5 flex-1 -skew-x-12 transition-colors duration-300 ${k <= i ? (on ? "bg-durazno" : "bg-forest/70 group-hover:bg-forest") : on ? "bg-bone/15" : "bg-ink/10"}`}
                       style={{ transitionDelay: `${k * 50}ms` }}
                     />
                   ))}

@@ -18,7 +18,7 @@ function Esqueleto() {
     <div aria-hidden className="min-h-[540px] sm:min-h-[560px]">
       <div className="flex h-11 items-center gap-1">
         {Array.from({ length: 10 }, (_, i) => (
-          <span key={i} className="h-2 flex-1 -skew-x-[24deg] bg-ink/10" />
+          <span key={i} className="h-2 flex-1 -skew-x-12 bg-ink/10" />
         ))}
       </div>
       <div className="mt-10 h-12 w-3/4 bg-ink/8" />

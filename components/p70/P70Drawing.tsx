@@ -1,9 +1,9 @@
 /**
  * Croquis del P70: la captura del modelo 3D que pasó Andrés (16/11), con su fondo,
- * las cotas (largo, ancho y alto) y los puntos de las piezas clave. Sin textos al lado
+ * las cotas (largo, alto y ancho, en perspectiva) y los puntos de las piezas clave. Sin textos al lado
  * de las líneas: Andrés (14/11) dice que no se llegan a leer; la info está en los
- * botones de abajo. Coordenadas = píxeles de la imagen (1222 × 740); el lienzo
- * sigue 100 px más abajo, con el mismo fondo, para que entre la cota del largo.
+ * botones de abajo. Coordenadas = píxeles de la imagen (1222 × 740); en el lienzo la imagen
+ * baja ARRIBA px y el resto tiene el mismo fondo, para que entren las cotas.
  */
 
 export interface Hotspot {
@@ -84,18 +84,56 @@ export const hotspots: Hotspot[] = [
   },
 ];
 
-/** La imagen y las cotas: largo de punta del acople a la cola, ancho de rueda a rueda, alto del piso a la parrilla. */
+/** La imagen; el lienzo la deja ARRIBA px más abajo para que entre la cota del ancho arriba del camper. */
 const IMG = { src: "/media/p70/croquis-p70-3d.webp", w: 1222, h: 740, fondo: "#2e333f" };
-const LIENZO_H = 840;
+const ARRIBA = 135;
+const LIENZO_H = ARRIBA + 875;
+
+type Pt = readonly [number, number];
 /**
- * Las cotas del piso siguen la perspectiva (Andrés, 22/11), se dibujan derechas y se giran:
- * el largo con el riel del chasis (7,5°; no con la lanza, que va al centro y es más chata)
- * y el ancho con los travesaños y el eje (18,1°).
+ * Cotas en perspectiva real (Andrés, 27/11), en píxeles de la imagen: puntos 3D del camper proyectados con
+ * la cámara que se resolvió para esta captura (entregas/22-11/giro/fuente/medidas.json). Ejes: X hacia atrás
+ * desde el eje, Y arriba desde el piso, Z hacia el costado que se ve.
+ * - Largo: por el piso, 1,40 m afuera del costado, de la punta del acople (-3,24) a la cola (0,93).
+ * - Alto: vertical desde la punta de atrás del largo hasta 2,10 m: las dos cotas casi se tocan.
+ * - Ancho: arriba del techo (2,45 m), 0,30 m detrás del eje (Andrés, 27/11: más atrás), paralela a sus líneas, de -1,08 a 1,08 (2,16 m).
  */
-const LARGO = { x: 50, y: 800, largo: 990, grados: -7.5 };
-// Corrido 6 cm hacia atrás, más cerca de la rueda (Andrés, 25/11), por el mismo eje del largo
-const ANCHO = { x: 489, y: 557, largo: 344, grados: 18.1 };
-const ALTO = { x: 1110, y1: 52, y2: 652 };
+const COTAS: { de: Pt; a: Pt; texto: string; dy: string; guias?: [Pt, Pt][] }[] = [
+  {
+    de: [236.3, 790.9],
+    a: [1160.8, 642.0],
+    texto: "4 m",
+    dy: "1.15em",
+    guias: [
+      [[49.6, 570.3], [236.3, 790.9]],
+      [[1071.8, 609.0], [1160.8, 642.0]],
+    ],
+  },
+  { de: [1160.95, 631.6], a: [1168.5, 114.6], texto: "2,10 m", dy: "0.9em", guias: [[[1078.4, 87.7], [1168.5, 114.6]]] },
+  { de: [684.7, -60.8], a: [987.6, 28.3], texto: "2,16 m", dy: "-0.5em" },
+];
+
+function Cota({ de, a, texto, dy, guias = [], trazo, relleno }: (typeof COTAS)[number] & { trazo: string; relleno: string }) {
+  const largo = Math.hypot(a[0] - de[0], a[1] - de[1]);
+  const grados = (Math.atan2(a[1] - de[1], a[0] - de[0]) * 180) / Math.PI;
+  return (
+    <g>
+      {guias.map(([p, q], i) => (
+        <line key={i} x1={p[0]} y1={p[1]} x2={q[0]} y2={q[1]} stroke={trazo} strokeWidth="1.2" strokeDasharray="6 6" />
+      ))}
+      <g transform={`translate(${de[0]} ${de[1]}) rotate(${grados})`}>
+        <line x1={0} y1={0} x2={largo} y2={0} stroke={trazo} strokeWidth="1.5" />
+        <line x1={0} y1={-12} x2={0} y2={12} stroke={trazo} strokeWidth="1.5" />
+        <line x1={largo} y1={-12} x2={largo} y2={12} stroke={trazo} strokeWidth="1.5" />
+        <path d={`M0 0 l16 -6 v12 Z M${largo} 0 l-16 -6 v12 Z`} fill={relleno} stroke="none" />
+        {/* dy en em: se separa de la línea lo mismo que crece la letra en el celu */}
+        <text x={largo / 2} y={0} dy={dy} textAnchor="middle">
+          {texto}
+        </text>
+      </g>
+    </g>
+  );
+}
 
 export function P70Drawing({
   // Durazno de los flyers: la pieza activa se lee sobre el bloque verde.
@@ -119,40 +157,15 @@ export function P70Drawing({
       <title>{title}</title>
 
       <rect width={IMG.w} height={LIENZO_H} fill={IMG.fondo} />
-      <image href={IMG.src} width={IMG.w} height={IMG.h} />
+      <g transform={`translate(0 ${ARRIBA})`}>
+        <image href={IMG.src} width={IMG.w} height={IMG.h} />
 
-      {/* Cotas: largo 4 m y alto 2 m (Andrés, 14/11), ancho 2,10 m (22/11) */}
-      {/* En el celu el croquis se ve chico (85% del ancho): las medidas van más grandes (en px del viewBox). */}
-      <g fontFamily="var(--font-jetbrains), monospace" fontWeight="600" fill={line} className="text-[46px] sm:text-[26px]">
-        <g transform={`translate(${LARGO.x} ${LARGO.y}) rotate(${LARGO.grados})`}>
-          <line x1={0} y1={0} x2={LARGO.largo} y2={0} stroke={detalle} strokeWidth="1.5" />
-          <line x1={0} y1={-12} x2={0} y2={12} stroke={detalle} strokeWidth="1.5" />
-          <line x1={LARGO.largo} y1={-12} x2={LARGO.largo} y2={12} stroke={detalle} strokeWidth="1.5" />
-          <path d={`M0 0 l16 -6 v12 Z M${LARGO.largo} 0 l-16 -6 v12 Z`} fill={line} stroke="none" />
-          {/* Corrido hacia adelante para no chocar con el 2,10 m */}
-          <text x={380} y={-14} textAnchor="middle">
-            4 m
-          </text>
+        {/* Cotas: largo 4 m, alto 2,10 m y ancho 2,16 m (Andrés, 27/11). En el celu el croquis se ve chico: van más grandes. */}
+        <g fontFamily="var(--font-jetbrains), monospace" fontWeight="600" fill={line} className="text-[46px] sm:text-[26px]">
+          {COTAS.map((c) => (
+            <Cota key={c.texto} {...c} trazo={detalle} relleno={line} />
+          ))}
         </g>
-        <g transform={`translate(${ANCHO.x} ${ANCHO.y}) rotate(${ANCHO.grados})`}>
-          <line x1={0} y1={0} x2={ANCHO.largo} y2={0} stroke={detalle} strokeWidth="1.5" />
-          <line x1={0} y1={-12} x2={0} y2={12} stroke={detalle} strokeWidth="1.5" />
-          <line x1={ANCHO.largo} y1={-12} x2={ANCHO.largo} y2={12} stroke={detalle} strokeWidth="1.5" />
-          <path d={`M0 0 l16 -6 v12 Z M${ANCHO.largo} 0 l-16 -6 v12 Z`} fill={line} stroke="none" />
-          {/* dy en em: baja lo mismo que crece la letra en el celu */}
-          <text x={ANCHO.largo / 2} y={8} dy="0.88em" textAnchor="middle">
-            2,10 m
-          </text>
-        </g>
-
-        <line x1={ALTO.x} y1={ALTO.y1} x2={ALTO.x} y2={ALTO.y2} stroke={detalle} strokeWidth="1.5" />
-        <line x1={ALTO.x - 12} y1={ALTO.y1} x2={ALTO.x + 12} y2={ALTO.y1} stroke={detalle} strokeWidth="1.5" />
-        <line x1={ALTO.x - 12} y1={ALTO.y2} x2={ALTO.x + 12} y2={ALTO.y2} stroke={detalle} strokeWidth="1.5" />
-        <path d={`M${ALTO.x} ${ALTO.y1} l-6 16 h12 Z M${ALTO.x} ${ALTO.y2} l-6 -16 h12 Z`} fill={line} stroke="none" />
-        <text x={ALTO.x + 16} y={(ALTO.y1 + ALTO.y2) / 2 + 12}>
-          2 m
-        </text>
-      </g>
 
       {/* Piezas clave: punto y línea, sin texto */}
       {showHotspots &&
@@ -176,6 +189,7 @@ export function P70Drawing({
             </g>
           );
         })}
+      </g>
     </svg>
   );
 }

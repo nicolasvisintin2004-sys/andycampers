@@ -2,7 +2,6 @@ import Link from "next/link";
 import { site, waLink } from "@/config/site";
 import { isPending } from "@/lib/pending";
 import { Wordmark } from "@/components/ui/Wordmark";
-import { Missing } from "@/components/ui/Missing";
 import { IconFacebook, IconInstagram, IconWhatsApp } from "@/components/ui/Icons";
 import { Descargas } from "./Descargas";
 
@@ -22,7 +21,6 @@ export function Footer() {
           <div>
             <Wordmark className="text-[1.7rem]" />
             <p className="titulo-cond mt-3 max-w-xs text-[1.35rem] leading-tight text-white/85">{site.lema}</p>
-            {isPending(site.logoSvg) && <Missing label={site.logoSvg} compact short="logo en vector" className="mt-4" />}
           </div>
 
           <div>

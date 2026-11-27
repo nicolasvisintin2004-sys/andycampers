@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: site.locale,
     siteName: site.name,
-    title: "Armá tu P70 · Camper off road de acero · andycampers",
+    title: "Elegí tu P70 · Camper off road de acero · andycampers",
     description: DESCRIPCION,
     images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Camper off-road P70 de andycampers" }],
   },
